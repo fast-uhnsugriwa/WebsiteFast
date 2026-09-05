@@ -20,10 +20,10 @@ export const UniversityLogo: React.FC<LogoProps> = ({
   const [imageError, setImageError] = useState(false);
 
   const sizeDimensions = {
-    sm: 'w-9 h-9',
-    md: 'w-12 h-12',
-    lg: 'w-16 h-16',
-    xl: 'w-20 h-20'
+    sm: 'w-8 h-8',
+    md: 'w-9 h-9 sm:w-12 sm:h-12',
+    lg: 'w-14 h-14 sm:w-16 sm:h-16',
+    xl: 'w-18 h-18 sm:w-20 sm:h-20'
   }[size];
 
   return (
@@ -130,10 +130,10 @@ export const FacultyLogo: React.FC<LogoProps> = ({
   const [imageError, setImageError] = useState(false);
 
   const sizeDimensions = {
-    sm: 'w-9 h-9',
-    md: 'w-12 h-12',
-    lg: 'w-16 h-16',
-    xl: 'w-20 h-20'
+    sm: 'w-8 h-8',
+    md: 'w-9 h-9 sm:w-12 sm:h-12',
+    lg: 'w-14 h-14 sm:w-16 sm:h-16',
+    xl: 'w-18 h-18 sm:w-20 sm:h-20'
   }[size];
 
   return (
@@ -237,21 +237,21 @@ export const InstitutionalBrandLockup: React.FC<{
     <button
       id="brand-header-link"
       onClick={onHomeClick}
-      className="group flex items-center text-left gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded-lg p-1 transition hover:opacity-95"
+      className="group flex items-center text-left gap-2 sm:gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded-lg p-1 transition hover:opacity-95 max-w-[calc(100vw-80px)] sm:max-w-none"
       aria-label="Kembali ke Beranda Fakultas Sains dan Teknologi UHN Sugriwa"
     >
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
         <UniversityLogo size={compact ? 'sm' : 'md'} showText={false} />
         <FacultyLogo size={compact ? 'sm' : 'md'} showText={false} />
       </div>
 
-      <div className="h-9 w-px bg-stone-200 hidden sm:block" aria-hidden="true" />
+      <div className="h-8 sm:h-9 w-px bg-stone-200 hidden sm:block shrink-0" aria-hidden="true" />
 
-      <div className="flex flex-col">
-        <span className="text-[11px] uppercase tracking-wider font-semibold text-amber-700 leading-none">
+      <div className="flex flex-col min-w-0">
+        <span className="text-[9px] sm:text-[11px] uppercase tracking-wider font-semibold text-amber-700 leading-none truncate">
           UHN I Gusti Bagus Sugriwa
         </span>
-        <span className="text-sm sm:text-lg font-extrabold text-stone-900 tracking-tight leading-tight mt-0.5 group-hover:text-orange-600 transition-colors">
+        <span className="text-xs sm:text-lg font-extrabold text-stone-900 tracking-tight leading-tight mt-0.5 group-hover:text-orange-600 transition-colors truncate">
           Fakultas Sains dan Teknologi
         </span>
       </div>

@@ -83,9 +83,6 @@ export const FacultyProfile: React.FC = () => {
                   <Compass className="w-6 h-6" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-orange-400">
-                    Arah Strategis 2035
-                  </span>
                   <h3 className="text-xl font-bold text-white">Visi Keilmuan FAST</h3>
                 </div>
               </div>
