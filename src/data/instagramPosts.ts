@@ -23,8 +23,8 @@ Halo Sivitas Akademika FAST UHN I Gusti Bagus Sugriwa Denpasar!
 Fakultas Sains dan Teknologi kembali menghadirkan Kuliah Tamu Nasional bertajuk "Eksplorasi Generative AI dan Computer Vision untuk Pelestarian Warisan Digital Naskah Lontar Nusantara".
 
 Menghadirkan narasumber utama:
-🎙️ Dr. Putu Arya Wikrama, M.Kom (Senior AI Researcher & IT Consultant)
-🎙️ Ni Luh Made Ariastuti, S.Ds., M.Sn (Creative Director Studio Visual Bali)
+🎙️ Senior AI Researcher & IT Consultant
+🎙️ Creative Director Studio Visual Bali
 
 🗓️ Waktu Pelaksanaan:
 Hari/Tanggal: Rabu, 18 Maret 2026
@@ -106,7 +106,7 @@ Program Studi S1 Sains Informasi FAST UHN I Gusti Bagus Sugriwa Denpasar menyele
 "Hands-On Data Engineering & Business Intelligence Dashboard with Python, SQL, and PowerBI".
 
 Mentor:
-👨‍💻 I Komang Bayu Anggara, M.T. (Lead Data Engineer & Dosen FAST)
+👨‍💻 Tim Dosen & Ahli Data Engineering FAST
 
 Materi yang dibahas:
 - Data Wrangling & Exploratory Data Analysis (EDA)

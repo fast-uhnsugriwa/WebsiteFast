@@ -61,8 +61,8 @@ Halo Sivitas Akademika FAST UHN I Gusti Bagus Sugriwa Denpasar!
 Fakultas Sains dan Teknologi kembali menghadirkan Kuliah Tamu Nasional bertajuk "Eksplorasi Generative AI dan Computer Vision untuk Pelestarian Warisan Digital Naskah Lontar Nusantara".
 
 Menghadirkan narasumber utama:
-🎙️ Dr. Putu Arya Wikrama, M.Kom (Senior AI Researcher & IT Consultant)
-🎙️ Ni Luh Made Ariastuti, S.Ds., M.Sn (Creative Director Studio Visual Bali)
+🎙️ Senior AI Researcher & IT Consultant
+🎙️ Creative Director Studio Visual Bali
 
 🗓️ Waktu Pelaksanaan:
 Hari/Tanggal: Rabu, 18 Maret 2026

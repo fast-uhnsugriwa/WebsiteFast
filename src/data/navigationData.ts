@@ -267,35 +267,25 @@ export const DETAIL_CONTENTS: Record<string, DetailContent> = {
     id: 'kegiatan-penelitian',
     title: 'Kegiatan Penelitian & Riset FAST',
     categoryName: 'Riset & Inovasi',
-    subtitle: 'Riset multidisipliner memadukan computational science, human-computer interaction, dan kearifan lokal Bali.',
-    summary: 'Fakultas Sains dan Teknologi UHN I Gusti Bagus Sugriwa mengarahkan peta jalan (roadmap) riset pada solusi cerdas masa depan. Dosen dan mahasiswa berkolaborasi dalam proyek kecerdasan buatan, visual identity, visual storytelling naskah lontar Hindu, arsitektur data kebudayaan, hingga sistem informasi cerdas perdesaan.',
+    subtitle: 'Halaman sedang dalam pemeliharaan (Under Maintenance)',
+    summary: 'Informasi mengenai Kegiatan Penelitian & Riset Fakultas Sains dan Teknologi UHN I Gusti Bagus Sugriwa Denpasar saat ini sedang dalam proses pemeliharaan dan pembaruan sistem. Mohon kembali lagi nanti.',
     keyPoints: [
       {
-        heading: 'Fokus Riset Utama',
+        heading: 'Informasi Pemeliharaan',
         points: [
-          'Digitalisasi & Preservasi AI Manuskrip Budaya: Alih aksara otomatis naskah lontar Bali berbasis Convolutional Neural Network (CNN).',
-          'Sains Data & Knowledge Graph Kebudayaan: Pemodelan data ontologi keagamaan Hindu dan kearifan Tri Hita Karana.',
-          'Komputasi Visual & Desain Interaktif: Perancangan antarmuka pengguna berbasis augmented reality (AR) untuk edukasi warisan budaya.',
-          'Sistem Cerdas Lingkungan: Monitoring IoT kualitas air, kesuburan tanah subak, dan pertanian presisi.'
-        ]
-      },
-      {
-        heading: 'Skema Pendanaan Riset',
-        points: [
-          'Hibah Penelitian Dosen Pemula (PDP) dan Terapan Kemendiktisaintek / Kemenag.',
-          'Kolaborasi Riset Mahasiswa-Dosen terintegrasi dalam mata kuliah Tugas Akhir.',
-          'Konsorsium riset bersama universitas mitra di dalam dan luar negeri.'
+          'Peta jalan (roadmap) dan dokumentasi penelitian sedang disinkronisasi oleh tim pengembang.',
+          'Untuk pertanyaan atau konsultasi seputar riset, Anda dapat menghubungi tim kami melalui email resmi fakultas.'
         ]
       }
     ],
     actionLink: {
-      label: 'Lihat Roadmap Riset & Panduan Proposal',
-      url: '#',
-      isExternal: false
+      label: 'Hubungi Layanan FAST',
+      url: 'mailto:fast@uhnsugriwa.ac.id',
+      isExternal: true
     },
     contactPerson: {
-      role: 'Ketua Unit Riset & Pengabdian FAST',
-      name: 'Dr. I Wayan Sudiarta, S.Kom., M.Cs.',
+      role: 'Unit Riset & Pengabdian FAST',
+      name: 'Tim Unit Riset & Pengabdian FAST',
       email: 'fast@uhnsugriwa.ac.id'
     }
   },
@@ -303,23 +293,21 @@ export const DETAIL_CONTENTS: Record<string, DetailContent> = {
     id: 'kegiatan-pengabdian',
     title: 'Kegiatan Pengabdian kepada Masyarakat (PkM)',
     categoryName: 'Riset & Inovasi',
-    subtitle: 'Mendedikasikan ilmu pengetahuan dan teknologi demi kemakmuran masyarakat Bali dan Nusantara.',
-    summary: 'Pengabdian kepada Masyarakat FAST berfokus pada hilirisasi teknologi. Melalui pelatihan literasi digital, perancangan identitas visual produk UMKM desa adat, serta instalasi sistem informasi tata kelola banjar dan desa wisata cerdas (smart village).',
+    subtitle: 'Halaman sedang dalam pemeliharaan (Under Maintenance)',
+    summary: 'Informasi mengenai Kegiatan Pengabdian kepada Masyarakat (PkM) Fakultas Sains dan Teknologi UHN I Gusti Bagus Sugriwa Denpasar saat ini sedang dalam proses pemeliharaan dan pembaruan sistem. Mohon kembali lagi nanti.',
     keyPoints: [
       {
-        heading: 'Program Unggulan Pengabdian',
+        heading: 'Informasi Pemeliharaan',
         points: [
-          'Digitalisasi Tata Kelola Desa Adat: Pelatihan sistem administrasi digital kependudukan dan pencatatan kas banjar.',
-          'Rebranding & Packaging Kreatif UMKM: Pendampingan mahasiswa DKV bagi pengrajin lokal untuk go-digital ke pasar global.',
-          'Literasi Keamanan Siber & Privasi Data: Edukasi etika digital, anti-hoaks, dan perlindungan privasi data keluarga.',
-          'Sistem Arsip Digital Pura & Tempat Suci: Pendataan dan katalogisasi artefak budaya berkoordinasi dengan pemangku adat.'
+          'Dokumentasi program kerja dan kemitraan PkM sedang dalam tahap pembaruan.',
+          'Pengajuan usulan atau kerja sama pengabdian tetap dapat disampaikan via email resmi fakultas.'
         ]
       }
     ],
     actionLink: {
-      label: 'Unduh Laporan & Usulan Mitra PkM',
-      url: '#',
-      isExternal: false
+      label: 'Hubungi Layanan FAST',
+      url: 'mailto:fast@uhnsugriwa.ac.id',
+      isExternal: true
     },
     contactPerson: {
       role: 'Koordinator PkM FAST',
@@ -331,21 +319,20 @@ export const DETAIL_CONTENTS: Record<string, DetailContent> = {
     id: 'publikasi',
     title: 'Publikasi Ilmiah & Repositori FAST',
     categoryName: 'Riset & Inovasi',
-    subtitle: 'Wadah desiminasi ilmiah dosen dan mahasiswa di panggung jurnal nasional dan internasional.',
-    summary: 'Seluruh hasil penelitian sivitas akademika Fakultas Sains dan Teknologi dipublikasikan secara terbuka melalui jurnal terakreditasi SINTA serta dipresentasikan pada simposium internasional di bidang sains data, informatika, dan desain grafis.',
+    subtitle: 'Halaman sedang dalam pemeliharaan (Under Maintenance)',
+    summary: 'Informasi mengenai Publikasi Ilmiah & Repositori Fakultas Sains dan Teknologi UHN I Gusti Bagus Sugriwa Denpasar saat ini sedang dalam proses pemeliharaan dan pembaruan sistem. Mohon kembali lagi nanti.',
     keyPoints: [
       {
-        heading: 'Koleksi Publikasi & Jurnal Fakultas',
+        heading: 'Informasi Pemeliharaan',
         points: [
-          'Jurnal Sains dan Teknologi Cendekia (J-STEC): Jurnal peer-reviewed terbit 2 kali setahun.',
-          'Prosiding Konferensi Nasional Teknologi Informasi & Desain Kebudayaan (KONSTID).',
-          'Koleksi Skripsi Digital dan Naskah Publikasi Mahasiswa Terindeks Google Scholar.'
+          'Katalog publikasi ilmiah dan repositori jurnal sedang dalam proses integrasi data.',
+          'Untuk informasi penyerahan artikel ilmiah, silakan hubungi tim melalui email resmi fakultas.'
         ]
       }
     ],
     actionLink: {
-      label: 'Buka Portal E-Journal FAST UHN Sugriwa',
-      url: 'https://ejournal.uhnsugriwa.ac.id/',
+      label: 'Hubungi Layanan FAST',
+      url: 'mailto:fast@uhnsugriwa.ac.id',
       isExternal: true
     },
     contactPerson: {
