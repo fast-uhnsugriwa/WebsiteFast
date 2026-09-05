@@ -89,12 +89,13 @@ export const CinematicLightBackground: React.FC<CinematicLightBackgroundProps> =
   if (variant === 'ambient') {
     return (
       <div
-        className={`fixed inset-0 overflow-hidden pointer-events-none select-none z-0 ${className}`}
+        className={`absolute inset-0 overflow-hidden pointer-events-none select-none z-0 ${className}`}
         aria-hidden="true"
+        style={{ transform: 'translateZ(0)' }}
       >
         {/* Ambient Moving White Luminescence */}
         <div
-          className="absolute top-10 left-1/3 w-[520px] h-[520px] rounded-full blur-[130px] opacity-35 animate-cinematic-white"
+          className="absolute top-10 left-1/3 w-[320px] sm:w-[520px] h-[320px] sm:h-[520px] rounded-full blur-[80px] sm:blur-[130px] opacity-35 animate-cinematic-white"
           style={{
             background:
               'radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(254, 240, 138, 0.4) 35%, transparent 70%)'
@@ -103,7 +104,7 @@ export const CinematicLightBackground: React.FC<CinematicLightBackgroundProps> =
 
         {/* Soft Golden Yellow Drift - Top Right */}
         <div
-          className="absolute -top-40 right-[-10%] w-[650px] h-[650px] rounded-full blur-[160px] opacity-25 animate-cinematic-yellow"
+          className="absolute -top-40 right-[-10%] w-[400px] sm:w-[650px] h-[400px] sm:h-[650px] rounded-full blur-[100px] sm:blur-[160px] opacity-25 animate-cinematic-yellow"
           style={{
             background:
               'radial-gradient(circle, rgba(253, 224, 71, 0.75) 0%, rgba(245, 158, 11, 0.4) 50%, transparent 75%)'
@@ -112,7 +113,7 @@ export const CinematicLightBackground: React.FC<CinematicLightBackgroundProps> =
 
         {/* Warm Orange Drift - Center Left */}
         <div
-          className="absolute top-1/3 -left-36 w-[600px] h-[600px] rounded-full blur-[150px] opacity-20 animate-cinematic-orange"
+          className="absolute top-1/3 -left-36 w-[380px] sm:w-[600px] h-[380px] sm:h-[600px] rounded-full blur-[90px] sm:blur-[150px] opacity-20 animate-cinematic-orange"
           style={{
             background:
               'radial-gradient(circle, rgba(249, 115, 22, 0.7) 0%, rgba(251, 146, 60, 0.35) 55%, transparent 80%)'
@@ -121,7 +122,7 @@ export const CinematicLightBackground: React.FC<CinematicLightBackgroundProps> =
 
         {/* Subtle Golden Amber Pulse - Lower Middle */}
         <div
-          className="absolute bottom-10 right-1/3 w-[500px] h-[500px] rounded-full blur-[140px] opacity-20 animate-cinematic-amber"
+          className="absolute bottom-10 right-1/3 w-[320px] sm:w-[500px] h-[320px] sm:h-[500px] rounded-full blur-[90px] sm:blur-[140px] opacity-20 animate-cinematic-amber"
           style={{
             background:
               'radial-gradient(circle, rgba(251, 191, 36, 0.65) 0%, rgba(234, 88, 12, 0.25) 50%, transparent 75%)'
