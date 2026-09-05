@@ -344,12 +344,12 @@ export const Header: React.FC<HeaderProps> = ({
               );
             })}
 
-            {/* Direct Links to Other 2 External Programs */}
+            {/* Program Studi Links */}
             <div className="pt-2 border-t border-stone-100 space-y-2">
               <span className="text-[11px] font-semibold text-stone-400 uppercase tracking-wider px-1">
-                Portal Program Studi Mitra
+                Program Studi
               </span>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <a
                   href="https://informatika.uhnsugriwa.ac.id/"
                   target="_blank"
@@ -368,6 +368,17 @@ export const Header: React.FC<HeaderProps> = ({
                   <span>S1 DKV</span>
                   <ExternalLink className="w-3.5 h-3.5 text-stone-400" />
                 </a>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onNavigateSainsInformasi();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="flex items-center justify-between p-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200/80 text-xs font-bold text-amber-900 transition-colors text-left"
+                >
+                  <span>S1 Sains Informasi</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-amber-700" />
+                </button>
               </div>
             </div>
 

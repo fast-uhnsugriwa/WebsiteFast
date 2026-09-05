@@ -19,7 +19,8 @@ import {
   TrendingUp,
   ShieldCheck,
   Building,
-  HelpCircle
+  HelpCircle,
+  Wrench
 } from 'lucide-react';
 import { SAINS_INFORMASI_DETAILS } from '../data/sainsInformasiData';
 import { FacultyLogo, UniversityLogo } from './Logos';
@@ -90,6 +91,21 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl">
+            {/* Under Maintenance Notification Banner */}
+            <div className="mb-8 p-4 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-200 flex items-start gap-3 text-xs sm:text-sm shadow-inner backdrop-blur-xs">
+              <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0 border border-amber-500/40 mt-0.5">
+                <Wrench className="w-4 h-4" />
+              </div>
+              <div>
+                <div className="font-extrabold uppercase tracking-wider text-amber-400 text-xs flex items-center gap-2 mb-0.5">
+                  <span>Status: Under Maintenance (Pemeliharaan Sistem)</span>
+                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                </div>
+                <p className="text-stone-300 text-xs sm:text-sm leading-relaxed">
+                  Halaman profil dan kurikulum Program Studi Sains Informasi saat ini sedang dalam proses pemeliharaan serta pembaruan data sistem. Mohon kembali lagi secara berkala.
+                </p>
+              </div>
+            </div>
             {/* Badges */}
             <div className="flex flex-wrap items-center gap-2.5 mb-6">
               <span className="px-3 py-1 rounded-full bg-orange-600/20 text-orange-400 border border-orange-500/30 text-xs font-extrabold uppercase tracking-wider flex items-center gap-1.5">

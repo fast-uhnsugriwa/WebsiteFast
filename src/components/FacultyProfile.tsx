@@ -223,7 +223,7 @@ export const FacultyProfile: React.FC = () => {
 
               <div className="p-5 rounded-xl bg-stone-50 border border-stone-200">
                 <div className="text-[11px] font-bold uppercase text-amber-700 tracking-wider">
-                  Wakil Dekan I
+                  Bidang Akademik
                 </div>
                 <div className="text-base font-bold text-stone-900 mt-1">Bidang Akademik & Kelembagaan</div>
                 <p className="text-xs text-stone-500 mt-0.5">Kurikulum OBE, Perkuliahan & Penjaminan Mutu</p>

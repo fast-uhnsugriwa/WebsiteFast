@@ -363,7 +363,7 @@ export const DETAIL_CONTENTS: Record<string, DetailContent> = {
       isExternal: false
     },
     contactPerson: {
-      role: 'Wakil Dekan I Bidang Akademik',
+      role: 'Bidang Akademik FAST',
       name: 'Sekretariat Pimpinan FAST',
       email: 'fast@uhnsugriwa.ac.id'
     }
