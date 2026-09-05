@@ -9,7 +9,6 @@ import {
   Award,
   Users
 } from 'lucide-react';
-import { UniversityLogo, FacultyLogo } from './Logos';
 import { CinematicLightBackground } from './CinematicLightBackground';
 
 interface HeroProps {
@@ -92,13 +91,12 @@ export const Hero: React.FC<HeroProps> = ({
             <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
               {/* Left: Emblem Showcase */}
               <div className="flex items-center gap-4 text-left">
-                <div className="flex -space-x-2">
-                  <div className="p-2 rounded-2xl bg-amber-50 border border-amber-200 shadow-xs">
-                    <UniversityLogo size="md" showText={false} />
-                  </div>
-                  <div className="p-2 rounded-2xl bg-orange-50 border border-orange-200 shadow-xs">
-                    <FacultyLogo size="md" showText={false} />
-                  </div>
+                <div className="p-2 rounded-2xl bg-amber-50/80 border border-amber-200/80 shadow-xs flex items-center justify-center shrink-0">
+                  <img
+                    src="/FASTlogo.png"
+                    alt="Logo FAST UHN Sugriwa"
+                    className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
+                  />
                 </div>
                 <div>
                   <div className="text-xs uppercase tracking-widest font-extrabold text-amber-700">
