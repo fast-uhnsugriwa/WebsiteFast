@@ -178,7 +178,7 @@ export const DETAIL_CONTENTS: Record<string, DetailContent> = {
     contactPerson: {
       role: 'Subbagian Kemahasiswaan & Alumni',
       name: 'Tim Beasiswa FAST UHN Sugriwa',
-      email: 'kemahasiswaan.fast@uhnsugriwa.ac.id'
+      email: 'fast@uhnsugriwa.ac.id'
     }
   },
   'beasiswa-bib': {
@@ -219,7 +219,7 @@ export const DETAIL_CONTENTS: Record<string, DetailContent> = {
     contactPerson: {
       role: 'Helpdesk Beasiswa BIB FAST',
       name: 'Pusat Layanan Mahasiswa UHN',
-      email: 'bib@uhnsugriwa.ac.id'
+      email: 'fast@uhnsugriwa.ac.id'
     }
   },
   'beasiswa-pipk': {
@@ -260,7 +260,7 @@ export const DETAIL_CONTENTS: Record<string, DetailContent> = {
     contactPerson: {
       role: 'Koordinator Verifikasi PIPK',
       name: 'Sekretariat FAST UHN Sugriwa',
-      email: 'pipk.fast@uhnsugriwa.ac.id'
+      email: 'fast@uhnsugriwa.ac.id'
     }
   },
   'kegiatan-penelitian': {
@@ -296,7 +296,7 @@ export const DETAIL_CONTENTS: Record<string, DetailContent> = {
     contactPerson: {
       role: 'Ketua Unit Riset & Pengabdian FAST',
       name: 'Dr. I Wayan Sudiarta, S.Kom., M.Cs.',
-      email: 'riset.fast@uhnsugriwa.ac.id'
+      email: 'fast@uhnsugriwa.ac.id'
     }
   },
   'kegiatan-pengabdian': {
@@ -324,7 +324,7 @@ export const DETAIL_CONTENTS: Record<string, DetailContent> = {
     contactPerson: {
       role: 'Koordinator PkM FAST',
       name: 'Tim Pengabdian Masyarakat UHN Sugriwa',
-      email: 'pkm.fast@uhnsugriwa.ac.id'
+      email: 'fast@uhnsugriwa.ac.id'
     }
   },
   'publikasi': {
@@ -351,7 +351,7 @@ export const DETAIL_CONTENTS: Record<string, DetailContent> = {
     contactPerson: {
       role: 'Dewan Redaksi Jurnal FAST',
       name: 'Tim Publikasi & Repositori Digital',
-      email: 'jurnal.fast@uhnsugriwa.ac.id'
+      email: 'fast@uhnsugriwa.ac.id'
     }
   },
   'profil-dosen': {
@@ -378,7 +378,7 @@ export const DETAIL_CONTENTS: Record<string, DetailContent> = {
     contactPerson: {
       role: 'Wakil Dekan I Bidang Akademik',
       name: 'Sekretariat Pimpinan FAST',
-      email: 'akademik.fast@uhnsugriwa.ac.id'
+      email: 'fast@uhnsugriwa.ac.id'
     }
   },
   'modul-mata-kuliah': {
@@ -406,7 +406,7 @@ export const DETAIL_CONTENTS: Record<string, DetailContent> = {
     contactPerson: {
       role: 'Pusat Kurikulum & Pembelajaran FAST',
       name: 'Koordinator Akademik FAST',
-      email: 'kurikulum.fast@uhnsugriwa.ac.id'
+      email: 'fast@uhnsugriwa.ac.id'
     }
   },
   'kerja-praktek': {
@@ -442,7 +442,7 @@ export const DETAIL_CONTENTS: Record<string, DetailContent> = {
     contactPerson: {
       role: 'Koordinator PKL & Hubungan Industri',
       name: 'Tim Magang Mahasiswa FAST',
-      email: 'pkl.fast@uhnsugriwa.ac.id'
+      email: 'fast@uhnsugriwa.ac.id'
     }
   },
   'kkn': {
@@ -469,7 +469,7 @@ export const DETAIL_CONTENTS: Record<string, DetailContent> = {
     contactPerson: {
       role: 'Lembaga Penelitian & Pengabdian (LP2M)',
       name: 'Pusat KKN UHN IGB Sugriwa',
-      email: 'lp2m@uhnsugriwa.ac.id'
+      email: 'fast@uhnsugriwa.ac.id'
     }
   },
   'tugas-akhir': {
@@ -497,7 +497,7 @@ export const DETAIL_CONTENTS: Record<string, DetailContent> = {
     contactPerson: {
       role: 'Ketua Panitia Tugas Akhir FAST',
       name: 'Sekretariat Ujian Skripsi FAST',
-      email: 'ta.fast@uhnsugriwa.ac.id'
+      email: 'fast@uhnsugriwa.ac.id'
     }
   },
   'prospek-karir': {
@@ -524,7 +524,7 @@ export const DETAIL_CONTENTS: Record<string, DetailContent> = {
     contactPerson: {
       role: 'Pusat Karir & Hubungan Alumni FAST',
       name: 'Biro Pengembangan Karir UHN Sugriwa',
-      email: 'karir.fast@uhnsugriwa.ac.id'
+      email: 'fast@uhnsugriwa.ac.id'
     }
   },
   'kehidupan-kampus': {
@@ -578,7 +578,7 @@ export const DETAIL_CONTENTS: Record<string, DetailContent> = {
     contactPerson: {
       role: 'Staf Ahli Dekan FAST',
       name: 'Bagian Penjaminan Mutu FAST',
-      email: 'penjaminanmutu.fast@uhnsugriwa.ac.id'
+      email: 'fast@uhnsugriwa.ac.id'
     }
   },
   'kegiatan-mahasiswa': {
@@ -606,7 +606,7 @@ export const DETAIL_CONTENTS: Record<string, DetailContent> = {
     contactPerson: {
       role: 'Ketua Himpunan Mahasiswa FAST',
       name: 'Pengurus HIMA FAST UHN Sugriwa',
-      email: 'hima.fast@uhnsugriwa.ac.id'
+      email: 'fast@uhnsugriwa.ac.id'
     }
   },
   'fasilitas-pembelajaran': {
@@ -635,7 +635,7 @@ export const DETAIL_CONTENTS: Record<string, DetailContent> = {
     contactPerson: {
       role: 'Kepala Laboratorium Terpadu FAST',
       name: 'Subbagian Sarana & Prasarana FAST',
-      email: 'lab.fast@uhnsugriwa.ac.id'
+      email: 'fast@uhnsugriwa.ac.id'
     }
   }
 };
