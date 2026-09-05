@@ -1,0 +1,6 @@
+{
+  "name": "Fakultas Sains dan Teknologi UHN I Gusti Bagus Sugriwa",
+  "description": "Situs resmi Fakultas Sains dan Teknologi Universitas Hindu Negeri I Gusti Bagus Sugriwa Denpasar. Menyelenggarakan pendidikan unggul bidang Informatika, Desain Komunikasi Visual, dan Sains Informasi.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
