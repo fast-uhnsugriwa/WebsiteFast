@@ -98,7 +98,7 @@ export const Hero: React.FC<HeroProps> = ({
 
             <motion.a
               id="hero-btn-pmb"
-              href="https://pmb.uhnsugriwa.ac.id/"
+              href="https://pmb-uhn.uhnsugriwa.ac.id/"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.02, x: 2 }}

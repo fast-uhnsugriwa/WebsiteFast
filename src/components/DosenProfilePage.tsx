@@ -136,7 +136,7 @@ export const DosenProfilePage: React.FC<{ onBackToHome: () => void }> = ({ onBac
                 Direktori Dosen dan Pegawai
               </h1>
               <p className="mt-4 text-stone-600 max-w-2xl text-lg leading-relaxed">
-                Menampilkan profil lengkap staf pengajar, tenaga kependidikan, dan praktisi ahli Fakultas Sains dan Teknologi UHN IGB Sugriwa secara *real-time*.
+                Menampilkan profil lengkap Dosen Pengajar dan Tenaga Kependidikan di Fakultas Sains dan Teknologi UHN IGB Sugriwa
               </p>
             </div>
             

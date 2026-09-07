@@ -346,7 +346,7 @@ export const DETAIL_CONTENTS: Record<string, DetailContent> = {
     title: 'Profil Tenaga Pendidik & Dosen FAST',
     categoryName: 'Akademik',
     subtitle: 'Dosen berkompetensi tinggi lulusan universitas terkemuka dalam dan luar negeri, berdedikasi membimbing mahasiswa.',
-    summary: 'Fakultas Sains dan Teknologi UHN IGB Sugriwa Denpasar didukung oleh tenaga pendidik yang dinamis, memiliki sertifikasi keahlian industri (Cisco, Adobe Certified, AWS, Google Cloud, Data Science Professional), serta aktif meneliti di tingkat internasional.',
+    summary: 'Fakultas Sains dan Teknologi UHN IGB Sugriwa Denpasar didukung oleh tenaga pendidik yang dinamis, memiliki sertifikasi keahlian industri, serta aktif meneliti di tingkat nasional maupun internasional.',
     keyPoints: [
       {
         heading: 'Kualifikasi Dosen FAST',
