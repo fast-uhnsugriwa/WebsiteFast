@@ -2,6 +2,8 @@ import React from 'react';
 import { motion } from 'motion/react';
 import {
   Instagram,
+  Youtube,
+  Facebook,
   Mail,
   MapPin,
   ExternalLink,
@@ -13,6 +15,12 @@ import {
 } from 'lucide-react';
 import { InstitutionalBrandLockup, UniversityLogo, FacultyLogo } from './Logos';
 import { NavDropdownItem } from '../types';
+
+const TikTokIcon: React.FC<{ className?: string }> = ({ className = 'w-4 h-4' }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.298-.002.595.042.88.13V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.66a6.34 6.34 0 0 0 10.86 4.43c.24-.24.45-.5.64-.78V9.17a8.16 8.16 0 0 0 5.09 1.76V7.48a4.84 4.84 0 0 1 0-.79Z" />
+  </svg>
+);
 
 interface FooterProps {
   onSelectNavItem: (item: NavDropdownItem) => void;
@@ -104,16 +112,56 @@ export const Footer: React.FC<FooterProps> = ({
                   fast@uhnsugriwa.ac.id
                 </a>
               </div>
-              <div className="flex items-center gap-2.5">
-                <Instagram className="w-4 h-4 text-rose-500 shrink-0" />
-                <a
-                  href="https://www.instagram.com/fastsugriwa/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-amber-400 hover:translate-x-0.5 transition-all font-semibold inline-block"
-                >
-                  @fastsugriwa (Akun Resmi)
-                </a>
+              {/* Media Sosial Resmi FAST */}
+              <div className="pt-2.5 mt-2.5 border-t border-stone-800/90 space-y-2">
+                <div className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
+                  Media Sosial Resmi:
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <a
+                    href="https://www.instagram.com/fastsugriwa/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 p-1.5 rounded-lg bg-stone-900/80 hover:bg-stone-800 border border-stone-800 hover:border-rose-500/50 hover:text-rose-300 transition-all group"
+                    title="Instagram @fastsugriwa"
+                  >
+                    <Instagram className="w-3.5 h-3.5 text-rose-500 shrink-0 group-hover:scale-110 transition-transform" />
+                    <span className="truncate">@fastsugriwa</span>
+                  </a>
+
+                  <a
+                    href="https://www.youtube.com/@fastsugriwa"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 p-1.5 rounded-lg bg-stone-900/80 hover:bg-stone-800 border border-stone-800 hover:border-red-500/50 hover:text-red-300 transition-all group"
+                    title="YouTube @fastsugriwa"
+                  >
+                    <Youtube className="w-3.5 h-3.5 text-red-500 shrink-0 group-hover:scale-110 transition-transform" />
+                    <span className="truncate">@fastsugriwa</span>
+                  </a>
+
+                  <a
+                    href="https://www.tiktok.com/@fastsugriwa"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 p-1.5 rounded-lg bg-stone-900/80 hover:bg-stone-800 border border-stone-800 hover:border-cyan-400/50 hover:text-cyan-300 transition-all group"
+                    title="TikTok @fastsugriwa"
+                  >
+                    <TikTokIcon className="w-3.5 h-3.5 text-stone-300 group-hover:text-cyan-300 shrink-0 group-hover:scale-110 transition-transform" />
+                    <span className="truncate">@fastsugriwa</span>
+                  </a>
+
+                  <a
+                    href="https://www.facebook.com/sainteksugriwa"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 p-1.5 rounded-lg bg-stone-900/80 hover:bg-stone-800 border border-stone-800 hover:border-blue-500/50 hover:text-blue-300 transition-all group"
+                    title="Facebook Saintek Sugriwa"
+                  >
+                    <Facebook className="w-3.5 h-3.5 text-blue-500 shrink-0 group-hover:scale-110 transition-transform" />
+                    <span className="truncate">Saintek Sugriwa</span>
+                  </a>
+                </div>
               </div>
             </div>
           </motion.div>
