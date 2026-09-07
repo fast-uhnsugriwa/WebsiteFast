@@ -69,7 +69,7 @@ export const InstagramSection: React.FC = () => {
               Berita & Artikel @fastsugriwa
             </h2>
             <p className="mt-2 text-stone-600 text-sm sm:text-base max-w-2xl">
-              Publikasi resmi seputar beasiswa, kuliah umum, prestasi mahasiswa, dan agenda fakultas yang terhubung dengan akun resmi Instagram <span className="font-semibold text-stone-800">@fastsugriwa</span>.
+              Publikasi resmi seputar beasiswa, kuliah umum, prestasi mahasiswa, dan agenda fakultas.
             </p>
           </div>
 
@@ -115,37 +115,6 @@ export const InstagramSection: React.FC = () => {
               </motion.a>
             </div>
           </motion.div>
-        </motion.div>
-
-        {/* Informative Status Strip with Scroll Entrance */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.15 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="mb-6 px-4 py-2.5 rounded-xl bg-stone-50 border border-stone-200/90 flex flex-wrap items-center justify-between gap-3 text-xs text-stone-700"
-        >
-          <div className="flex items-center gap-2">
-            {posts.length > 0 ? (
-              <>
-                <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
-                <span>
-                  <strong>Feed Resmi Terverifikasi:</strong> Menyajikan publikasi pengumuman terkini akun <strong>@fastsugriwa</strong>
-                </span>
-              </>
-            ) : (
-              <>
-                <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0 animate-pulse" />
-                <span>
-                  <strong>Status Feed:</strong> Under Maintenance (Sedang Dalam Pemeliharaan hingga Konfigurasi Feed Dilakukan)
-                </span>
-              </>
-            )}
-          </div>
-          <div className="flex items-center gap-2 text-stone-500 text-[11px]">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-            <span>Pembaruan Berkala</span>
-          </div>
         </motion.div>
 
         {/* Category Filter Pills */}
@@ -405,17 +374,17 @@ export const InstagramSection: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, amount: 0.15 }}
           transition={{ duration: 0.5 }}
-          className="mt-12 p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-orange-50 via-amber-50 to-stone-50 border border-amber-200/80 flex flex-col sm:flex-row items-center justify-between gap-6"
+          className="mt-10 sm:mt-12 p-5 sm:p-7 md:p-8 rounded-2xl bg-gradient-to-br from-amber-50/80 via-orange-50/50 to-stone-50 border border-amber-200/80 shadow-xs flex flex-col md:flex-row items-center md:items-center justify-between gap-5 sm:gap-6 text-center md:text-left"
         >
-          <div className="flex items-center gap-4 text-center sm:text-left">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500 text-white flex items-center justify-center shrink-0 shadow-md">
-              <Instagram className="w-6 h-6" />
+          <div className="flex flex-col sm:flex-row items-center gap-3.5 sm:gap-4 max-w-2xl">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500 text-white flex items-center justify-center shrink-0 shadow-md">
+              <Instagram className="w-6 h-6 sm:w-7 sm:h-7" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-stone-900">
+              <h3 className="text-base sm:text-lg font-bold text-stone-900 tracking-tight">
                 Ikuti Pembaruan Harian di @fastsugriwa
               </h3>
-              <p className="text-xs text-stone-600 mt-0.5">
+              <p className="text-xs sm:text-sm text-stone-600 mt-1 leading-relaxed">
                 Kunjungi Instagram resmi Fakultas Sains dan Teknologi untuk info beasiswa berkala, pengumuman PKL, dan prestasi mahasiswa.
               </p>
             </div>
@@ -425,7 +394,7 @@ export const InstagramSection: React.FC = () => {
             href={INSTAGRAM_CONFIG.profileUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-stone-900 hover:bg-orange-600 text-white font-bold text-xs tracking-wide shadow-md transition-all shrink-0"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-stone-900 hover:bg-orange-600 active:bg-orange-700 text-white font-bold text-xs sm:text-sm tracking-wide shadow-md transition-all shrink-0"
           >
             <span>Kunjungi Profil @fastsugriwa</span>
             <ExternalLink className="w-4 h-4" />
