@@ -359,7 +359,7 @@ export const DETAIL_CONTENTS: Record<string, DetailContent> = {
     ],
     actionLink: {
       label: 'Lihat Direktori Lengkap Dosen & Publikasi SINTA',
-      url: '#',
+      url: '#dosen',
       isExternal: false
     },
     contactPerson: {

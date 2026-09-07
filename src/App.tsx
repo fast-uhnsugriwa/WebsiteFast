@@ -6,6 +6,7 @@ import { FacultyProfile } from './components/FacultyProfile';
 import { ProgramStudies } from './components/ProgramStudies';
 import { InstagramSection } from './components/InstagramSection';
 import { SainsInformasiPage } from './components/SainsInformasiPage';
+import { DosenProfilePage } from './components/DosenProfilePage';
 import { AcademicModal } from './components/AcademicModal';
 import { Footer } from './components/Footer';
 import { CinematicLightBackground } from './components/CinematicLightBackground';
@@ -13,15 +14,19 @@ import { GeometricConstellationCanvas } from './components/GeometricConstellatio
 import { NavDropdownItem } from './types';
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<'home' | 'sains-informasi'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'sains-informasi' | 'dosen'>('home');
   const [selectedDetailItem, setSelectedDetailItem] = useState<NavDropdownItem | null>(null);
 
   // Sync with browser hash for bookmarking and back button
   useEffect(() => {
     const handleHashChange = () => {
+      setSelectedDetailItem(null);
       const hash = window.location.hash.toLowerCase();
       if (hash === '#sains-informasi' || hash === '#prodi-sains-informasi') {
         setCurrentPage('sains-informasi');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (hash === '#dosen' || hash === '#profil-dosen') {
+        setCurrentPage('dosen');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         setCurrentPage('home');
@@ -108,6 +113,8 @@ export default function App() {
             />
             <InstagramSection />
           </>
+        ) : currentPage === 'dosen' ? (
+          <DosenProfilePage onBackToHome={handleNavigateHome} />
         ) : (
           <SainsInformasiPage onBackToHome={handleNavigateHome} />
         )}
