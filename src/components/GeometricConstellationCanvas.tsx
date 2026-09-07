@@ -29,9 +29,15 @@ interface FormationEdge {
 interface Formation {
   id: number;
   type: 'triangle' | 'spiral' | 'neural' | 'hubring' | 'sine' | 'binarytree';
+  formula: string;
   centerX: number;
   centerY: number;
+  driftVx: number;
+  driftVy: number;
+  baseAngle: number;
+  rotSpeed: number;
   radius: number;
+  localNodes: Point[];
   nodes: Point[];
   edges: FormationEdge[];
   particleIndices: number[];
@@ -118,13 +124,13 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
     const PROXIMITY_THRESHOLD = 95;
     const MOUSE_REPEL_RADIUS = 95;
 
-    // Initialize Particles (~150-170)
+    // Initialize Particles (~150-170) with slower gentle speeds
     const count = Math.max(150, Math.min(170, particleCount));
     const particles: Particle[] = [];
 
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const speed = 0.35 + Math.random() * 0.45;
+      const speed = 0.12 + Math.random() * 0.18; // pelan dan halus (0.12 - 0.30 px/frame)
       const vx = Math.cos(angle) * speed;
       const vy = Math.sin(angle) * speed;
 
@@ -155,20 +161,32 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
       y: x * Math.sin(angle) + y * Math.cos(angle)
     });
 
+    // Helper: Draw rounded pill
+    const drawPillPath = (x: number, y: number, w: number, h: number, r: number) => {
+      ctx.beginPath();
+      if (typeof ctx.roundRect === 'function') {
+        ctx.roundRect(x, y, w, h, r);
+      } else {
+        ctx.moveTo(x + r, y);
+        ctx.arcTo(x + w, y, x + w, y + h, r);
+        ctx.arcTo(x + w, y + h, x, y + h, r);
+        ctx.arcTo(x, y + h, x, y, r);
+        ctx.arcTo(x, y, x + w, y, r);
+        ctx.closePath();
+      }
+    };
+
     // 6 Geometrical Formations Creators
     const createFormationData = (
-      typeIndex: number,
-      cx: number,
-      cy: number
+      typeIndex: number
     ): {
       type: Formation['type'];
+      formula: string;
       radius: number;
-      nodes: Point[];
+      localNodes: Point[];
       edges: FormationEdge[];
       isHueCycling?: boolean;
     } => {
-      const rot = Math.random() * Math.PI * 2;
-
       switch (typeIndex % 6) {
         // 1. Segitiga siku-siku bertanda sudut (Right-angle triangle with right-angle corner indicator)
         case 0: {
@@ -189,10 +207,10 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
           // Center offset so centroid is near (0, 0)
           const ox = w / 3;
           const oy = -h / 3;
-          const nodes = rawPoints.map((p) => {
-            const r = rotatePoint(p.x - ox, p.y - oy, rot);
-            return { x: cx + r.x, y: cy + r.y };
-          });
+          const localNodes = rawPoints.map((p) => ({
+            x: p.x - ox,
+            y: p.y - oy
+          }));
 
           const edges: FormationEdge[] = [
             // Triangle
@@ -204,7 +222,13 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
             { from: 4, to: 5 }
           ];
 
-          return { type: 'triangle', radius: 85, nodes, edges };
+          return {
+            type: 'triangle',
+            formula: 'a² + b² = c²',
+            radius: 85,
+            localNodes,
+            edges
+          };
         }
 
         // 2. Spiral Golden Ratio (r = a * e^(b*theta))
@@ -213,26 +237,34 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
           const phi = 1.6180339887;
           const b = Math.log(phi) / (Math.PI / 2); // ~0.30635
           const numNodes = 10;
-          const nodes: Point[] = [];
+          const localNodes: Point[] = [];
           const edges: FormationEdge[] = [];
 
           for (let i = 0; i < numNodes; i++) {
             const theta = (i * Math.PI) / 3.2;
             const r = a * Math.exp(b * theta);
-            const pt = rotatePoint(r * Math.cos(theta), r * Math.sin(theta), rot);
-            nodes.push({ x: cx + pt.x, y: cy + pt.y });
+            localNodes.push({
+              x: r * Math.cos(theta),
+              y: r * Math.sin(theta)
+            });
             if (i > 0) {
               edges.push({ from: i - 1, to: i });
             }
           }
 
-          return { type: 'spiral', radius: 85, nodes, edges };
+          return {
+            type: 'spiral',
+            formula: 'r = a · e^(bθ)',
+            radius: 85,
+            localNodes,
+            edges
+          };
         }
 
         // 3. Neural Network 2-3-2 (Input 2, Hidden 3, Output 2)
         case 2: {
           const dx = 52;
-          const rawNodes: Point[] = [
+          const localNodes: Point[] = [
             // Layer 1 (2 nodes)
             { x: -dx, y: -24 },
             { x: -dx, y: 24 },
@@ -244,11 +276,6 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
             { x: dx, y: -24 },
             { x: dx, y: 24 }
           ];
-
-          const nodes = rawNodes.map((p) => {
-            const r = rotatePoint(p.x, p.y, rot);
-            return { x: cx + r.x, y: cy + r.y };
-          });
 
           const edges: FormationEdge[] = [
             // Layer 1 -> Layer 2
@@ -267,20 +294,26 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
             { from: 4, to: 6 }
           ];
 
-          return { type: 'neural', radius: 80, nodes, edges };
+          return {
+            type: 'neural',
+            formula: 'y = σ(W·x + b)',
+            radius: 80,
+            localNodes,
+            edges
+          };
         }
 
         // 4. Mesh Graf Hub-Ring 7 Node (1 center hub + 6 perimeter ring nodes)
         case 3: {
           const R = 55;
-          const nodes: Point[] = [{ x: cx, y: cy }]; // Center hub (node 0)
+          const localNodes: Point[] = [{ x: 0, y: 0 }]; // Center hub (node 0)
           const edges: FormationEdge[] = [];
 
           for (let i = 0; i < 6; i++) {
-            const theta = (i * Math.PI * 2) / 6 + rot;
-            nodes.push({
-              x: cx + Math.cos(theta) * R,
-              y: cy + Math.sin(theta) * R
+            const theta = (i * Math.PI * 2) / 6;
+            localNodes.push({
+              x: Math.cos(theta) * R,
+              y: Math.sin(theta) * R
             });
             // Spoke edge from center
             edges.push({ from: 0, to: i + 1 });
@@ -288,7 +321,13 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
             edges.push({ from: i + 1, to: i === 5 ? 1 : i + 2 });
           }
 
-          return { type: 'hubring', radius: 75, nodes, edges };
+          return {
+            type: 'hubring',
+            formula: 'G = (V, E)  |V|=7, |E|=12',
+            radius: 75,
+            localNodes,
+            edges
+          };
         }
 
         // 5. Gelombang Sinus dengan Hue Cycling
@@ -296,27 +335,33 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
           const length = 145;
           const numNodes = 8;
           const amplitude = 26;
-          const nodes: Point[] = [];
+          const localNodes: Point[] = [];
           const edges: FormationEdge[] = [];
 
           for (let i = 0; i < numNodes; i++) {
             const progress = (i / (numNodes - 1)) * 2 - 1; // -1 to 1
             const lx = progress * (length / 2);
             const ly = Math.sin(progress * Math.PI * 1.5) * amplitude;
-            const r = rotatePoint(lx, ly, rot);
-            nodes.push({ x: cx + r.x, y: cy + r.y });
+            localNodes.push({ x: lx, y: ly });
             if (i > 0) {
               edges.push({ from: i - 1, to: i });
             }
           }
 
-          return { type: 'sine', radius: 85, nodes, edges, isHueCycling: true };
+          return {
+            type: 'sine',
+            formula: 'y = A·sin(kx - ωt)',
+            radius: 85,
+            localNodes,
+            edges,
+            isHueCycling: true
+          };
         }
 
         // 6. Pohon Biner 7 Node (Full 3-level binary tree: 1 root, 2 children, 4 leaves)
         case 5:
         default: {
-          const rawNodes: Point[] = [
+          const localNodes: Point[] = [
             // Level 0 (Root)
             { x: 0, y: -48 },
             // Level 1
@@ -329,13 +374,6 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
             { x: 58, y: 38 }
           ];
 
-          // Gentle tilt rotation
-          const tilt = (Math.random() - 0.5) * 0.4;
-          const nodes = rawNodes.map((p) => {
-            const r = rotatePoint(p.x, p.y, tilt);
-            return { x: cx + r.x, y: cy + r.y };
-          });
-
           const edges: FormationEdge[] = [
             { from: 0, to: 1 },
             { from: 0, to: 2 },
@@ -345,7 +383,13 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
             { from: 2, to: 6 }
           ];
 
-          return { type: 'binarytree', radius: 80, nodes, edges };
+          return {
+            type: 'binarytree',
+            formula: 'N = 2ʰ⁺¹ - 1  (h=2)',
+            radius: 80,
+            localNodes,
+            edges
+          };
         }
       }
     };
@@ -355,50 +399,62 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
     let currentFormationTypeIndex = Math.floor(Math.random() * 6);
 
     const trySpawnFormation = (now: number) => {
-      // Don't spawn more than 4 concurrent formations to keep canvas clean
-      if (formations.length >= 4) return;
+      // Keep up to 3-4 concurrent formations
+      if (formations.length >= 3) return;
 
-      const padding = 120;
+      const padding = 130;
       if (width < padding * 2 || height < padding * 2) return;
 
-      // Try finding a random location that respects clearance radius
-      let validSpawn: { cx: number; cy: number; data: ReturnType<typeof createFormationData> } | null = null;
+      let validSpawn: {
+        cx: number;
+        cy: number;
+        data: ReturnType<typeof createFormationData>;
+        initialAngle: number;
+      } | null = null;
 
-      for (let attempts = 0; attempts < 12; attempts++) {
+      for (let attempts = 0; attempts < 14; attempts++) {
         const cx = padding + Math.random() * (width - padding * 2);
         const cy = padding + Math.random() * (height - padding * 2);
-        const candidate = createFormationData(currentFormationTypeIndex, cx, cy);
+        const candidate = createFormationData(currentFormationTypeIndex);
 
-        // Check distance to all other active formations
         let hasClearance = true;
         for (const f of formations) {
           const dist = Math.hypot(cx - f.centerX, cy - f.centerY);
-          if (dist < candidate.radius + f.radius + 60) {
+          if (dist < candidate.radius + f.radius + 70) {
             hasClearance = false;
             break;
           }
         }
 
         if (hasClearance) {
-          validSpawn = { cx, cy, data: candidate };
+          validSpawn = {
+            cx,
+            cy,
+            data: candidate,
+            initialAngle: Math.random() * Math.PI * 2
+          };
           break;
         }
       }
 
       if (!validSpawn) return;
 
-      const { cx, cy, data } = validSpawn;
-      const neededNodesCount = data.nodes.length;
+      const { cx, cy, data, initialAngle } = validSpawn;
+      const neededNodesCount = data.localNodes.length;
 
-      // Find closest free particles to each target node
-      // Candidate free particles
+      // Compute initial world node coordinates
+      const worldNodes: Point[] = data.localNodes.map((p) => {
+        const r = rotatePoint(p.x, p.y, initialAngle);
+        return { x: cx + r.x, y: cy + r.y };
+      });
+
+      // Find closest free particles to each initial target node
       const availableIndices = particles
         .map((p, idx) => ({ p, idx }))
         .filter(({ p }) => p.formationId === null);
 
       if (availableIndices.length < neededNodesCount) return;
 
-      // Sort available particles by distance to the formation center
       availableIndices.sort(
         (a, b) => Math.hypot(a.p.x - cx, a.p.y - cy) - Math.hypot(b.p.x - cx, b.p.y - cy)
       );
@@ -407,7 +463,7 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
       const assignedParticles = new Set<number>();
 
       for (let nodeIdx = 0; nodeIdx < neededNodesCount; nodeIdx++) {
-        const target = data.nodes[nodeIdx];
+        const target = worldNodes[nodeIdx];
         let bestDist = Infinity;
         let bestIdx = -1;
 
@@ -426,33 +482,45 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
         }
       }
 
-      // If we couldn't recruit enough particles, abort this attempt
       if (recruitedIndices.length < neededNodesCount) return;
+
+      // Gentle drift velocity for the formation (smooth floating)
+      const driftAngle = Math.random() * Math.PI * 2;
+      const driftSpeed = 0.14 + Math.random() * 0.12; // slow smooth movement (0.14 - 0.26 px/frame)
+      const driftVx = Math.cos(driftAngle) * driftSpeed;
+      const driftVy = Math.sin(driftAngle) * driftSpeed;
+      const rotSpeed = (Math.random() - 0.5) * 0.0006; // very subtle slow rotation
 
       const formationId = nextFormationId++;
       const formation: Formation = {
         id: formationId,
         type: data.type,
+        formula: data.formula,
         centerX: cx,
         centerY: cy,
+        driftVx,
+        driftVy,
+        baseAngle: initialAngle,
+        rotSpeed,
         radius: data.radius,
-        nodes: data.nodes,
+        localNodes: data.localNodes,
+        nodes: worldNodes,
         edges: data.edges,
         particleIndices: recruitedIndices,
         spawnTime: now,
-        fadeDuration: 900,
-        holdDuration: 4200,
-        totalDuration: 6000,
+        fadeDuration: 1100, // gentle smooth fade-in
+        holdDuration: 4600, // longer hold to admire formation & formula
+        totalDuration: 6800,
         isHueCycling: data.isHueCycling
       };
 
-      // Assign target positions to recruited particles
+      // Assign initial targets to recruited particles
       for (let i = 0; i < recruitedIndices.length; i++) {
         const pIdx = recruitedIndices[i];
         const p = particles[pIdx];
         p.formationId = formationId;
-        p.targetX = data.nodes[i].x;
-        p.targetY = data.nodes[i].y;
+        p.targetX = worldNodes[i].x;
+        p.targetY = worldNodes[i].y;
       }
 
       formations.push(formation);
@@ -471,88 +539,119 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
       ctx.fillStyle = backgroundColor;
       ctx.fillRect(0, 0, width, height);
 
-      // 3. Update Formations & Lifecycles
+      // 3. Update Formations & Lifecycles (Continuous Smooth Drifting & Rotation)
       for (let fIdx = formations.length - 1; fIdx >= 0; fIdx--) {
         const f = formations[fIdx];
         const elapsed = time - f.spawnTime;
 
-        // If completed total duration (900ms + 4200ms + 900ms = 6000ms), release particles!
+        // If completed total duration, release particles back to free motion!
         if (elapsed >= f.totalDuration) {
           for (const pIdx of f.particleIndices) {
             const p = particles[pIdx];
             if (p && p.formationId === f.id) {
               p.formationId = null;
-              // Release back to free motion with random velocity vector
+              // Release with gentle random velocity
               const angle = Math.random() * Math.PI * 2;
-              const speed = 0.35 + Math.random() * 0.55;
+              const speed = 0.12 + Math.random() * 0.16;
               p.vx = Math.cos(angle) * speed;
               p.vy = Math.sin(angle) * speed;
             }
           }
           formations.splice(fIdx, 1);
+          continue;
+        }
+
+        // --- FORMATION DYNAMIC MOTION (Never freezes, drifts continuously) ---
+        f.centerX += f.driftVx;
+        f.centerY += f.driftVy;
+
+        // Soft screen bounce for the formation so it stays in visible canvas
+        const pad = f.radius + 40;
+        if (f.centerX < pad && f.driftVx < 0) f.driftVx *= -1;
+        else if (f.centerX > width - pad && f.driftVx > 0) f.driftVx *= -1;
+        if (f.centerY < pad && f.driftVy < 0) f.driftVy *= -1;
+        else if (f.centerY > height - pad && f.driftVy > 0) f.driftVy *= -1;
+
+        // Subtle organic sway rotation
+        const currentAngle = f.baseAngle + (elapsed * f.rotSpeed);
+
+        // Update all formation node positions and sync to recruited particles
+        for (let k = 0; k < f.localNodes.length; k++) {
+          const loc = f.localNodes[k];
+          const rotated = rotatePoint(loc.x, loc.y, currentAngle);
+          const nx = f.centerX + rotated.x;
+          const ny = f.centerY + rotated.y;
+
+          f.nodes[k].x = nx;
+          f.nodes[k].y = ny;
+
+          const pIdx = f.particleIndices[k];
+          const p = particles[pIdx];
+          if (p) {
+            p.targetX = nx;
+            p.targetY = ny;
+          }
         }
       }
 
-      // 4. Update Particles (Noise Drift, Lerp Pull to Formations, Cursor Repel)
+      // 4. Update Particles (Smooth ease, Lerp to moving formation, gentle cursor repel)
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
 
         if (p.formationId !== null) {
-          // Find parent formation
           const f = formations.find((item) => item.id === p.formationId);
           if (f) {
             const elapsed = time - f.spawnTime;
             if (elapsed < f.fadeDuration) {
-              // Fade-in Phase: Strong Lerp Pull toward target
-              p.x += (p.targetX - p.x) * 0.085;
-              p.y += (p.targetY - p.y) * 0.085;
+              // Fade-in Phase: Slower, graceful pull toward dynamic target
+              p.x += (p.targetX - p.x) * 0.048;
+              p.y += (p.targetY - p.y) * 0.048;
             } else if (elapsed < f.fadeDuration + f.holdDuration) {
-              // Hold Phase: Locked in formation with subtle organic breathing
-              const jitterX = Math.sin(time * 0.0025 + p.noiseOffset) * 0.45;
-              const jitterY = Math.cos(time * 0.0025 + p.noiseOffset) * 0.45;
-              p.x += (p.targetX + jitterX - p.x) * 0.2;
-              p.y += (p.targetY + jitterY - p.y) * 0.2;
+              // Hold Phase: Smoothly glides along with moving formation
+              const breathing = Math.sin(time * 0.0018 + p.noiseOffset) * 0.3;
+              p.x += (p.targetX + breathing - p.x) * 0.14;
+              p.y += (p.targetY + breathing - p.y) * 0.14;
             } else {
-              // Fade-out Phase: Starting to loosen up gently
-              p.x += (p.targetX - p.x) * 0.05 + p.vx * 0.3;
-              p.y += (p.targetY - p.y) * 0.05 + p.vy * 0.3;
+              // Fade-out Phase: Starting to gently peel away
+              p.x += (p.targetX - p.x) * 0.03 + p.vx * 0.2;
+              p.y += (p.targetY - p.y) * 0.03 + p.vy * 0.2;
             }
           } else {
             p.formationId = null;
           }
         } else {
-          // Free Particle: Smooth Perlin/Trigonometric Noise Drift
-          const noiseX = Math.sin(time * 0.0009 + p.y * 0.008) * 0.08;
-          const noiseY = Math.cos(time * 0.0009 + p.x * 0.008) * 0.08;
+          // Free Particle: Pelan, tenang, smooth Perlin/trigonometric noise drift
+          const noiseX = Math.sin(time * 0.0005 + p.y * 0.006) * 0.025;
+          const noiseY = Math.cos(time * 0.0005 + p.x * 0.006) * 0.025;
 
-          p.vx += noiseX * 0.1;
-          p.vy += noiseY * 0.1;
+          p.vx += noiseX * 0.035;
+          p.vy += noiseY * 0.035;
 
-          // Limit max free speed
+          // Limit max free speed to keep motion calm and slow
           const curSpeed = Math.hypot(p.vx, p.vy);
-          if (curSpeed > 1.1) {
-            p.vx = (p.vx / curSpeed) * 1.1;
-            p.vy = (p.vy / curSpeed) * 1.1;
+          if (curSpeed > 0.32) {
+            p.vx = (p.vx / curSpeed) * 0.32;
+            p.vy = (p.vy / curSpeed) * 0.32;
           }
 
           p.x += p.vx;
           p.y += p.vy;
 
-          // Cursor Reactivity: Repel free particles within ~95px
+          // Cursor Reactivity: Repel free particles within ~95px smoothly
           if (mouse.active) {
             const dx = p.x - mouse.x;
             const dy = p.y - mouse.y;
             const dist = Math.hypot(dx, dy);
 
             if (dist < MOUSE_REPEL_RADIUS && dist > 0.1) {
-              const repelForce = (1 - dist / MOUSE_REPEL_RADIUS) * 3.6;
+              const repelForce = (1 - dist / MOUSE_REPEL_RADIUS) * 1.35;
               const angle = Math.atan2(dy, dx);
               p.x += Math.cos(angle) * repelForce;
               p.y += Math.sin(angle) * repelForce;
             }
           }
 
-          // Screen Boundary Soft Wrap / Bounce
+          // Screen Boundary Soft Wrap
           const margin = 20;
           if (p.x < -margin) p.x = width + margin;
           else if (p.x > width + margin) p.x = -margin;
@@ -562,7 +661,7 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
       }
 
       // 5. Draw Proximity Lines between nearby free particles (< 95px)
-      ctx.lineWidth = 0.75;
+      ctx.lineWidth = 0.7;
       for (let i = 0; i < particles.length; i++) {
         const p1 = particles[i];
         for (let j = i + 1; j < particles.length; j++) {
@@ -576,7 +675,7 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
           const dist = Math.hypot(dx, dy);
 
           if (dist < PROXIMITY_THRESHOLD) {
-            const alpha = (1 - dist / PROXIMITY_THRESHOLD) * 0.28;
+            const alpha = (1 - dist / PROXIMITY_THRESHOLD) * 0.25;
             ctx.strokeStyle = `rgba(224, 123, 26, ${alpha.toFixed(3)})`;
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
@@ -586,27 +685,28 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
         }
       }
 
-      // 6. Draw Formations (Edges with Fade-in 900ms -> Hold 4200ms -> Fade-out 900ms)
+      // 6. Draw Formations (Edges + Nodes + Formula Text at Top-Right)
       for (const f of formations) {
         const elapsed = time - f.spawnTime;
         let alpha = 0;
 
         if (elapsed < f.fadeDuration) {
-          // Fade-in 900ms
+          // Fade-in
           alpha = elapsed / f.fadeDuration;
         } else if (elapsed < f.fadeDuration + f.holdDuration) {
-          // Hold 4200ms
+          // Hold
           alpha = 1.0;
         } else if (elapsed < f.totalDuration) {
-          // Fade-out 900ms
-          alpha = 1 - (elapsed - f.fadeDuration - f.holdDuration) / f.fadeDuration;
+          // Fade-out
+          alpha = 1 - (elapsed - f.fadeDuration - f.holdDuration) / (f.totalDuration - f.fadeDuration - f.holdDuration);
         }
 
         alpha = Math.max(0, Math.min(1, alpha));
+        if (alpha <= 0.01) continue;
 
         // Edge stroke style
         if (f.isHueCycling) {
-          const hue = Math.floor((time * 0.06) % 360);
+          const hue = Math.floor((time * 0.05) % 360);
           ctx.strokeStyle = `hsla(${hue}, 85%, 48%, ${(alpha * 0.92).toFixed(3)})`;
         } else {
           ctx.strokeStyle = `rgba(185, 99, 26, ${(alpha * 0.9).toFixed(3)})`;
@@ -638,7 +738,7 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.radius + 1.8, 0, Math.PI * 2);
             if (f.isHueCycling) {
-              const hue = Math.floor((time * 0.06) % 360);
+              const hue = Math.floor((time * 0.05) % 360);
               ctx.strokeStyle = `hsla(${hue}, 85%, 55%, ${(alpha * 0.6).toFixed(3)})`;
             } else {
               ctx.strokeStyle = `rgba(224, 123, 26, ${(alpha * 0.6).toFixed(3)})`;
@@ -646,6 +746,60 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
             ctx.lineWidth = 1;
             ctx.stroke();
           }
+        }
+
+        // --- FORMULA TEXT DI KANAN ATAS FORMASI ---
+        // Formula appears gracefully as formation completes forming (from fade-in midway onwards)
+        const formulaAlpha = Math.max(0, Math.min(1, (alpha - 0.25) / 0.75));
+        if (formulaAlpha > 0.02) {
+          ctx.save();
+          ctx.font = '600 11px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace';
+          const metrics = ctx.measureText(f.formula);
+          const textWidth = metrics.width;
+          const pillPaddingX = 9;
+          const pillHeight = 22;
+          const pillWidth = textWidth + pillPaddingX * 2;
+
+          // Position at top right of formation
+          let badgeX = f.centerX + f.radius * 0.6;
+          let badgeY = f.centerY - f.radius * 0.75;
+
+          // Keep badge within visible canvas boundaries
+          badgeX = Math.max(16, Math.min(width - pillWidth - 16, badgeX));
+          badgeY = Math.max(28, Math.min(height - pillHeight - 16, badgeY));
+
+          // Draw Connecting subtle dotted indicator line from formation perimeter to formula
+          ctx.strokeStyle = f.isHueCycling
+            ? `hsla(${(time * 0.05) % 360}, 80%, 50%, ${(formulaAlpha * 0.35).toFixed(3)})`
+            : `rgba(185, 99, 26, ${(formulaAlpha * 0.35).toFixed(3)})`;
+          ctx.lineWidth = 1;
+          ctx.setLineDash([2, 3]);
+          ctx.beginPath();
+          ctx.moveTo(f.centerX + f.radius * 0.35, f.centerY - f.radius * 0.45);
+          ctx.lineTo(badgeX + 4, badgeY + pillHeight / 2);
+          ctx.stroke();
+          ctx.setLineDash([]); // reset line dash
+
+          // Glass Pill Background
+          ctx.fillStyle = `rgba(253, 252, 250, ${(formulaAlpha * 0.94).toFixed(3)})`;
+          ctx.strokeStyle = f.isHueCycling
+            ? `hsla(${(time * 0.05) % 360}, 85%, 45%, ${(formulaAlpha * 0.55).toFixed(3)})`
+            : `rgba(185, 99, 26, ${(formulaAlpha * 0.55).toFixed(3)})`;
+          ctx.lineWidth = 1.1;
+
+          drawPillPath(badgeX, badgeY, pillWidth, pillHeight, 5);
+          ctx.fill();
+          ctx.stroke();
+
+          // Formula Text
+          ctx.fillStyle = f.isHueCycling
+            ? `hsla(${(time * 0.05) % 360}, 90%, 35%, ${(formulaAlpha * 0.95).toFixed(3)})`
+            : `rgba(164, 75, 12, ${(formulaAlpha * 0.95).toFixed(3)})`;
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(f.formula, badgeX + pillPaddingX, badgeY + pillHeight / 2 + 0.5);
+
+          ctx.restore();
         }
       }
 
