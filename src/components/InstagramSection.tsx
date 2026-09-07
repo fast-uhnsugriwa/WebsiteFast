@@ -46,7 +46,7 @@ export const InstagramSection: React.FC = () => {
     <section
       id="berita-instagram"
       aria-label="Berita dan Artikel Instagram FAST"
-      className="py-16 sm:py-24 bg-white border-b border-stone-200/80 relative"
+      className="py-16 sm:py-24 bg-white/80 backdrop-blur-2xs border-b border-stone-200/80 relative"
     >
       <div className="max-w-7xl mx-auto px-4 sm:6 lg:px-8">
         {/* Section Title & Instagram Profile Header Box with Scroll Reveal */}

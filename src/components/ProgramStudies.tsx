@@ -35,8 +35,8 @@ export const ProgramStudies: React.FC<ProgramStudiesProps> = ({
   return (
     <section
       id="program-studi"
-      aria-label="Program Studi Fakultas Sains dan Teknologi"
-      className="py-16 sm:py-24 bg-stone-50/70 border-b border-stone-200/80 relative"
+      aria-label="Daftar Program Studi Fakultas Sains dan Teknologi"
+      className="py-16 sm:py-24 bg-gradient-to-b from-stone-50/75 via-amber-50/15 to-white/80 backdrop-blur-2xs relative overflow-hidden border-b border-stone-200/80"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Title with Animated Entrance */}

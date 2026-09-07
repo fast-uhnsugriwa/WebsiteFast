@@ -9,6 +9,7 @@ import { SainsInformasiPage } from './components/SainsInformasiPage';
 import { AcademicModal } from './components/AcademicModal';
 import { Footer } from './components/Footer';
 import { CinematicLightBackground } from './components/CinematicLightBackground';
+import { GeometricConstellationCanvas } from './components/GeometricConstellationCanvas';
 import { NavDropdownItem } from './types';
 
 export default function App() {
@@ -78,7 +79,10 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-stone-50 font-sans text-stone-800 selection:bg-amber-500 selection:text-white relative">
+    <div className="min-h-screen flex flex-col bg-[#FDFCFA]/60 font-sans text-stone-800 selection:bg-amber-500 selection:text-white relative">
+      {/* Fullscreen Generative Geometric Constellation Canvas Background */}
+      <GeometricConstellationCanvas />
+
       {/* Global Cinematic Subtle Background Lights */}
       <CinematicLightBackground variant="ambient" />
 

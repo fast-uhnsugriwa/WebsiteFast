@@ -25,7 +25,7 @@ export const Hero: React.FC<HeroProps> = ({
     <section
       id="beranda-hero"
       aria-label="Pusat Informasi Fakultas Sains dan Teknologi"
-      className="relative overflow-hidden bg-gradient-to-b from-stone-50 via-amber-50/20 to-white pt-10 pb-20 lg:pt-16 lg:pb-28 border-b border-stone-200/60"
+      className="relative overflow-hidden bg-gradient-to-b from-stone-50/60 via-amber-50/10 to-white/70 pt-10 pb-20 lg:pt-16 lg:pb-28 border-b border-stone-200/60"
     >
       {/* Subtle Geometric Balinese Sacred Line Art & Circuit Patterns (NO Campus Photography) */}
       <div className="absolute inset-0 pointer-events-none select-none opacity-[0.035]" aria-hidden="true">

@@ -19,7 +19,7 @@ export const FacultyProfile: React.FC = () => {
     <section
       id="profil-fakultas"
       aria-label="Profil Fakultas Sains dan Teknologi"
-      className="py-16 sm:py-24 bg-white border-b border-stone-200/80 relative"
+      className="py-16 sm:py-24 bg-white/80 backdrop-blur-2xs border-b border-stone-200/80 relative"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header with Scroll Reveal */}
