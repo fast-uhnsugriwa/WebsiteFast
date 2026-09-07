@@ -90,8 +90,7 @@ export default function App() {
         <GeometricConstellationCanvas />
       </div>
 
-      {/* Global Cinematic Subtle Background Lights */}
-      <CinematicLightBackground variant="ambient" />
+      {/* Global Cinematic Subtle Background Lights - inside main only, see below */}
 
       {/* Primary Institutional Header */}
       <Header
@@ -102,7 +101,9 @@ export default function App() {
       />
 
       {/* Main View Area */}
-      <main className="flex-1">
+      <main className="flex-1 relative overflow-hidden">
+        {/* Cinematic ambient lights scoped to main content only */}
+        <CinematicLightBackground variant="ambient" />
         {currentPage === 'home' ? (
           <>
             <Hero
