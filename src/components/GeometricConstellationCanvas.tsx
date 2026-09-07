@@ -29,7 +29,17 @@ interface FormationEdge {
 
 interface Formation {
   id: number;
-  type: 'triangle' | 'spiral' | 'neural' | 'hubring' | 'sine' | 'binarytree';
+  type:
+    | 'triangle'
+    | 'spiral'
+    | 'neural'
+    | 'hubring'
+    | 'sine'
+    | 'binarytree'
+    | 'kmeans'
+    | 'resnet'
+    | 'regression'
+    | 'colorharmony';
   formula: string;
   centerX: number;
   centerY: number;
@@ -209,7 +219,7 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
       edges: FormationEdge[];
       isHueCycling?: boolean;
     } => {
-      switch (typeIndex % 6) {
+      switch (typeIndex % 10) {
         // 1. Segitiga siku-siku bertanda sudut (Right-angle triangle with right-angle corner indicator)
         case 0: {
           const w = 75;
@@ -381,8 +391,7 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
         }
 
         // 6. Pohon Biner 7 Node (Full 3-level binary tree: 1 root, 2 children, 4 leaves)
-        case 5:
-        default: {
+        case 5: {
           const localNodes: Point[] = [
             // Level 0 (Root)
             { x: 0, y: -48 },
@@ -413,12 +422,160 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
             edges
           };
         }
+
+        // 7. Algoritma K-Means Clustering (3 Klaster Sentroid dengan Titik Satelit)
+        case 6: {
+          const localNodes: Point[] = [
+            // Sentroid Klaster (0, 1, 2)
+            { x: -38, y: -26 },
+            { x: 40, y: -22 },
+            { x: 2, y: 38 },
+            // Titik Satelit Klaster A (3, 4)
+            { x: -58, y: -14 },
+            { x: -26, y: -45 },
+            // Titik Satelit Klaster B (5, 6)
+            { x: 58, y: -34 },
+            { x: 32, y: -4 },
+            // Titik Satelit Klaster C (7, 8)
+            { x: -18, y: 52 },
+            { x: 24, y: 48 }
+          ];
+
+          const edges: FormationEdge[] = [
+            // Segitiga penghubung antar-sentroid
+            { from: 0, to: 1 },
+            { from: 1, to: 2 },
+            { from: 2, to: 0 },
+            // Hubungan titik data ke sentroid masing-masing
+            { from: 0, to: 3 },
+            { from: 0, to: 4 },
+            { from: 1, to: 5 },
+            { from: 1, to: 6 },
+            { from: 2, to: 7 },
+            { from: 2, to: 8 }
+          ];
+
+          return {
+            type: 'kmeans',
+            formula: 'J = ∑‖x - μₖ‖²  (k=3)',
+            radius: 85,
+            localNodes,
+            edges
+          };
+        }
+
+        // 8. ResNet Deep Residual Block (Feed-forward + Shortcut Connection)
+        case 7: {
+          const localNodes: Point[] = [
+            { x: 0, y: -54 },  // Node 0: Input x
+            { x: 0, y: -20 },  // Node 1: Weight Layer 1
+            { x: 0, y: 10 },   // Node 2: ReLU Activation
+            { x: 0, y: 40 },   // Node 3: Weight Layer 2
+            { x: 0, y: 72 },   // Node 4: Output addition ⊕ y
+            { x: 38, y: -20 }, // Node 5: Residual skip arc 1
+            { x: 38, y: 40 }   // Node 6: Residual skip arc 2
+          ];
+
+          const edges: FormationEdge[] = [
+            // Feed-forward path
+            { from: 0, to: 1 },
+            { from: 1, to: 2 },
+            { from: 2, to: 3 },
+            { from: 3, to: 4 },
+            // Identity shortcut connection F(x) + x
+            { from: 0, to: 5 },
+            { from: 5, to: 6 },
+            { from: 6, to: 4 }
+          ];
+
+          return {
+            type: 'resnet',
+            formula: 'y = F(x, {Wᵢ}) + x',
+            radius: 85,
+            localNodes,
+            edges
+          };
+        }
+
+        // 9. Regresi Linier (Scatter Data Points + Garis Regresi Terbaik)
+        case 8: {
+          const localNodes: Point[] = [
+            // Best fit regression line (0, 1, 2)
+            { x: -55, y: 35 },
+            { x: 0, y: -3.5 },
+            { x: 55, y: -42 },
+            // Scatter data points with residual projections
+            { x: -38, y: 14 },
+            { x: -18, y: 18 },
+            { x: 20, y: -28 },
+            { x: 42, y: -22 }
+          ];
+
+          const edges: FormationEdge[] = [
+            // Garis regresi utama
+            { from: 0, to: 1 },
+            { from: 1, to: 2 },
+            // Proyeksi residual galat (error residuals)
+            { from: 3, to: 0 },
+            { from: 4, to: 1 },
+            { from: 5, to: 1 },
+            { from: 6, to: 2 }
+          ];
+
+          return {
+            type: 'regression',
+            formula: 'y = β₀ + β₁x + ε',
+            radius: 80,
+            localNodes,
+            edges
+          };
+        }
+
+        // 10. Color Harmony (Harmoni Warna Triadik Roda Warna 120° HSL)
+        case 9:
+        default: {
+          const R = 52;
+          const localNodes: Point[] = [];
+          const edges: FormationEdge[] = [];
+
+          // 6 titik perimeter roda warna (0, 1, 2, 3, 4, 5)
+          for (let i = 0; i < 6; i++) {
+            const theta = (i * Math.PI * 2) / 6;
+            localNodes.push({
+              x: Math.cos(theta) * R,
+              y: Math.sin(theta) * R
+            });
+            edges.push({ from: i, to: (i + 1) % 6 });
+          }
+
+          // Titik pusat (Node 6)
+          localNodes.push({ x: 0, y: 0 });
+
+          // Segitiga harmoni triadik (0°, 120°, 240°)
+          edges.push({ from: 0, to: 2 });
+          edges.push({ from: 2, to: 4 });
+          edges.push({ from: 4, to: 0 });
+
+          // Jari-jari harmoni ke pusat
+          edges.push({ from: 6, to: 0 });
+          edges.push({ from: 6, to: 2 });
+          edges.push({ from: 6, to: 4 });
+
+          return {
+            type: 'colorharmony',
+            formula: 'Hₙ = (H₀ + n·120°) mod 360°',
+            radius: 82,
+            localNodes,
+            edges,
+            isHueCycling: true
+          };
+        }
       }
     };
 
     // Attempt to spawn a formation every ~1.6 seconds
     let lastSpawnCheck = performance.now();
-    let currentFormationTypeIndex = Math.floor(Math.random() * 6);
+    let currentFormationTypeIndex = Math.floor(Math.random() * 10);
 
     const trySpawnFormation = (now: number) => {
       // Keep up to 3-4 concurrent formations
@@ -739,16 +896,17 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
         }
 
         if (formationAlpha > 0.01) {
-          // Broad volumetric white daylight bloom centered at formation
-          const outerR = f.radius * 2.8;
+          // 1. Broad Volumetric Pure White Daylight Bloom (intensitas tinggi & radius diperluas)
+          const outerR = f.radius * 3.4;
           const glowGrad = ctx.createRadialGradient(
             f.centerX, f.centerY, 0,
             f.centerX, f.centerY, outerR
           );
-          glowGrad.addColorStop(0, `rgba(255, 255, 255, ${(0.96 * formationAlpha).toFixed(3)})`);
-          glowGrad.addColorStop(0.25, `rgba(255, 255, 255, ${(0.84 * formationAlpha).toFixed(3)})`);
-          glowGrad.addColorStop(0.55, `rgba(255, 252, 240, ${(0.52 * formationAlpha).toFixed(3)})`);
-          glowGrad.addColorStop(0.8, `rgba(254, 243, 199, ${(0.22 * formationAlpha).toFixed(3)})`);
+          glowGrad.addColorStop(0, `rgba(255, 255, 255, ${(1.0 * formationAlpha).toFixed(3)})`);
+          glowGrad.addColorStop(0.2, `rgba(255, 255, 255, ${(0.96 * formationAlpha).toFixed(3)})`);
+          glowGrad.addColorStop(0.45, `rgba(255, 255, 255, ${(0.86 * formationAlpha).toFixed(3)})`);
+          glowGrad.addColorStop(0.7, `rgba(255, 252, 240, ${(0.58 * formationAlpha).toFixed(3)})`);
+          glowGrad.addColorStop(0.88, `rgba(254, 243, 199, ${(0.28 * formationAlpha).toFixed(3)})`);
           glowGrad.addColorStop(1, 'rgba(253, 252, 250, 0)');
 
           ctx.fillStyle = glowGrad;
@@ -756,15 +914,15 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
           ctx.arc(f.centerX, f.centerY, outerR, 0, Math.PI * 2);
           ctx.fill();
 
-          // Focused brilliant white specular core
-          const innerR = f.radius * 1.25;
+          // 2. Focused Brilliant White Specular Core (sangat menyala dan bercahaya)
+          const innerR = f.radius * 1.5;
           const coreGrad = ctx.createRadialGradient(
             f.centerX, f.centerY, 0,
             f.centerX, f.centerY, innerR
           );
           coreGrad.addColorStop(0, `rgba(255, 255, 255, ${(1.0 * formationAlpha).toFixed(3)})`);
-          coreGrad.addColorStop(0.38, `rgba(255, 255, 255, ${(0.92 * formationAlpha).toFixed(3)})`);
-          coreGrad.addColorStop(0.72, `rgba(255, 255, 255, ${(0.45 * formationAlpha).toFixed(3)})`);
+          coreGrad.addColorStop(0.45, `rgba(255, 255, 255, ${(0.98 * formationAlpha).toFixed(3)})`);
+          coreGrad.addColorStop(0.75, `rgba(255, 255, 255, ${(0.65 * formationAlpha).toFixed(3)})`);
           coreGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
 
           ctx.fillStyle = coreGrad;
@@ -772,9 +930,15 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
           ctx.arc(f.centerX, f.centerY, innerR, 0, Math.PI * 2);
           ctx.fill();
 
-          // Subtle sunbeam streak rotating gracefully through formation center
+          // 3. Intense Specular Center Starlight Sparkle
+          ctx.beginPath();
+          ctx.arc(f.centerX, f.centerY, 40, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${(0.95 * formationAlpha).toFixed(3)})`;
+          ctx.fill();
+
+          // 4. Radiant White Sunbeam Streak Rotating Gracefully Through Formation
           const streakAngle = f.baseAngle + (elapsed * f.rotSpeed);
-          const streakLen = f.radius * 2.2;
+          const streakLen = f.radius * 2.4;
           const sp1 = rotatePoint(-streakLen, 0, streakAngle);
           const sp2 = rotatePoint(streakLen, 0, streakAngle);
           const streakGrad = ctx.createLinearGradient(
@@ -782,13 +946,13 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
             f.centerX + sp2.x, f.centerY + sp2.y
           );
           streakGrad.addColorStop(0, 'rgba(255, 255, 255, 0)');
-          streakGrad.addColorStop(0.3, `rgba(255, 255, 255, ${(0.35 * formationAlpha).toFixed(3)})`);
-          streakGrad.addColorStop(0.5, `rgba(255, 255, 255, ${(0.82 * formationAlpha).toFixed(3)})`);
-          streakGrad.addColorStop(0.7, `rgba(255, 255, 255, ${(0.35 * formationAlpha).toFixed(3)})`);
+          streakGrad.addColorStop(0.25, `rgba(255, 255, 255, ${(0.55 * formationAlpha).toFixed(3)})`);
+          streakGrad.addColorStop(0.5, `rgba(255, 255, 255, ${(0.98 * formationAlpha).toFixed(3)})`);
+          streakGrad.addColorStop(0.75, `rgba(255, 255, 255, ${(0.55 * formationAlpha).toFixed(3)})`);
           streakGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
 
           ctx.strokeStyle = streakGrad;
-          ctx.lineWidth = 14;
+          ctx.lineWidth = 20;
           ctx.beginPath();
           ctx.moveTo(f.centerX + sp1.x, f.centerY + sp1.y);
           ctx.lineTo(f.centerX + sp2.x, f.centerY + sp2.y);
@@ -813,9 +977,9 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
       }
 
       if (whiteLightBlobRef.current) {
-        const halfSize = 250; // half of 500px
+        const halfSize = 290; // half of 580px
         whiteLightBlobRef.current.style.transform = `translate3d(${Math.round(rovingWhiteLight.x - halfSize)}px, ${Math.round(rovingWhiteLight.y - halfSize)}px, 0) translateZ(0)`;
-        whiteLightBlobRef.current.style.opacity = (rovingWhiteLight.alpha * 0.88).toFixed(3);
+        whiteLightBlobRef.current.style.opacity = (rovingWhiteLight.alpha * 0.98).toFixed(3);
       }
 
       // 6. Draw Glowing Proximity Lines between nearby free particles (< 110px)
@@ -1065,10 +1229,10 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
       <div
         ref={whiteLightBlobRef}
         aria-hidden="true"
-        className="absolute top-0 left-0 w-[500px] h-[500px] rounded-full blur-[65px] pointer-events-none will-change-transform opacity-0"
+        className="absolute top-0 left-0 w-[580px] h-[580px] rounded-full blur-[65px] pointer-events-none will-change-transform opacity-0"
         style={{
           background:
-            'radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.85) 25%, rgba(254, 240, 138, 0.4) 50%, transparent 72%)',
+            'radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.94) 28%, rgba(254, 240, 138, 0.55) 55%, transparent 75%)',
           transform: 'translate3d(-9999px, -9999px, 0) translateZ(0)',
           contain: 'strict'
         }}
