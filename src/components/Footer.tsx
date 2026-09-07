@@ -152,7 +152,7 @@ export const Footer: React.FC<FooterProps> = ({
                   </a>
 
                   <a
-                    href="https://www.facebook.com/sainteksugriwa"
+                    href="https://www.facebook.com/profile.php?id=61588343014740&ref=1"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 p-1.5 rounded-lg bg-stone-900/80 hover:bg-stone-800 border border-stone-800 hover:border-blue-500/50 hover:text-blue-300 transition-all group"
