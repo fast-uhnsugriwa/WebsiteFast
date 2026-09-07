@@ -19,13 +19,15 @@ export interface InstagramPost {
   caption: string;
   shortSnippet: string;
   date: string;
-  category: 'Akademik' | 'Beasiswa' | 'Prestasi' | 'Workshop' | 'Riset';
+  category: 'Akademik' | 'Beasiswa' | 'Prestasi' | 'Workshop' | 'Riset' | 'Hari Raya';
   likesCount: number;
   commentsCount: number;
   tags: string[];
   postUrl: string;
-  mediaType?: 'IMAGE' | 'VIDEO' | 'CAROUSEL_ALBUM';
+  mediaType?: 'IMAGE' | 'VIDEO' | 'CAROUSEL_ALBUM' | 'REEL';
   mediaUrl?: string;
+  thumbnailUrl?: string;
+  videoUrl?: string;
   permalink?: string;
   timestamp?: string;
   source?: 'api' | 'cache' | 'official_feed';

@@ -24,8 +24,34 @@ export interface InstagramApiStatus {
 }
 
 // Helper to determine category from caption
-function categorizeCaption(caption: string): 'Akademik' | 'Beasiswa' | 'Prestasi' | 'Workshop' | 'Riset' {
+function categorizeCaption(caption: string): 'Akademik' | 'Beasiswa' | 'Prestasi' | 'Workshop' | 'Riset' | 'Hari Raya' {
   const lower = caption.toLowerCase();
+  if (
+    lower.includes('hari raya') ||
+    lower.includes('rahajeng') ||
+    lower.includes('nyepi') ||
+    lower.includes('galungan') ||
+    lower.includes('kuningan') ||
+    lower.includes('saraswati') ||
+    lower.includes('pagerwesi') ||
+    lower.includes('siwaratri') ||
+    lower.includes('tawur') ||
+    lower.includes('maulid') ||
+    lower.includes('idul fitri') ||
+    lower.includes('idul adha') ||
+    lower.includes('natal') ||
+    lower.includes('tahun baru') ||
+    lower.includes('waisak') ||
+    lower.includes('imlek') ||
+    lower.includes('dirgahayu') ||
+    lower.includes('kemerdekaan') ||
+    lower.includes('hari pahlawan') ||
+    lower.includes('selamat memperingati') ||
+    lower.includes('selamat hari') ||
+    lower.includes('ucapan')
+  ) {
+    return 'Hari Raya';
+  }
   if (lower.includes('beasiswa') || lower.includes('dipa') || lower.includes('bib') || lower.includes('pipk')) {
     return 'Beasiswa';
   }
@@ -285,6 +311,10 @@ export class InstagramService {
               const caption = item.caption || 'Postingan resmi dari @fastsugriwa';
               const cleanLines = caption.split('\n').map((l: string) => l.trim()).filter((l: string) => l.length > 0);
               const shortSnippet = cleanLines[0] || caption.slice(0, 100);
+              const isVideo = item.mediaType === 'VIDEO' || item.mediaType === 'REEL' || item.media_type === 'VIDEO';
+
+              // Untuk video / reel, jadikan thumbnailUrl sebagai gambar cover utama
+              const displayImage = isVideo ? (item.thumbnailUrl || item.thumbnail_url || item.mediaUrl || item.media_url) : (item.mediaUrl || item.thumbnailUrl || item.media_url);
 
               return {
                 id: item.id || `ig-${Math.random()}`,
@@ -298,8 +328,10 @@ export class InstagramService {
                 tags: extractTags(caption),
                 postUrl: item.permalink || INSTAGRAM_CONFIG.profileUrl,
                 permalink: item.permalink || INSTAGRAM_CONFIG.profileUrl,
-                mediaType: item.mediaType || item.media_type || 'IMAGE',
-                mediaUrl: item.mediaUrl || item.thumbnailUrl || item.media_url,
+                mediaType: isVideo ? 'REEL' : (item.mediaType || item.media_type || 'IMAGE'),
+                mediaUrl: displayImage,
+                thumbnailUrl: item.thumbnailUrl || item.thumbnail_url,
+                videoUrl: isVideo ? (item.mediaUrl || item.media_url) : undefined,
                 source: 'api'
               };
             });

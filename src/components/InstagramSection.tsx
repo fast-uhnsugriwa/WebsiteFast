@@ -21,7 +21,7 @@ export const InstagramSection: React.FC = () => {
   const [activeModalPost, setActiveModalPost] = useState<InstagramPost | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const categories = ['Semua', 'Akademik', 'Beasiswa', 'Prestasi', 'Workshop', 'Riset'];
+  const categories = ['Semua', 'Akademik', 'Beasiswa', 'Prestasi', 'Workshop', 'Riset', 'Hari Raya'];
 
   const loadPosts = async () => {
     try {
@@ -266,6 +266,12 @@ export const InstagramSection: React.FC = () => {
                           ? 'bg-amber-50 text-amber-800 border border-amber-200'
                           : post.category === 'Akademik'
                           ? 'bg-orange-50 text-orange-800 border border-orange-200'
+                          : post.category === 'Hari Raya'
+                          ? 'bg-purple-50 text-purple-800 border border-purple-200'
+                          : post.category === 'Workshop'
+                          ? 'bg-blue-50 text-blue-800 border border-blue-200'
+                          : post.category === 'Riset'
+                          ? 'bg-teal-50 text-teal-800 border border-teal-200'
                           : 'bg-stone-100 text-stone-700 border border-stone-200'
                       }`}
                     >
@@ -282,10 +288,33 @@ export const InstagramSection: React.FC = () => {
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                         loading="lazy"
                       />
-                      <div className="absolute top-2.5 right-2.5 px-2 py-1 rounded-md bg-stone-900/70 backdrop-blur-xs text-white flex items-center gap-1 text-[10px] font-medium">
-                        <Instagram className="w-3 h-3 text-orange-400" />
-                        <span>{post.mediaType === 'CAROUSEL_ALBUM' ? 'Album' : post.mediaType === 'VIDEO' ? 'Reel' : 'Post'}</span>
+                      <div className="absolute top-2.5 right-2.5 px-2 py-1 rounded-md bg-stone-900/75 backdrop-blur-xs text-white flex items-center gap-1.5 text-[10px] font-medium shadow-xs">
+                        {post.mediaType === 'REEL' || post.mediaType === 'VIDEO' ? (
+                          <>
+                            <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+                            <span className="font-bold text-rose-300">Reel</span>
+                          </>
+                        ) : post.mediaType === 'CAROUSEL_ALBUM' ? (
+                          <>
+                            <Instagram className="w-3 h-3 text-amber-400" />
+                            <span>Album</span>
+                          </>
+                        ) : (
+                          <>
+                            <Instagram className="w-3 h-3 text-orange-400" />
+                            <span>Post</span>
+                          </>
+                        )}
                       </div>
+
+                      {/* Play overlay for Reels / Videos */}
+                      {(post.mediaType === 'REEL' || post.mediaType === 'VIDEO') && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/35 transition-colors pointer-events-none">
+                          <div className="w-11 h-11 rounded-full bg-white/90 text-stone-900 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                            <span className="ml-0.5 text-xs font-black">▶</span>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   ) : (
                     <div className="relative p-6 bg-gradient-to-br from-stone-900 via-stone-850 to-stone-900 text-white overflow-hidden border-b border-stone-100 min-h-[140px] flex flex-col justify-between">
@@ -431,7 +460,17 @@ export const InstagramSection: React.FC = () => {
 
             {/* Modal Body */}
             <div className="p-6 overflow-y-auto space-y-4">
-              {activeModalPost.mediaUrl && (
+              {activeModalPost.videoUrl ? (
+                <div className="rounded-xl overflow-hidden aspect-[4/3] sm:aspect-video w-full bg-black border border-stone-200 shadow-2xs">
+                  <video
+                    src={activeModalPost.videoUrl}
+                    poster={activeModalPost.mediaUrl}
+                    controls
+                    playsInline
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              ) : activeModalPost.mediaUrl ? (
                 <div className="rounded-xl overflow-hidden aspect-[4/3] w-full bg-stone-100 border border-stone-200 shadow-2xs">
                   <img
                     src={activeModalPost.mediaUrl}
@@ -439,7 +478,7 @@ export const InstagramSection: React.FC = () => {
                     className="w-full h-full object-cover"
                   />
                 </div>
-              )}
+              ) : null}
 
               <div className="p-4 rounded-xl bg-stone-900 text-white text-xs space-y-2">
                 <div className="text-amber-400 font-mono text-[10px] uppercase">
