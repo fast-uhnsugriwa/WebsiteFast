@@ -211,7 +211,7 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: false, amount: 0.15 }}
               transition={{ duration: 0.6 }}
               className="lg:col-span-5 space-y-6"
             >
@@ -240,7 +240,7 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
                       key={i}
                       initial={{ opacity: 0, x: -10 }}
                       whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
+                      viewport={{ once: false, amount: 0.15 }}
                       transition={{ duration: 0.4, delay: i * 0.08 }}
                       className="flex items-start gap-2.5"
                     >
@@ -256,7 +256,7 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: false, amount: 0.15 }}
               transition={{ duration: 0.6 }}
               className="lg:col-span-7 space-y-6"
             >
@@ -275,7 +275,7 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
                       key={index}
                       initial={{ opacity: 0, y: 15 }}
                       whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
+                      viewport={{ once: false, amount: 0.15 }}
                       transition={{ duration: 0.4, delay: index * 0.1 }}
                       whileHover={{ x: 6, borderColor: '#fdba74' }}
                       className="flex items-start gap-3.5 p-4 rounded-xl bg-white border border-stone-100 shadow-xs transition-colors cursor-default"
@@ -298,7 +298,7 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
                     key={i}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    viewport={{ once: false, amount: 0.15 }}
                     transition={{ duration: 0.4, delay: i * 0.1 }}
                     whileHover={{ y: -4, borderColor: '#ea580c', boxShadow: '0 10px 15px -3px rgba(234, 88, 12, 0.1)' }}
                     className="p-4 rounded-xl bg-white border border-stone-200/90 shadow-xs transition-all cursor-default"
@@ -330,7 +330,7 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false, amount: 0.15 }}
             transition={{ duration: 0.6 }}
             className="text-center max-w-3xl mx-auto mb-14"
           >
@@ -354,7 +354,7 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
                 id={`career-card-${idx}`}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                viewport={{ once: false, amount: 0.15 }}
                 transition={{ duration: 0.5, delay: idx * 0.08 }}
                 whileHover={{ y: -8, boxShadow: '0 20px 25px -5px rgba(234, 88, 12, 0.15), 0 8px 10px -6px rgba(234, 88, 12, 0.1)' }}
                 className="flex flex-col justify-between p-6 rounded-2xl bg-white border border-stone-200/90 shadow-sm hover:border-orange-400 transition-all group cursor-default"
@@ -412,7 +412,7 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false, amount: 0.15 }}
             transition={{ duration: 0.6 }}
             className="text-center max-w-3xl mx-auto mb-12"
           >
@@ -504,7 +504,7 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: false, amount: 0.15 }}
           transition={{ duration: 0.6 }}
           className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-3xl mx-auto"
         >

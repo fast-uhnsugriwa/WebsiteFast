@@ -26,7 +26,7 @@ export const FacultyProfile: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-50px' }}
+          viewport={{ once: false, amount: 0.15 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="text-center max-w-3xl mx-auto mb-14"
         >
@@ -153,7 +153,7 @@ export const FacultyProfile: React.FC = () => {
                         key={index}
                         initial={{ opacity: 0, x: 20 }}
                         whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
+                        viewport={{ once: false, amount: 0.15 }}
                         transition={{ duration: 0.35, delay: index * 0.08 }}
                         className="flex items-start gap-3 text-sm text-stone-700 leading-relaxed"
                       >
@@ -249,7 +249,7 @@ export const FacultyProfile: React.FC = () => {
                 <motion.div
                   initial={{ opacity: 0, y: 25 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false, amount: 0.15 }}
                   transition={{ duration: 0.5, delay: 0.05 }}
                   whileHover={{ y: -5, transition: { duration: 0.25 } }}
                   className="p-6 sm:p-7 rounded-2xl bg-gradient-to-br from-amber-500/10 via-orange-500/5 to-white border-2 border-amber-300/80 shadow-lg shadow-amber-900/5 relative overflow-hidden group hover:border-amber-400 hover:shadow-xl transition-all"
@@ -280,7 +280,7 @@ export const FacultyProfile: React.FC = () => {
                 <motion.div
                   initial={{ opacity: 0, y: 25 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false, amount: 0.15 }}
                   transition={{ duration: 0.5, delay: 0.15 }}
                   whileHover={{ y: -5, transition: { duration: 0.25 } }}
                   className="p-6 sm:p-7 rounded-2xl bg-gradient-to-br from-blue-500/10 via-indigo-500/5 to-white border-2 border-blue-300/80 shadow-lg shadow-blue-900/5 relative overflow-hidden group hover:border-blue-400 hover:shadow-xl transition-all"
@@ -313,7 +313,7 @@ export const FacultyProfile: React.FC = () => {
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false, amount: 0.15 }}
                   transition={{ duration: 0.4, delay: 0.1 }}
                   whileHover={{ y: -3 }}
                   className="p-5 rounded-xl bg-stone-50 border border-stone-200/80 hover:bg-white hover:border-amber-300 hover:shadow-md transition-all"
@@ -328,7 +328,7 @@ export const FacultyProfile: React.FC = () => {
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false, amount: 0.15 }}
                   transition={{ duration: 0.4, delay: 0.2 }}
                   whileHover={{ y: -3 }}
                   className="p-5 rounded-xl bg-stone-50 border border-stone-200/80 hover:bg-white hover:border-orange-300 hover:shadow-md transition-all"
@@ -343,7 +343,7 @@ export const FacultyProfile: React.FC = () => {
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false, amount: 0.15 }}
                   transition={{ duration: 0.4, delay: 0.3 }}
                   whileHover={{ y: -3 }}
                   className="p-5 rounded-xl bg-stone-50 border border-stone-200/80 hover:bg-white hover:border-stone-400 hover:shadow-md transition-all sm:col-span-2 lg:col-span-1"

@@ -53,7 +53,7 @@ export const InstagramSection: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-50px' }}
+          viewport={{ once: false, amount: 0.15 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8"
         >
@@ -121,7 +121,7 @@ export const InstagramSection: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: false, amount: 0.15 }}
           transition={{ duration: 0.5, delay: 0.1 }}
           className="mb-6 px-4 py-2.5 rounded-xl bg-stone-50 border border-stone-200/90 flex flex-wrap items-center justify-between gap-3 text-xs text-stone-700"
         >
@@ -185,7 +185,7 @@ export const InstagramSection: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.96, y: 25 }}
             whileInView={{ opacity: 1, scale: 1, y: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
+            viewport={{ once: false, amount: 0.15 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             whileHover={{ scale: 1.01 }}
             className="rounded-2xl border-2 border-dashed border-amber-300/90 bg-amber-50/40 p-8 sm:p-14 text-center max-w-3xl mx-auto shadow-xs hover:shadow-md transition-all"
@@ -238,7 +238,7 @@ export const InstagramSection: React.FC = () => {
                 id={`post-card-${post.id}`}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                viewport={{ once: false, amount: 0.15 }}
                 transition={{ duration: 0.5, delay: idx * 0.08 }}
                 whileHover={{ y: -6 }}
                 className="flex flex-col justify-between rounded-2xl bg-white border border-stone-200/90 shadow-2xs hover:shadow-xl hover:border-amber-400/80 transition-all duration-300 overflow-hidden group"
@@ -354,7 +354,13 @@ export const InstagramSection: React.FC = () => {
         )}
 
         {/* View All on Instagram CTA Banner */}
-        <div className="mt-12 p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-orange-50 via-amber-50 to-stone-50 border border-amber-200/80 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.15 }}
+          transition={{ duration: 0.5 }}
+          className="mt-12 p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-orange-50 via-amber-50 to-stone-50 border border-amber-200/80 flex flex-col sm:flex-row items-center justify-between gap-6"
+        >
           <div className="flex items-center gap-4 text-center sm:text-left">
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500 text-white flex items-center justify-center shrink-0 shadow-md">
               <Instagram className="w-6 h-6" />
@@ -378,7 +384,7 @@ export const InstagramSection: React.FC = () => {
             <span>Kunjungi Profil @fastsugriwa</span>
             <ExternalLink className="w-4 h-4" />
           </a>
-        </div>
+        </motion.div>
       </div>
 
       {/* Modal for Full Instagram Post Content */}

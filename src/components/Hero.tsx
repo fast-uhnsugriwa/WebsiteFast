@@ -47,22 +47,12 @@ export const Hero: React.FC<HeroProps> = ({
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
-          {/* Animated Institutional Tag Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: -15, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-orange-500/10 via-amber-500/10 to-transparent border border-orange-200/80 text-orange-800 text-xs font-bold uppercase tracking-wider mb-5 shadow-2xs"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-orange-600 animate-pulse" />
-            <span>Pusat Unggulan Sains Komputasi & Desain Digital</span>
-          </motion.div>
-
-          {/* Primary Academic Typography Heading with Staggered Entrance */}
+          {/* Primary Academic Typography Heading with Staggered Entrance & Scroll Reveal */}
           <motion.h1
-            initial={{ opacity: 0, y: 25 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.2 }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-stone-900 tracking-tight leading-[1.15]"
           >
             Selamat Datang di <br />
@@ -76,9 +66,10 @@ export const Hero: React.FC<HeroProps> = ({
 
           {/* Subtitle with Generous Whitespace */}
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            initial={{ opacity: 0, y: 25 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.2 }}
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             className="mt-6 text-base sm:text-xl text-stone-600 font-normal leading-relaxed max-w-3xl"
           >
             Kami hadir sebagai pusat keunggulan dalam pendidikan, penelitian, dan penerapan teknologi yang berlandaskan pada nilai-nilai Tri Dharma Perguruan Tinggi. Fakultas Sains dan Teknologi menaungi tiga program studi unggulan yang dirancang sesuai dengan kebutuhan industri masa kini, yaitu <span className="font-semibold text-blue-700">Informatika</span>, <span className="font-semibold text-rose-700">Desain Komunikasi Visual</span>, dan <span className="font-semibold text-cyan-700">Sains Informasi</span>.
@@ -87,8 +78,9 @@ export const Hero: React.FC<HeroProps> = ({
           {/* Action CTAs with Interactive Micro-Animations */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className="mt-9 flex flex-wrap items-center justify-center gap-3 sm:gap-4"
           >
             <motion.button
@@ -122,7 +114,7 @@ export const Hero: React.FC<HeroProps> = ({
           <motion.div
             initial={{ opacity: 0, y: 40, scale: 0.97 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, margin: '-40px' }}
+            viewport={{ once: false, amount: 0.15 }}
             transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
             className="mt-14 w-full max-w-4xl p-6 sm:p-8 rounded-2xl bg-white/85 backdrop-blur-md border border-stone-200/90 shadow-xl shadow-stone-900/5 relative hover:shadow-2xl transition-all duration-300"
           >
@@ -198,8 +190,8 @@ export const Hero: React.FC<HeroProps> = ({
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2 }}
+                viewport={{ once: false, amount: 0.2 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
                 whileHover={{ y: -3 }}
                 className="p-3 rounded-xl hover:bg-orange-50/50 transition-colors"
               >
@@ -215,8 +207,8 @@ export const Hero: React.FC<HeroProps> = ({
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.3 }}
+                viewport={{ once: false, amount: 0.2 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
                 whileHover={{ y: -3 }}
                 className="p-3 rounded-xl hover:bg-amber-50/50 transition-colors"
               >
@@ -232,8 +224,8 @@ export const Hero: React.FC<HeroProps> = ({
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.4 }}
+                viewport={{ once: false, amount: 0.2 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
                 whileHover={{ y: -3 }}
                 className="p-3 rounded-xl hover:bg-stone-50 transition-colors"
               >

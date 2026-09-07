@@ -35,7 +35,7 @@ export const Footer: React.FC<FooterProps> = ({
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
+        viewport={{ once: false, amount: 0.1 }}
         transition={{ duration: 0.5 }}
         className="bg-stone-950 py-3 px-4 sm:px-6 lg:px-8 border-b border-stone-800/80"
       >
@@ -65,7 +65,7 @@ export const Footer: React.FC<FooterProps> = ({
           <motion.div
             initial={{ opacity: 0, y: 25 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false, amount: 0.1 }}
             transition={{ duration: 0.6 }}
             className="lg:col-span-4 space-y-4"
           >
@@ -127,7 +127,7 @@ export const Footer: React.FC<FooterProps> = ({
           <motion.div
             initial={{ opacity: 0, y: 25 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false, amount: 0.1 }}
             transition={{ duration: 0.6, delay: 0.1 }}
             className="lg:col-span-3 space-y-3"
           >
@@ -191,7 +191,7 @@ export const Footer: React.FC<FooterProps> = ({
           <motion.div
             initial={{ opacity: 0, y: 25 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false, amount: 0.1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="lg:col-span-3 space-y-3"
           >
@@ -281,7 +281,7 @@ export const Footer: React.FC<FooterProps> = ({
           <motion.div
             initial={{ opacity: 0, y: 25 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false, amount: 0.1 }}
             transition={{ duration: 0.6, delay: 0.3 }}
             className="lg:col-span-2 space-y-3"
           >
@@ -372,8 +372,8 @@ export const Footer: React.FC<FooterProps> = ({
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
+          viewport={{ once: false, amount: 0.1 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
           className="mt-12 pt-8 border-t border-stone-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-stone-500 text-[11px]"
         >
           <div>
