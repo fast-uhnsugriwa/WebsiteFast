@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'motion/react';
 import {
   Instagram,
   Heart,
@@ -48,12 +49,18 @@ export const InstagramSection: React.FC = () => {
       className="py-16 sm:py-24 bg-white border-b border-stone-200/80 relative"
     >
       <div className="max-w-7xl mx-auto px-4 sm:6 lg:px-8">
-        {/* Section Title & Instagram Profile Header Box */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+        {/* Section Title & Instagram Profile Header Box with Scroll Reveal */}
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-50px' }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8"
+        >
           <div>
             <div className="flex flex-wrap items-center gap-2 mb-3">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-amber-50 to-orange-50 border border-orange-200/70 text-orange-800 text-xs font-bold uppercase tracking-wider">
-                <Instagram className="w-3.5 h-3.5 text-orange-600" />
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-amber-50 to-orange-50 border border-orange-200/70 text-orange-800 text-xs font-bold uppercase tracking-wider shadow-2xs">
+                <Instagram className="w-3.5 h-3.5 text-orange-600 animate-pulse" />
                 <span>Kabar Terkini & Informasi Resmi</span>
               </div>
             </div>
@@ -66,9 +73,12 @@ export const InstagramSection: React.FC = () => {
             </p>
           </div>
 
-          {/* Instagram Account Card */}
-          <div className="flex flex-wrap items-center gap-3 shrink-0">
-            <div className="flex items-center gap-3 p-3 rounded-2xl bg-stone-50 border border-stone-200 shadow-2xs">
+          {/* Instagram Account Card with Interactive Micro-Animations */}
+          <motion.div
+            whileHover={{ y: -2 }}
+            className="flex flex-wrap items-center gap-3 shrink-0"
+          >
+            <div className="flex items-center gap-3 p-3 rounded-2xl bg-stone-50 border border-stone-200 shadow-2xs hover:shadow-md transition-shadow">
               <div className="relative">
                 <div className="p-0.5 rounded-full bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500">
                   <div className="p-0.5 bg-white rounded-full">
@@ -90,23 +100,31 @@ export const InstagramSection: React.FC = () => {
                 </div>
               </div>
 
-              <a
+              <motion.a
                 id="link-official-instagram"
                 href={INSTAGRAM_CONFIG.profileUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white font-bold text-xs tracking-wide shadow-2xs transition-all active:scale-95"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white font-bold text-xs tracking-wide shadow-2xs transition-all cursor-pointer"
               >
                 <Instagram className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">Buka Instagram</span>
                 <ArrowUpRight className="w-3 h-3" />
-              </a>
+              </motion.a>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
-        {/* Informative Status Strip */}
-        <div className="mb-6 px-4 py-2.5 rounded-xl bg-stone-50 border border-stone-200/90 flex flex-wrap items-center justify-between gap-3 text-xs text-stone-700">
+        {/* Informative Status Strip with Scroll Entrance */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="mb-6 px-4 py-2.5 rounded-xl bg-stone-50 border border-stone-200/90 flex flex-wrap items-center justify-between gap-3 text-xs text-stone-700"
+        >
           <div className="flex items-center gap-2">
             {posts.length > 0 ? (
               <>
@@ -128,24 +146,26 @@ export const InstagramSection: React.FC = () => {
             <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
             <span>Pembaruan Berkala</span>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Category Filter Pills (Only shown when posts are available) */}
+        {/* Category Filter Pills */}
         {posts.length > 0 && (
           <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 scrollbar-none">
             {categories.map((cat) => (
-              <button
+              <motion.button
                 key={cat}
+                whileTap={{ scale: 0.95 }}
+                whileHover={{ y: -1 }}
                 id={`filter-category-${cat.toLowerCase()}`}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-1.5 rounded-full text-xs font-bold shrink-0 transition-all ${
+                className={`px-4 py-1.5 rounded-full text-xs font-bold shrink-0 transition-all cursor-pointer ${
                   selectedCategory === cat
                     ? 'bg-orange-600 text-white shadow-2xs'
                     : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
                 }`}
               >
                 {cat}
-              </button>
+              </motion.button>
             ))}
           </div>
         )}
@@ -160,12 +180,23 @@ export const InstagramSection: React.FC = () => {
           </div>
         )}
 
-        {/* Under Maintenance Display (When Feed is Empty / Pending Configuration) */}
+        {/* Under Maintenance Display (When Feed is Empty / Pending Configuration) with Floating Animation */}
         {!isLoading && posts.length === 0 && (
-          <div className="rounded-2xl border-2 border-dashed border-amber-300/90 bg-amber-50/40 p-8 sm:p-14 text-center max-w-3xl mx-auto shadow-xs">
-            <div className="w-16 h-16 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center mx-auto mb-5 border border-amber-200 shadow-xs">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96, y: 25 }}
+            whileInView={{ opacity: 1, scale: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            whileHover={{ scale: 1.01 }}
+            className="rounded-2xl border-2 border-dashed border-amber-300/90 bg-amber-50/40 p-8 sm:p-14 text-center max-w-3xl mx-auto shadow-xs hover:shadow-md transition-all"
+          >
+            <motion.div
+              whileHover={{ rotate: [0, -10, 10, 0] }}
+              transition={{ duration: 0.5 }}
+              className="w-16 h-16 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center mx-auto mb-5 border border-amber-200 shadow-xs cursor-pointer"
+            >
               <Wrench className="w-8 h-8" />
-            </div>
+            </motion.div>
 
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-xs font-bold uppercase tracking-wider mb-4">
               <span className="w-2 h-2 rounded-full bg-amber-600 animate-pulse" />
@@ -181,29 +212,36 @@ export const InstagramSection: React.FC = () => {
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-3">
-              <a
+              <motion.a
                 id="btn-visit-ig-maintenance"
                 href={INSTAGRAM_CONFIG.profileUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white font-bold text-xs tracking-wide shadow-md shadow-orange-600/20 transition-all active:scale-95"
+                whileHover={{ scale: 1.04, y: -2 }}
+                whileTap={{ scale: 0.96 }}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white font-bold text-xs tracking-wide shadow-md shadow-orange-600/20 transition-all cursor-pointer"
               >
                 <Instagram className="w-4 h-4" />
                 <span>Kunjungi Akun Resmi @fastsugriwa</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
-              </a>
+              </motion.a>
             </div>
-          </div>
+          </motion.div>
         )}
 
         {/* Instagram Post Cards Grid (Shown when posts are available) */}
         {!isLoading && posts.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredPosts.map((post) => (
-              <article
+            {filteredPosts.map((post, idx) => (
+              <motion.article
                 key={post.id}
                 id={`post-card-${post.id}`}
-                className="flex flex-col justify-between rounded-2xl bg-white border border-stone-200/90 shadow-2xs hover:shadow-md hover:border-amber-400/80 transition-all duration-200 overflow-hidden group"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.08 }}
+                whileHover={{ y: -6 }}
+                className="flex flex-col justify-between rounded-2xl bg-white border border-stone-200/90 shadow-2xs hover:shadow-xl hover:border-amber-400/80 transition-all duration-300 overflow-hidden group"
               >
                 <div>
                   {/* Post Header: Profile & Date */}
@@ -310,7 +348,7 @@ export const InstagramSection: React.FC = () => {
                     <ExternalLink className="w-3 h-3 text-stone-400" />
                   </a>
                 </div>
-              </article>
+              </motion.article>
             ))}
           </div>
         )}

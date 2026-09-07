@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { AnimatePresence } from 'motion/react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { FacultyProfile } from './components/FacultyProfile';
@@ -109,10 +110,14 @@ export default function App() {
       </main>
 
       {/* Academic Service / Information Modal */}
-      <AcademicModal
-        item={selectedDetailItem}
-        onClose={() => setSelectedDetailItem(null)}
-      />
+      <AnimatePresence>
+        {selectedDetailItem && (
+          <AcademicModal
+            item={selectedDetailItem}
+            onClose={() => setSelectedDetailItem(null)}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Institutional Footer */}
       <Footer

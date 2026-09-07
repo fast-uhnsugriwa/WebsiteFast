@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   ArrowLeft,
   GraduationCap,
@@ -52,7 +53,7 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
           <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-stone-500">
             <button
               onClick={onBackToHome}
-              className="hover:text-orange-600 font-medium transition-colors"
+              className="hover:text-orange-600 font-medium transition-colors cursor-pointer"
             >
               Beranda
             </button>
@@ -62,14 +63,16 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
             <span className="text-stone-900 font-bold">Sains Informasi (S1)</span>
           </nav>
 
-          <button
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
             id="btn-back-to-home"
             onClick={onBackToHome}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-stone-700 hover:text-orange-600 hover:bg-stone-100 transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-stone-700 hover:text-orange-600 hover:bg-stone-100 transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Kembali ke Beranda</span>
-          </button>
+          </motion.button>
         </div>
       </div>
 
@@ -92,7 +95,12 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl">
             {/* Under Maintenance Notification Banner */}
-            <div className="mb-8 p-4 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-200 flex items-start gap-3 text-xs sm:text-sm shadow-inner backdrop-blur-xs">
+            <motion.div
+              initial={{ opacity: 0, y: -15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="mb-8 p-4 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-200 flex items-start gap-3 text-xs sm:text-sm shadow-inner backdrop-blur-xs"
+            >
               <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0 border border-amber-500/40 mt-0.5">
                 <Wrench className="w-4 h-4" />
               </div>
@@ -105,9 +113,15 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
                   Halaman profil dan kurikulum Program Studi Sains Informasi saat ini sedang dalam proses pemeliharaan serta pembaruan data sistem. Mohon kembali lagi secara berkala.
                 </p>
               </div>
-            </div>
+            </motion.div>
+
             {/* Badges */}
-            <div className="flex flex-wrap items-center gap-2.5 mb-6">
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="flex flex-wrap items-center gap-2.5 mb-6"
+            >
               <span className="px-3 py-1 rounded-full bg-orange-600/20 text-orange-400 border border-orange-500/30 text-xs font-extrabold uppercase tracking-wider flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Program Sarjana (S1)</span>
@@ -118,31 +132,53 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
               <span className="px-3 py-1 rounded-full bg-stone-800 text-stone-300 border border-stone-700 text-xs font-medium">
                 {SAINS_INFORMASI_DETAILS.duration}
               </span>
-            </div>
+            </motion.div>
 
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight"
+            >
               Program Studi <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-400 to-amber-300">Sains Informasi</span>
-            </h1>
+            </motion.h1>
 
-            <p className="mt-6 text-stone-300 text-base sm:text-lg leading-relaxed max-w-3xl">
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="mt-6 text-stone-300 text-base sm:text-lg leading-relaxed max-w-3xl"
+            >
               {SAINS_INFORMASI_DETAILS.summary}
-            </p>
+            </motion.p>
 
             {/* Quick Stats Grid */}
-            <div className="mt-10 pt-8 border-t border-stone-800 grid grid-cols-2 sm:grid-cols-4 gap-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="mt-10 pt-8 border-t border-stone-800 grid grid-cols-2 sm:grid-cols-4 gap-6"
+            >
               {SAINS_INFORMASI_DETAILS.stats.map((s, idx) => (
-                <div key={idx}>
-                  <div className="text-2xl sm:text-3xl font-black text-amber-400 font-display">
+                <div key={idx} className="group">
+                  <div className="text-2xl sm:text-3xl font-black text-amber-400 font-display group-hover:scale-105 group-hover:text-orange-400 transition-all origin-left">
                     {s.value}
                   </div>
                   <div className="text-xs text-stone-400 mt-0.5">{s.label}</div>
                 </div>
               ))}
-            </div>
+            </motion.div>
 
             {/* Direct CTA */}
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="mt-8 flex flex-wrap items-center gap-3"
+            >
+              <motion.a
+                whileHover={{ scale: 1.04, boxShadow: '0 10px 25px -5px rgba(234, 88, 12, 0.4)' }}
+                whileTap={{ scale: 0.96 }}
                 href="https://taplink.cc/uhnmaba2026"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -151,16 +187,18 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
                 <GraduationCap className="w-4 h-4" />
                 <span>Daftar Prodi Sains Informasi</span>
                 <ExternalLink className="w-3.5 h-3.5" />
-              </a>
+              </motion.a>
 
-              <a
+              <motion.a
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
                 href="#kurikulum"
                 className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-stone-800 text-stone-200 hover:bg-stone-700 font-bold text-xs transition-colors"
               >
                 <BookOpen className="w-4 h-4" />
                 <span>Lihat Struktur Kurikulum</span>
-              </a>
-            </div>
+              </motion.a>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -170,7 +208,13 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
             {/* Left: Visi Keilmuan Card */}
-            <div className="lg:col-span-5 space-y-6">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="lg:col-span-5 space-y-6"
+            >
               <div className="p-8 rounded-2xl bg-gradient-to-br from-amber-500/10 via-orange-500/10 to-transparent border-2 border-orange-500/30 shadow-xs">
                 <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-orange-700 mb-2">
                   <Compass className="w-4 h-4" />
@@ -192,17 +236,30 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
                 </div>
                 <ul className="space-y-2.5 text-xs sm:text-sm text-stone-600">
                   {SAINS_INFORMASI_DETAILS.objectives.map((obj, i) => (
-                    <li key={i} className="flex items-start gap-2.5">
+                    <motion.li
+                      key={i}
+                      initial={{ opacity: 0, x: -10 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.4, delay: i * 0.08 }}
+                      className="flex items-start gap-2.5"
+                    >
                       <span className="w-1.5 h-1.5 rounded-full bg-orange-500 mt-2 shrink-0" />
                       <span>{obj}</span>
-                    </li>
+                    </motion.li>
                   ))}
                 </ul>
               </div>
-            </div>
+            </motion.div>
 
             {/* Right: Misi Tridharma */}
-            <div className="lg:col-span-7 space-y-6">
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="lg:col-span-7 space-y-6"
+            >
               <div className="p-8 rounded-2xl bg-stone-50/70 border border-stone-200">
                 <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-700 mb-3">
                   <Target className="w-4 h-4" />
@@ -214,14 +271,22 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
 
                 <div className="space-y-4">
                   {SAINS_INFORMASI_DETAILS.mission.map((m, index) => (
-                    <div key={index} className="flex items-start gap-3.5 p-4 rounded-xl bg-white border border-stone-100 shadow-xs">
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 15 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.4, delay: index * 0.1 }}
+                      whileHover={{ x: 6, borderColor: '#fdba74' }}
+                      className="flex items-start gap-3.5 p-4 rounded-xl bg-white border border-stone-100 shadow-xs transition-colors cursor-default"
+                    >
                       <div className="w-7 h-7 rounded-lg bg-orange-100 text-orange-800 font-extrabold text-xs flex items-center justify-center shrink-0">
                         {index + 1}
                       </div>
                       <p className="text-xs sm:text-sm text-stone-700 leading-relaxed font-normal">
                         {m}
                       </p>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
               </div>
@@ -229,7 +294,15 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
               {/* 3 Keunggulan Peminatan */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {SAINS_INFORMASI_DETAILS.specializations.map((spec, i) => (
-                  <div key={i} className="p-4 rounded-xl bg-white border border-stone-200/90 shadow-xs">
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: i * 0.1 }}
+                    whileHover={{ y: -4, borderColor: '#ea580c', boxShadow: '0 10px 15px -3px rgba(234, 88, 12, 0.1)' }}
+                    className="p-4 rounded-xl bg-white border border-stone-200/90 shadow-xs transition-all cursor-default"
+                  >
                     <div className="text-xs font-bold text-orange-600 mb-1">
                       Peminatan 0{i + 1}
                     </div>
@@ -239,10 +312,10 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
                     <p className="text-[11px] text-stone-500 mt-2 leading-relaxed">
                       {spec.desc}
                     </p>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -254,7 +327,13 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
         className="py-16 sm:py-24 bg-gradient-to-b from-stone-50 via-amber-50/20 to-white border-b border-stone-200/80"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-14">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center max-w-3xl mx-auto mb-14"
+          >
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100 text-orange-900 border border-orange-300 text-xs font-bold uppercase tracking-wider mb-3">
               <Briefcase className="w-3.5 h-3.5 text-orange-700" />
               <span>Karier Masa Depan</span>
@@ -265,19 +344,24 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
             <p className="mt-3 text-stone-600 text-base sm:text-lg">
               Permintaan terhadap spesialis data dan arsitek pengetahuan terus melesat di seluruh sektor industri, BUMN, pemerintahan, dan organisasi internasional.
             </p>
-          </div>
+          </motion.div>
 
           {/* 6 Career Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {SAINS_INFORMASI_DETAILS.careerProspects.map((career, idx) => (
-              <div
+              <motion.div
                 key={idx}
                 id={`career-card-${idx}`}
-                className="flex flex-col justify-between p-6 rounded-2xl bg-white border border-stone-200/90 shadow-sm hover:shadow-md hover:border-orange-300 transition-all group"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.08 }}
+                whileHover={{ y: -8, boxShadow: '0 20px 25px -5px rgba(234, 88, 12, 0.15), 0 8px 10px -6px rgba(234, 88, 12, 0.1)' }}
+                className="flex flex-col justify-between p-6 rounded-2xl bg-white border border-stone-200/90 shadow-sm hover:border-orange-400 transition-all group cursor-default"
               >
                 <div>
                   <div className="flex items-center justify-between gap-3 mb-4">
-                    <div className="p-3 rounded-xl bg-orange-50 border border-orange-200/60 group-hover:scale-105 transition-transform">
+                    <div className="p-3 rounded-xl bg-orange-50 border border-orange-200/60 group-hover:scale-110 group-hover:bg-orange-100 transition-all">
                       {prospectIcons[career.iconName] || <Briefcase className="w-6 h-6 text-orange-600" />}
                     </div>
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200">
@@ -305,14 +389,14 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
                     {career.skills.map((skill, sIdx) => (
                       <span
                         key={sIdx}
-                        className="text-[10px] font-medium px-2 py-0.5 rounded bg-stone-100 text-stone-700"
+                        className="text-[10px] font-medium px-2 py-0.5 rounded bg-stone-100 text-stone-700 group-hover:bg-orange-50 group-hover:text-orange-800 transition-colors"
                       >
                         {skill}
                       </span>
                     ))}
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -325,7 +409,13 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
         className="py-16 sm:py-24 bg-white border-b border-stone-200/80"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center max-w-3xl mx-auto mb-12"
+          >
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-900 text-xs font-bold uppercase tracking-wider mb-3">
               <BookOpen className="w-3.5 h-3.5 text-amber-700" />
               <span>Struktur Perkuliahan</span>
@@ -340,63 +430,84 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
             {/* Semester Tabs */}
             <div className="mt-8 inline-flex p-1 rounded-xl bg-stone-100 border border-stone-200 overflow-x-auto max-w-full">
               {SAINS_INFORMASI_DETAILS.curriculumBlocks.map((block, idx) => (
-                <button
+                <motion.button
                   key={idx}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => setActiveCurriculumTab(idx)}
-                  className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all whitespace-nowrap ${
+                  className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all whitespace-nowrap cursor-pointer ${
                     activeCurriculumTab === idx
                       ? 'bg-white text-orange-600 shadow-xs ring-1 ring-stone-200'
                       : 'text-stone-600 hover:text-stone-900'
                   }`}
                 >
                   {block.semester}
-                </button>
+                </motion.button>
               ))}
             </div>
-          </div>
+          </motion.div>
 
-          {/* Active Curriculum Content */}
-          <div className="max-w-3xl mx-auto p-6 sm:p-8 rounded-2xl bg-stone-50 border border-stone-200">
-            <div className="flex items-center justify-between mb-4 pb-4 border-b border-stone-200">
-              <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-orange-600">
-                  {SAINS_INFORMASI_DETAILS.curriculumBlocks[activeCurriculumTab].semester}
-                </span>
-                <h3 className="text-xl font-extrabold text-stone-900">
-                  {SAINS_INFORMASI_DETAILS.curriculumBlocks[activeCurriculumTab].description}
-                </h3>
+          {/* Active Curriculum Content with AnimatePresence */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeCurriculumTab}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3 }}
+              className="max-w-3xl mx-auto p-6 sm:p-8 rounded-2xl bg-stone-50 border border-stone-200"
+            >
+              <div className="flex items-center justify-between mb-4 pb-4 border-b border-stone-200">
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-wider text-orange-600">
+                    {SAINS_INFORMASI_DETAILS.curriculumBlocks[activeCurriculumTab].semester}
+                  </span>
+                  <h3 className="text-xl font-extrabold text-stone-900">
+                    {SAINS_INFORMASI_DETAILS.curriculumBlocks[activeCurriculumTab].description}
+                  </h3>
+                </div>
+                <div className="text-right">
+                  <span className="text-lg font-black text-amber-700">
+                    {SAINS_INFORMASI_DETAILS.curriculumBlocks[activeCurriculumTab].credits} SKS
+                  </span>
+                  <div className="text-[10px] text-stone-500">Beban Studi</div>
+                </div>
               </div>
-              <div className="text-right">
-                <span className="text-lg font-black text-amber-700">
-                  {SAINS_INFORMASI_DETAILS.curriculumBlocks[activeCurriculumTab].credits} SKS
-                </span>
-                <div className="text-[10px] text-stone-500">Beban Studi</div>
-              </div>
-            </div>
 
-            <div className="space-y-2.5">
-              <div className="text-xs font-bold uppercase tracking-wider text-stone-500">
-                Contoh Mata Kuliah Inti:
+              <div className="space-y-2.5">
+                <div className="text-xs font-bold uppercase tracking-wider text-stone-500">
+                  Contoh Mata Kuliah Inti:
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {SAINS_INFORMASI_DETAILS.curriculumBlocks[activeCurriculumTab].sampleCourses.map((course, cIdx) => (
+                    <motion.div
+                      key={cIdx}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.25, delay: cIdx * 0.05 }}
+                      whileHover={{ scale: 1.02, backgroundColor: '#ffffff' }}
+                      className="p-3 rounded-xl bg-white border border-stone-100 flex items-center gap-2.5 text-xs sm:text-sm font-semibold text-stone-800 shadow-2xs"
+                    >
+                      <CheckCircle2 className="w-4 h-4 text-orange-600 shrink-0" />
+                      <span>{course}</span>
+                    </motion.div>
+                  ))}
+                </div>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {SAINS_INFORMASI_DETAILS.curriculumBlocks[activeCurriculumTab].sampleCourses.map((course, cIdx) => (
-                  <div
-                    key={cIdx}
-                    className="p-3 rounded-xl bg-white border border-stone-100 flex items-center gap-2.5 text-xs sm:text-sm font-semibold text-stone-800"
-                  >
-                    <CheckCircle2 className="w-4 h-4 text-orange-600 shrink-0" />
-                    <span>{course}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </section>
 
       {/* Call To Action & Admissions */}
       <section className="py-16 bg-gradient-to-r from-orange-600 via-amber-600 to-amber-500 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-3xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-3xl mx-auto"
+        >
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
             Mulai Perjalananmu Bersama Prodi Sains Informasi
           </h2>
@@ -405,26 +516,30 @@ export const SainsInformasiPage: React.FC<SainsInformasiPageProps> = ({
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            <a
+            <motion.a
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               href="https://taplink.cc/uhnmaba2026"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-white text-orange-700 font-extrabold text-xs sm:text-sm tracking-wide shadow-lg hover:bg-stone-50 transition-all"
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-white text-orange-700 font-extrabold text-xs sm:text-sm tracking-wide shadow-lg hover:bg-stone-50 transition-all cursor-pointer"
             >
               <GraduationCap className="w-4 h-4" />
               <span>Pendaftaran PMB 2026 Online</span>
               <ExternalLink className="w-3.5 h-3.5" />
-            </a>
+            </motion.a>
 
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={onBackToHome}
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-orange-950/30 hover:bg-orange-950/40 text-white font-bold text-xs sm:text-sm border border-white/20 transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-orange-950/30 hover:bg-orange-950/40 text-white font-bold text-xs sm:text-sm border border-white/20 transition-all cursor-pointer"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Kembali ke Beranda FAST</span>
-            </button>
+            </motion.button>
           </div>
-        </div>
+        </motion.div>
       </section>
     </div>
   );
