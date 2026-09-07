@@ -94,39 +94,102 @@ export const FacultyProfile: React.FC = () => {
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
               className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
             >
-              {/* Visi Card with Hover Glow & Tilt Effect */}
+              {/* Visi Card with Rich Animations, Ambient Aura & Interactive Pillars */}
               <motion.div
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.25 }}
-                className="lg:col-span-5 rounded-2xl bg-gradient-to-br from-stone-900 via-stone-850 to-stone-900 text-white p-8 sm:p-10 border border-stone-800 shadow-xl relative overflow-hidden group"
+                initial={{ opacity: 0, x: -35, scale: 0.96 }}
+                whileInView={{ opacity: 1, x: 0, scale: 1 }}
+                viewport={{ once: false, amount: 0.2 }}
+                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                whileHover={{ y: -6, boxShadow: '0 25px 35px -5px rgba(249, 115, 22, 0.2), 0 10px 10px -5px rgba(249, 115, 22, 0.1)' }}
+                className="lg:col-span-5 rounded-2xl bg-gradient-to-br from-stone-900 via-stone-850 to-stone-900 text-white p-8 sm:p-10 border border-stone-800 shadow-xl relative overflow-hidden group transition-all duration-300"
               >
-                <div className="absolute top-0 right-0 w-48 h-48 bg-orange-500/10 group-hover:bg-orange-500/20 rounded-full blur-2xl pointer-events-none transition-all duration-500" />
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2.5 rounded-xl bg-orange-500/20 text-orange-400 border border-orange-500/30 group-hover:scale-110 transition-transform">
-                    <Compass className="w-6 h-6" />
-                  </div>
+                {/* Animated Breathing Ambient Aura */}
+                <motion.div
+                  animate={{
+                    scale: [1, 1.35, 1],
+                    opacity: [0.12, 0.28, 0.12]
+                  }}
+                  transition={{
+                    duration: 5,
+                    repeat: Infinity,
+                    ease: 'easeInOut'
+                  }}
+                  className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-orange-500/20 via-amber-500/15 to-transparent rounded-full blur-3xl pointer-events-none"
+                />
+
+                {/* Animated Badge */}
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: false, amount: 0.2 }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-500/15 border border-orange-400/30 text-orange-300 text-[10px] font-extrabold uppercase tracking-widest mb-4 shadow-2xs"
+                >
+                  <Sparkles className="w-3 h-3 text-orange-400 animate-pulse" />
+                  <span>Visi Strategis Fakultas</span>
+                </motion.div>
+
+                {/* Header with Animated Compass */}
+                <div className="flex items-center gap-3.5 mb-6">
+                  <motion.div
+                    whileHover={{ rotate: 180, scale: 1.1 }}
+                    transition={{ duration: 0.6, ease: 'easeOut' }}
+                    className="p-3 rounded-2xl bg-gradient-to-br from-orange-500/25 to-amber-500/10 text-orange-400 border border-orange-500/30 shadow-inner group-hover:scale-105 transition-transform cursor-pointer"
+                  >
+                    <Compass className="w-6 h-6 animate-pulse" />
+                  </motion.div>
                   <div>
-                    <h3 className="text-xl font-bold text-white">Visi Keilmuan FAST</h3>
+                    <motion.h3
+                      initial={{ opacity: 0, x: -10 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: false, amount: 0.2 }}
+                      transition={{ duration: 0.5, delay: 0.15 }}
+                      className="text-xl sm:text-2xl font-black text-white tracking-tight"
+                    >
+                      Visi Keilmuan <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-400 to-amber-300">FAST</span>
+                    </motion.h3>
+                    <div className="text-[11px] text-stone-400 font-medium">UHN I Gusti Bagus Sugriwa Denpasar</div>
                   </div>
                 </div>
 
-                <blockquote className="text-stone-200 text-base sm:text-lg leading-relaxed font-medium italic border-l-2 border-amber-500 pl-4 my-6">
-                  “Menjadi Fakultas Sains dan Teknologi yang unggul dan inovatif dalam pengembangan sains, teknologi, desain, dan informasi berbasis budaya untuk menghasilkan lulusan yang bermanfaat bagi masyarakat menuju Indonesia Emas.”
-                </blockquote>
+                {/* Quote Box with Glowing Gradient Accent Border */}
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: false, amount: 0.2 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="relative p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs my-6 overflow-hidden"
+                >
+                  <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-orange-500 via-amber-400 to-amber-600 rounded-full" />
+                  <blockquote className="text-stone-200 text-sm sm:text-base leading-relaxed font-medium italic pl-2">
+                    “Menjadi Fakultas Sains dan Teknologi yang unggul dan inovatif dalam pengembangan sains, teknologi, desain, dan informasi berbasis budaya untuk menghasilkan lulusan yang bermanfaat bagi masyarakat menuju Indonesia Emas.”
+                  </blockquote>
+                </motion.div>
 
-                <div className="pt-6 border-t border-stone-800 space-y-3">
-                  <div className="flex items-center gap-2 text-xs text-stone-300">
-                    <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                    <span>Sains, Teknologi, Desain & Informasi Berbasis Budaya</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-xs text-stone-300">
-                    <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                    <span>Lulusan Berdaya Saing Menuju Indonesia Emas</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-xs text-stone-300">
-                    <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                    <span>Integritas Nilai Tri Dharma Perguruan Tinggi</span>
-                  </div>
+                {/* Staggered Pillars with Interactive Micro-Animations */}
+                <div className="pt-6 border-t border-stone-800 space-y-2.5">
+                  {[
+                    'Sains, Teknologi, Desain & Informasi Berbasis Budaya',
+                    'Lulusan Berdaya Saing Menuju Indonesia Emas',
+                    'Integritas Nilai Tri Dharma Perguruan Tinggi'
+                  ].map((pillar, pIdx) => (
+                    <motion.div
+                      key={pIdx}
+                      initial={{ opacity: 0, x: -15 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: false, amount: 0.2 }}
+                      transition={{ duration: 0.4, delay: 0.25 + pIdx * 0.1 }}
+                      whileHover={{ x: 6 }}
+                      className="flex items-center gap-3 p-2 rounded-xl hover:bg-white/5 transition-all cursor-default group/pillar"
+                    >
+                      <div className="w-6 h-6 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center shrink-0 border border-orange-500/30 group-hover/pillar:scale-110 group-hover/pillar:bg-orange-500 group-hover/pillar:text-white transition-all">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                      </div>
+                      <span className="text-xs text-stone-300 font-medium group-hover/pillar:text-amber-300 transition-colors">
+                        {pillar}
+                      </span>
+                    </motion.div>
+                  ))}
                 </div>
               </motion.div>
 
