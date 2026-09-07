@@ -231,35 +231,35 @@ export const InstagramSection: React.FC = () => {
 
         {/* Instagram Post Cards Grid (Shown when posts are available) */}
         {!isLoading && posts.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
             {filteredPosts.map((post) => (
               <article
                 key={post.id}
                 id={`post-card-${post.id}`}
-                className="flex flex-col justify-between rounded-2xl bg-white border border-stone-200/90 shadow-2xs hover:shadow-xl hover:border-amber-400/80 hover:-translate-y-1.5 transition-all duration-300 overflow-hidden group"
+                className="flex flex-col justify-between rounded-xl sm:rounded-2xl bg-white border border-stone-200/90 shadow-2xs hover:shadow-xl hover:border-amber-400/80 hover:-translate-y-1.5 transition-all duration-300 overflow-hidden group"
               >
                 <div>
                   {/* Post Header: Profile & Date */}
-                  <div className="p-4 flex items-center justify-between border-b border-stone-100 bg-stone-50/50">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-400 to-orange-500 p-0.5">
+                  <div className="p-2.5 sm:p-4 flex items-center justify-between border-b border-stone-100 bg-stone-50/50 gap-1.5">
+                    <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
+                      <div className="w-6 h-6 sm:w-8 sm:h-8 shrink-0 rounded-full bg-gradient-to-tr from-amber-400 to-orange-500 p-0.5">
                         <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
                           <FacultyLogo size="sm" showText={false} />
                         </div>
                       </div>
-                      <div>
-                        <div className="text-xs font-bold text-stone-900 group-hover:text-orange-600 transition-colors">
+                      <div className="min-w-0">
+                        <div className="text-[11px] sm:text-xs font-bold text-stone-900 group-hover:text-orange-600 transition-colors truncate max-w-[65px] sm:max-w-none">
                           @fastsugriwa
                         </div>
-                        <div className="text-[10px] text-stone-400 flex items-center gap-1">
-                          <Calendar className="w-2.5 h-2.5" />
-                          <span>{post.date}</span>
+                        <div className="text-[9px] sm:text-[10px] text-stone-400 flex items-center gap-0.5 sm:gap-1 truncate">
+                          <Calendar className="w-2 h-2 sm:w-2.5 sm:h-2.5 shrink-0" />
+                          <span className="truncate">{post.date}</span>
                         </div>
                       </div>
                     </div>
 
                     <span
-                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                      className={`shrink-0 text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full ${
                         post.category === 'Beasiswa'
                           ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                           : post.category === 'Prestasi'
@@ -281,14 +281,17 @@ export const InstagramSection: React.FC = () => {
 
                   {/* Post Media / Banner */}
                   {post.mediaUrl ? (
-                    <div className="relative aspect-[4/3] w-full overflow-hidden bg-stone-100 border-b border-stone-100">
+                    <div 
+                      onClick={() => setActiveModalPost(post)}
+                      className="relative aspect-square sm:aspect-[4/3] w-full overflow-hidden bg-stone-100 border-b border-stone-100 cursor-pointer"
+                    >
                       <img
                         src={post.mediaUrl}
                         alt={post.shortSnippet}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                         loading="lazy"
                       />
-                      <div className="absolute top-2.5 right-2.5 px-2 py-1 rounded-md bg-stone-900/75 backdrop-blur-xs text-white flex items-center gap-1.5 text-[10px] font-medium shadow-xs">
+                      <div className="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md bg-stone-900/75 backdrop-blur-xs text-white flex items-center gap-1 text-[9px] sm:text-[10px] font-medium shadow-xs">
                         {post.mediaType === 'REEL' || post.mediaType === 'VIDEO' ? (
                           <>
                             <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
@@ -296,28 +299,31 @@ export const InstagramSection: React.FC = () => {
                           </>
                         ) : post.mediaType === 'CAROUSEL_ALBUM' ? (
                           <>
-                            <Instagram className="w-3 h-3 text-amber-400" />
-                            <span>Album</span>
+                            <Instagram className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-amber-400" />
+                            <span className="hidden xs:inline">Album</span>
                           </>
                         ) : (
                           <>
-                            <Instagram className="w-3 h-3 text-orange-400" />
-                            <span>Post</span>
+                            <Instagram className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-orange-400" />
+                            <span className="hidden xs:inline">Post</span>
                           </>
                         )}
                       </div>
 
                       {/* Play overlay for Reels / Videos */}
                       {(post.mediaType === 'REEL' || post.mediaType === 'VIDEO') && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/35 transition-colors pointer-events-none">
-                          <div className="w-11 h-11 rounded-full bg-white/90 text-stone-900 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                            <span className="ml-0.5 text-xs font-black">▶</span>
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/35 transition-colors">
+                          <div className="w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-white/90 text-stone-900 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                            <span className="ml-0.5 text-[10px] sm:text-xs font-black">▶</span>
                           </div>
                         </div>
                       )}
                     </div>
                   ) : (
-                    <div className="relative p-6 bg-gradient-to-br from-stone-900 via-stone-850 to-stone-900 text-white overflow-hidden border-b border-stone-100 min-h-[140px] flex flex-col justify-between">
+                    <div 
+                      onClick={() => setActiveModalPost(post)}
+                      className="relative p-3.5 sm:p-6 bg-gradient-to-br from-stone-900 via-stone-850 to-stone-900 text-white overflow-hidden border-b border-stone-100 min-h-[120px] sm:min-h-[140px] flex flex-col justify-between cursor-pointer"
+                    >
                       {/* Subtle Geometric Balinese Sacred Line Pattern */}
                       <div className="absolute inset-0 opacity-10 pointer-events-none">
                         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
@@ -328,21 +334,21 @@ export const InstagramSection: React.FC = () => {
                       </div>
 
                       <div className="relative z-10 flex items-center justify-between">
-                        <span className="text-[10px] uppercase font-mono tracking-widest text-amber-400">
-                          FAST SUGRIWA POST
+                        <span className="text-[9px] sm:text-[10px] uppercase font-mono tracking-widest text-amber-400">
+                          FAST SUGRIWA
                         </span>
-                        <Instagram className="w-4 h-4 text-orange-400" />
+                        <Instagram className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-400" />
                       </div>
 
-                      <div className="relative z-10 my-3">
-                        <h4 className="text-base sm:text-lg font-bold text-white tracking-tight leading-snug line-clamp-2">
+                      <div className="relative z-10 my-2 sm:my-3">
+                        <h4 className="text-xs sm:text-base md:text-lg font-bold text-white tracking-tight leading-snug line-clamp-2">
                           {post.shortSnippet}
                         </h4>
                       </div>
 
-                      <div className="relative z-10 flex items-center gap-2">
+                      <div className="relative z-10 flex items-center gap-1.5 sm:gap-2">
                         {post.tags.slice(0, 2).map((t) => (
-                          <span key={t} className="text-[10px] text-stone-400 font-mono">
+                          <span key={t} className="text-[9px] sm:text-[10px] text-stone-400 font-mono truncate max-w-[80px]">
                             {t}
                           </span>
                         ))}
@@ -351,13 +357,13 @@ export const InstagramSection: React.FC = () => {
                   )}
 
                   {/* Post Caption Preview */}
-                  <div className="p-4 text-xs text-stone-600 leading-relaxed">
-                    <p className="line-clamp-3 whitespace-pre-line">
+                  <div className="p-2.5 sm:p-4 text-[11px] sm:text-xs text-stone-600 leading-relaxed">
+                    <p className="line-clamp-2 sm:line-clamp-3 whitespace-pre-line">
                       {post.caption}
                     </p>
                     <button
                       onClick={() => setActiveModalPost(post)}
-                      className="text-orange-600 font-bold hover:underline mt-2 inline-block text-xs"
+                      className="text-orange-600 font-bold hover:underline mt-1.5 sm:mt-2 inline-block text-[10px] sm:text-xs"
                     >
                       Baca selengkapnya...
                     </button>
@@ -365,14 +371,14 @@ export const InstagramSection: React.FC = () => {
                 </div>
 
                 {/* Card Footer: Engagement & Actions */}
-                <div className="p-4 border-t border-stone-100 flex items-center justify-between text-xs text-stone-500 bg-stone-50/40">
-                  <div className="flex items-center gap-3">
-                    <span className="flex items-center gap-1 text-rose-600 font-medium">
-                      <Heart className="w-3.5 h-3.5 fill-rose-600" />
+                <div className="p-2.5 sm:p-4 border-t border-stone-100 flex items-center justify-between text-[10px] sm:text-xs text-stone-500 bg-stone-50/40">
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <span className="flex items-center gap-0.5 sm:gap-1 text-rose-600 font-medium">
+                      <Heart className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-rose-600" />
                       <span>{post.likesCount}</span>
                     </span>
-                    <span className="flex items-center gap-1 text-stone-600 font-medium">
-                      <MessageCircle className="w-3.5 h-3.5" />
+                    <span className="flex items-center gap-0.5 sm:gap-1 text-stone-600 font-medium">
+                      <MessageCircle className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                       <span>{post.commentsCount}</span>
                     </span>
                   </div>
@@ -381,10 +387,11 @@ export const InstagramSection: React.FC = () => {
                     href={post.postUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-stone-700 hover:text-orange-600 font-semibold transition-colors"
+                    className="inline-flex items-center gap-0.5 sm:gap-1 text-stone-700 hover:text-orange-600 font-semibold transition-colors"
                   >
-                    <span>Lihat di IG</span>
-                    <ExternalLink className="w-3 h-3 text-stone-400" />
+                    <span>Lihat</span>
+                    <span className="hidden sm:inline"> di IG</span>
+                    <ExternalLink className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-stone-400" />
                   </a>
                 </div>
               </article>
