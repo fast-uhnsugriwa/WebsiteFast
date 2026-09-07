@@ -63,14 +63,11 @@ export const DosenProfilePage: React.FC<{ onBackToHome: () => void }> = ({ onBac
             const hasNuptk = rawNuptk !== '-' && rawNuptk !== '' && rawNuptk.toLowerCase() !== 'null' && rawNuptk.toLowerCase() !== 'undefined';
             const rawGolongan = cleanString(row['Golongan'] || row['GOLONGAN'] || row['golongan']);
 
-            // Jika ada dosen yang menginput NUPTK di sheet, ubah golongan menjadi NUPTK
-            const golongan = hasNuptk ? 'NUPTK' : rawGolongan;
-
             return {
               id: row['No']?.toString() || (index + 1).toString(),
               name: cleanString(rawName) === '-' ? 'Tanpa Nama' : cleanString(rawName),
               nip: cleanString(row['NIP']),
-              golongan: golongan,
+              golongan: rawGolongan,
               nuptk: hasNuptk ? rawNuptk : undefined,
               jabatan: cleanString(row['Jabatan']),
               rumpunIlmu: cleanString(row['Rumpun Ilmu']),
@@ -315,13 +312,25 @@ export const DosenProfilePage: React.FC<{ onBackToHome: () => void }> = ({ onBac
                         </span>
                       </div>
 
-                      {/* Golongan Row */}
-                      <div className="flex items-center justify-between text-[10px] md:text-[11px] bg-stone-100/80 px-2.5 py-1 rounded-md border border-stone-200/50">
-                        <span className="text-stone-400 font-bold uppercase tracking-wider text-[9px] shrink-0">Golongan</span>
-                        <span className="font-semibold text-amber-900 bg-amber-100/80 px-2 py-0.5 rounded text-[9px] md:text-[10px] border border-amber-200/60">
-                          {dosen.golongan !== '-' ? dosen.golongan : '—'}
-                        </span>
-                      </div>
+                      {/* Golongan diganti dengan Nomor NUPTK jika diinputkan di sheet */}
+                      {dosen.nuptk ? (
+                        <div className="flex items-center justify-between text-[10px] md:text-[11px] bg-stone-100/80 px-2.5 py-1 rounded-md border border-stone-200/50">
+                          <span className="text-stone-400 font-bold uppercase tracking-wider text-[9px] shrink-0">NUPTK</span>
+                          <span 
+                            className="font-mono text-stone-700 font-semibold tracking-tight text-[10px] md:text-[11px] truncate ml-2 text-right select-all"
+                            title={dosen.nuptk}
+                          >
+                            {dosen.nuptk}
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center justify-between text-[10px] md:text-[11px] bg-stone-100/80 px-2.5 py-1 rounded-md border border-stone-200/50">
+                          <span className="text-stone-400 font-bold uppercase tracking-wider text-[9px] shrink-0">Golongan</span>
+                          <span className="font-semibold text-amber-900 bg-amber-100/80 px-2 py-0.5 rounded text-[9px] md:text-[10px] border border-amber-200/60">
+                            {dosen.golongan !== '-' ? dosen.golongan : '—'}
+                          </span>
+                        </div>
+                      )}
                     </div>
 
                     {/* Email Button */}
