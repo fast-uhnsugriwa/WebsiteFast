@@ -70,3 +70,37 @@ export interface CurriculumBlock {
   description: string;
   sampleCourses: string[];
 }
+
+export interface CourseItem {
+  no: number;
+  kode: string;
+  nama: string;
+  sks: number;
+  semester: string;
+  keterangan?: string;
+}
+
+export interface SemesterCurriculum {
+  semesterNumber: number;
+  semesterRoman: string;
+  title: string;
+  totalSks: number;
+  mbkmScheme: string;
+  description: string;
+  courses: CourseItem[];
+}
+
+export interface MbkmExternalOption {
+  no: number;
+  menempuhMk: string;
+  bobotSks: number;
+  keterangan: string;
+}
+
+export interface MbkmActivity {
+  no: number;
+  bentukKegiatan: string;
+  sksReguler: string;
+  sksMbkm: string;
+  keterangan: string;
+}
