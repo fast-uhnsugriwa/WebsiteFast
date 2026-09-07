@@ -169,18 +169,28 @@
   contain: layout paint;
 }
 
-/* Disable heavy blur animations on mobile to prevent scroll repaint glitches */
+/* On mobile: use simpler/shorter animations but keep them running */
 @media (max-width: 768px) {
-  .animate-cinematic-amber,
-  .animate-cinematic-orange,
-  .animate-cinematic-yellow,
-  .animate-cinematic-white,
-  .animate-cinematic-white-spot,
-  .animate-cinematic-beam,
+  .animate-cinematic-amber {
+    animation-duration: 5s;
+  }
+  .animate-cinematic-orange {
+    animation-duration: 6s;
+  }
+  .animate-cinematic-yellow {
+    animation-duration: 4s;
+  }
+  .animate-cinematic-white {
+    animation-duration: 3.5s;
+  }
+  .animate-cinematic-white-spot {
+    animation-duration: 2.8s;
+  }
+  .animate-cinematic-beam {
+    animation-duration: 4.5s;
+  }
   .animate-cinematic-pulse {
-    animation: none !important;
-    will-change: auto;
-    contain: none;
+    animation-duration: 3.5s;
   }
 }
 
