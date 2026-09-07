@@ -249,9 +249,14 @@ export const FacultyProfile: React.FC = () => {
                 <motion.div
                   whileHover={{ rotate: [0, -4, 4, 0], scale: 1.05 }}
                   transition={{ duration: 0.3 }}
-                  className="w-24 h-24 rounded-2xl bg-gradient-to-br from-orange-600 to-amber-600 flex items-center justify-center text-white shrink-0 shadow-md cursor-pointer"
+                  className="w-24 h-24 rounded-2xl overflow-hidden shrink-0 shadow-md cursor-pointer border-2 border-amber-200"
                 >
-                  <FacultyLogo size="lg" showText={false} />
+                  <img
+                    src="https://drive.google.com/thumbnail?id=1vu-ykQ1W-BWqySPdMCWPO1Cj3l_reJq4&sz=w400"
+                    alt="Dr. I Gede Sedana Suci"
+                    className="w-full h-full object-cover object-top"
+                    referrerPolicy="no-referrer"
+                  />
                 </motion.div>
 
                 <div>
@@ -319,8 +324,13 @@ export const FacultyProfile: React.FC = () => {
                 >
                   <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-amber-500 to-orange-600" />
                   <div className="flex items-start gap-4">
-                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-600 to-amber-600 flex items-center justify-center text-white shrink-0 shadow-md group-hover:scale-105 transition-transform">
-                      <FacultyLogo size="md" showText={false} />
+                    <div className="w-14 h-14 rounded-2xl overflow-hidden shrink-0 shadow-md group-hover:scale-105 transition-transform border border-amber-200">
+                      <img
+                        src="https://drive.google.com/thumbnail?id=1vu-ykQ1W-BWqySPdMCWPO1Cj3l_reJq4&sz=w200"
+                        alt="Dr. I Gede Sedana Suci"
+                        className="w-full h-full object-cover object-top"
+                        referrerPolicy="no-referrer"
+                      />
                     </div>
                     <div className="min-w-0 flex-1">
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-orange-100 text-orange-900 border border-orange-200">
@@ -350,8 +360,13 @@ export const FacultyProfile: React.FC = () => {
                 >
                   <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-blue-600 to-indigo-600" />
                   <div className="flex items-start gap-4">
-                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white shrink-0 shadow-md group-hover:scale-105 transition-transform">
-                      <UniversityLogo size="md" showText={false} />
+                    <div className="w-14 h-14 rounded-2xl overflow-hidden shrink-0 shadow-md group-hover:scale-105 transition-transform border border-blue-200">
+                      <img
+                        src="https://drive.google.com/thumbnail?id=18U3QPzeE10pnvzPATidWzT_meBfKYV19&sz=w200"
+                        alt="Dr.Eng. I Gede Agus Krisna Warmayana"
+                        className="w-full h-full object-cover object-top"
+                        referrerPolicy="no-referrer"
+                      />
                     </div>
                     <div className="min-w-0 flex-1">
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-blue-100 text-blue-900 border border-blue-200">
