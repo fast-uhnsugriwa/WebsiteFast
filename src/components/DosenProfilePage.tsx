@@ -8,6 +8,7 @@ interface Dosen {
   name: string;
   nip: string;
   golongan: string;
+  nuptk?: string;
   jabatan: string;
   rumpunIlmu: string;
   pohonIlmu: string;
@@ -58,11 +59,19 @@ export const DosenProfilePage: React.FC<{ onBackToHome: () => void }> = ({ onBac
         try {
           const parsedData = results.data.map((row: any, index) => {
             const rawName = row['Nama'] || row['NAMA'] || row['nama'];
+            const rawNuptk = cleanString(row['NUPTK'] || row['nuptk'] || row['Nuptk']);
+            const hasNuptk = rawNuptk !== '-' && rawNuptk !== '' && rawNuptk.toLowerCase() !== 'null' && rawNuptk.toLowerCase() !== 'undefined';
+            const rawGolongan = cleanString(row['Golongan'] || row['GOLONGAN'] || row['golongan']);
+
+            // Jika ada dosen yang menginput NUPTK di sheet, ubah golongan menjadi NUPTK
+            const golongan = hasNuptk ? 'NUPTK' : rawGolongan;
+
             return {
               id: row['No']?.toString() || (index + 1).toString(),
               name: cleanString(rawName) === '-' ? 'Tanpa Nama' : cleanString(rawName),
               nip: cleanString(row['NIP']),
-              golongan: cleanString(row['Golongan']),
+              golongan: golongan,
+              nuptk: hasNuptk ? rawNuptk : undefined,
               jabatan: cleanString(row['Jabatan']),
               rumpunIlmu: cleanString(row['Rumpun Ilmu']),
               pohonIlmu: cleanString(row['Pohon / Cabang Ilmu']),
@@ -96,9 +105,14 @@ export const DosenProfilePage: React.FC<{ onBackToHome: () => void }> = ({ onBac
   const isDosen = (d: Dosen) => d.rumpunIlmu !== '-' || d.pohonIlmu !== '-' || d.rantingIlmu !== '-';
 
   const filteredDosen = dosenList.filter(dosen => {
-    const matchesSearch = dosen.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          dosen.jabatan.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          dosen.rumpunIlmu.toLowerCase().includes(searchTerm.toLowerCase());
+    const q = searchTerm.toLowerCase().trim();
+    const matchesSearch = !q ||
+                          dosen.name.toLowerCase().includes(q) || 
+                          dosen.jabatan.toLowerCase().includes(q) ||
+                          dosen.rumpunIlmu.toLowerCase().includes(q) ||
+                          dosen.nip.replace(/\s+/g, '').includes(q.replace(/\s+/g, '')) ||
+                          (dosen.nuptk && dosen.nuptk.replace(/\s+/g, '').includes(q.replace(/\s+/g, ''))) ||
+                          dosen.golongan.toLowerCase().includes(q);
                           
     const matchesType = filterType === 'all' 
                      || (filterType === 'dosen' && isDosen(dosen))

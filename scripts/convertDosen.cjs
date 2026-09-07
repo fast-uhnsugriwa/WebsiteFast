@@ -70,11 +70,17 @@ try {
     const rawName = row['Nama'];
     const matchedPhoto = matchPhoto(rawName);
     
+    const rawNuptk = (row['NUPTK'] || row['nuptk'] || '').toString().trim();
+    const hasNuptk = rawNuptk !== '' && rawNuptk !== '-' && rawNuptk.toLowerCase() !== 'null';
+    const rawGolongan = (row['Golongan'] || '-').replace(/[\u200B-\u200D\uFEFF]/g, '');
+    const golongan = hasNuptk ? 'NUPTK' : rawGolongan;
+
     return {
       id: row['No']?.toString() || (index + 1).toString(),
       name: (rawName || '').replace(/[\u200B-\u200D\uFEFF]/g, '').replace(/â€Œ/g, ''),
       nip: (row['NIP']?.toString().trim() || '-').replace(/[\u200B-\u200D\uFEFF]/g, ''),
-      golongan: (row['Golongan'] || '-').replace(/[\u200B-\u200D\uFEFF]/g, ''),
+      golongan: golongan,
+      nuptk: hasNuptk ? rawNuptk : undefined,
       jabatan: (row['Jabatan'] || '-').replace(/[\u200B-\u200D\uFEFF]/g, ''),
       rumpunIlmu: (row['Rumpun Ilmu'] || '-').replace(/[\u200B-\u200D\uFEFF]/g, ''),
       pohonIlmu: (row['Pohon / Cabang Ilmu'] || '-').replace(/[\u200B-\u200D\uFEFF]/g, ''),
