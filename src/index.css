@@ -130,67 +130,87 @@
 .animate-cinematic-amber {
   animation: cinematic-drift-amber 6.5s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
   will-change: transform;
-  contain: layout paint;
+  contain: style layout;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .animate-cinematic-orange {
   animation: cinematic-drift-orange 7.5s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
   will-change: transform;
-  contain: layout paint;
+  contain: style layout;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .animate-cinematic-yellow {
   animation: cinematic-drift-yellow 5.2s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
   will-change: transform;
-  contain: layout paint;
+  contain: style layout;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .animate-cinematic-white {
   animation: cinematic-drift-white 4.2s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
   will-change: transform, opacity;
-  contain: layout paint;
+  contain: style layout;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .animate-cinematic-white-spot {
   animation: cinematic-white-spot 3.2s ease-in-out infinite alternate;
   will-change: transform, opacity;
-  contain: layout paint;
+  contain: style layout;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .animate-cinematic-beam {
   animation: cinematic-beam 5.8s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
   will-change: transform, opacity;
-  contain: layout paint;
+  contain: style layout;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .animate-cinematic-pulse {
   animation: cinematic-pulse-slow 4s ease-in-out infinite;
   will-change: transform, opacity;
-  contain: layout paint;
+  contain: style layout;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
-/* On mobile: use simpler/shorter animations but keep them running */
+/* On mobile: slower, GPU-only animations to prevent scroll flicker */
 @media (max-width: 768px) {
   .animate-cinematic-amber {
-    animation-duration: 5s;
+    animation-duration: 8s;
   }
   .animate-cinematic-orange {
-    animation-duration: 6s;
+    animation-duration: 9s;
   }
   .animate-cinematic-yellow {
-    animation-duration: 4s;
+    animation-duration: 7s;
   }
+  /* Disable opacity animation on mobile for white/beam/pulse to avoid repaint */
   .animate-cinematic-white {
-    animation-duration: 3.5s;
+    animation-name: cinematic-drift-white;
+    animation-duration: 6s;
+    opacity: 0.55;
   }
   .animate-cinematic-white-spot {
-    animation-duration: 2.8s;
+    animation-duration: 5s;
+    opacity: 0.4;
   }
   .animate-cinematic-beam {
-    animation-duration: 4.5s;
+    animation-duration: 7s;
+    opacity: 0.3;
   }
   .animate-cinematic-pulse {
-    animation-duration: 3.5s;
+    animation-duration: 6s;
+    opacity: 0.3;
   }
 }
 

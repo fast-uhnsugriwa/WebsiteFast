@@ -19,6 +19,7 @@ export const CinematicLightBackground: React.FC<CinematicLightBackgroundProps> =
       <div
         className={`absolute inset-0 overflow-hidden pointer-events-none select-none z-0 ${className}`}
         aria-hidden="true"
+        style={{ isolation: 'isolate', transform: 'translateZ(0)', willChange: 'transform' }}
       >
         {/* Pure Luminous White Specular Flare - Cinematic Core */}
         <div
@@ -91,7 +92,7 @@ export const CinematicLightBackground: React.FC<CinematicLightBackgroundProps> =
       <div
         className={`absolute inset-0 overflow-hidden pointer-events-none select-none z-0 ${className}`}
         aria-hidden="true"
-        style={{ transform: 'translateZ(0)' }}
+        style={{ isolation: 'isolate', transform: 'translateZ(0)', willChange: 'transform' }}
       >
         {/* Ambient Moving White Luminescence */}
         <div
@@ -137,6 +138,7 @@ export const CinematicLightBackground: React.FC<CinematicLightBackgroundProps> =
     <div
       className={`absolute inset-0 overflow-hidden pointer-events-none select-none z-0 ${className}`}
       aria-hidden="true"
+      style={{ isolation: 'isolate', transform: 'translateZ(0)', willChange: 'transform' }}
     >
       {/* Radiant Pure White Daylight Core - High Visibility Floating Spotlight */}
       <div
