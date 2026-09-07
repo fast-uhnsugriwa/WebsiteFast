@@ -194,34 +194,17 @@
   backface-visibility: hidden;
 }
 
-/* On mobile: slower, GPU-only animations to prevent scroll flicker */
+/* Mobile: cinematic orbs are rendered as separate smaller elements in the component.
+   These overrides are a safety net for any remaining animated elements. */
 @media (max-width: 768px) {
-  .animate-cinematic-amber {
-    animation-duration: 8s;
-  }
-  .animate-cinematic-orange {
-    animation-duration: 9s;
-  }
-  .animate-cinematic-yellow {
-    animation-duration: 7s;
-  }
-  /* Disable opacity animation on mobile for white/beam/pulse to avoid repaint */
-  .animate-cinematic-white {
-    animation-name: cinematic-drift-white;
-    animation-duration: 6s;
-    opacity: 0.55;
-  }
-  .animate-cinematic-white-spot {
-    animation-duration: 5s;
-    opacity: 0.4;
-  }
-  .animate-cinematic-beam {
-    animation-duration: 7s;
-    opacity: 0.3;
-  }
+  .animate-cinematic-amber,
+  .animate-cinematic-orange,
+  .animate-cinematic-yellow,
+  .animate-cinematic-white,
+  .animate-cinematic-white-spot,
+  .animate-cinematic-beam,
   .animate-cinematic-pulse {
-    animation-duration: 6s;
-    opacity: 0.3;
+    animation-duration: 8s;
   }
 }
 
