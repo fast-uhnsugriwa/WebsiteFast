@@ -30,7 +30,7 @@ export const Footer: React.FC<FooterProps> = ({
   };
 
   return (
-    <footer className="bg-stone-900 text-stone-300 border-t border-stone-800 text-xs overflow-hidden">
+    <footer className="relative z-10 bg-stone-900 text-stone-300 border-t border-stone-800 text-xs overflow-hidden">
       {/* Top Academic Credo Banner */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
