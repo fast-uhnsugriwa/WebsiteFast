@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { motion } from 'motion/react';
 import {
   Cpu,
   Palette,
@@ -18,6 +19,19 @@ interface ProgramStudiesProps {
 export const ProgramStudies: React.FC<ProgramStudiesProps> = ({
   onNavigateSainsInformasi
 }) => {
+  const [isHighlighted, setIsHighlighted] = useState(false);
+
+  useEffect(() => {
+    const handleHighlight = () => {
+      setIsHighlighted(true);
+      const timer = setTimeout(() => setIsHighlighted(false), 2200);
+      return () => clearTimeout(timer);
+    };
+
+    window.addEventListener('highlight-program-studi', handleHighlight);
+    return () => window.removeEventListener('highlight-program-studi', handleHighlight);
+  }, []);
+
   return (
     <section
       id="program-studi"
@@ -25,9 +39,15 @@ export const ProgramStudies: React.FC<ProgramStudiesProps> = ({
       className="py-16 sm:py-24 bg-stone-50/70 border-b border-stone-200/80 relative"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Title */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold uppercase tracking-wider mb-3">
+        {/* Section Title with Animated Entrance */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-50px' }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center max-w-3xl mx-auto mb-14"
+        >
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold uppercase tracking-wider mb-3 shadow-xs">
             <GraduationCap className="w-3.5 h-3.5 text-amber-700" />
             <span>Pilihan Program Sarjana (S1)</span>
           </div>
@@ -37,14 +57,23 @@ export const ProgramStudies: React.FC<ProgramStudiesProps> = ({
           <p className="mt-3 text-stone-600 text-base sm:text-lg">
             Kurikulum berstandar internasional yang diselaraskan dengan kebutuhan industri digital dan keagungan budaya Nusantara.
           </p>
-        </div>
+        </motion.div>
 
         {/* 3 Program Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
           {/* Card 1: Prodi Informatika (Biru) */}
-          <div
+          <motion.div
             id="card-prodi-informatika"
-            className="flex flex-col justify-between rounded-2xl bg-white border-2 border-blue-200 shadow-lg shadow-blue-900/5 hover:shadow-xl hover:border-blue-500 transition-all duration-300 p-7 group relative overflow-hidden"
+            initial={{ opacity: 0, y: 35 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.6, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
+            whileHover={{ y: -6, transition: { duration: 0.25 } }}
+            className={`flex flex-col justify-between rounded-2xl bg-white border-2 shadow-lg transition-all duration-500 p-7 group relative overflow-hidden ${
+              isHighlighted
+                ? 'border-blue-500 ring-4 ring-blue-400/30 scale-[1.015] shadow-2xl'
+                : 'border-blue-200 shadow-blue-900/5 hover:border-blue-500 hover:shadow-xl'
+            }`}
           >
             {/* Top Accent Stripe - Blue */}
             <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-blue-600 to-indigo-600" />
@@ -110,12 +139,21 @@ export const ProgramStudies: React.FC<ProgramStudiesProps> = ({
                 informatika.uhnsugriwa.ac.id
               </p>
             </div>
-          </div>
+          </motion.div>
 
           {/* Card 2: Prodi Desain Komunikasi Visual (DKV - Merah) */}
-          <div
+          <motion.div
             id="card-prodi-dkv"
-            className="flex flex-col justify-between rounded-2xl bg-white border-2 border-red-200 shadow-lg shadow-red-900/5 hover:shadow-xl hover:border-red-500 transition-all duration-300 p-7 group relative overflow-hidden"
+            initial={{ opacity: 0, y: 35 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.6, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
+            whileHover={{ y: -6, transition: { duration: 0.25 } }}
+            className={`flex flex-col justify-between rounded-2xl bg-white border-2 shadow-lg transition-all duration-500 p-7 group relative overflow-hidden ${
+              isHighlighted
+                ? 'border-red-500 ring-4 ring-red-400/30 scale-[1.015] shadow-2xl'
+                : 'border-red-200 shadow-red-900/5 hover:border-red-500 hover:shadow-xl'
+            }`}
           >
             {/* Top Accent Stripe - Red */}
             <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-red-600 to-rose-600" />
@@ -181,12 +219,21 @@ export const ProgramStudies: React.FC<ProgramStudiesProps> = ({
                 dkvsugriwa.id
               </p>
             </div>
-          </div>
+          </motion.div>
 
           {/* Card 3: Prodi Sains Informasi (Cyan) */}
-          <div
+          <motion.div
             id="card-prodi-sains-informasi"
-            className="flex flex-col justify-between rounded-2xl bg-white border-2 border-cyan-200 shadow-lg shadow-cyan-900/5 hover:shadow-xl hover:border-cyan-500 transition-all duration-300 p-7 group relative overflow-hidden"
+            initial={{ opacity: 0, y: 35 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            whileHover={{ y: -6, transition: { duration: 0.25 } }}
+            className={`flex flex-col justify-between rounded-2xl bg-white border-2 shadow-lg transition-all duration-500 p-7 group relative overflow-hidden ${
+              isHighlighted
+                ? 'border-cyan-500 ring-4 ring-cyan-400/30 scale-[1.015] shadow-2xl'
+                : 'border-cyan-200 shadow-cyan-900/5 hover:border-cyan-500 hover:shadow-xl'
+            }`}
           >
             {/* Top Accent Stripe - Cyan */}
             <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-cyan-500 to-teal-500" />
@@ -248,7 +295,7 @@ export const ProgramStudies: React.FC<ProgramStudiesProps> = ({
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

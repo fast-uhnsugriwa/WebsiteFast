@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import {
   ArrowRight,
   Sparkles,
@@ -64,15 +65,18 @@ export const Hero: React.FC<HeroProps> = ({
 
           {/* Action CTAs */}
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-            <button
+            <motion.button
               id="hero-btn-explore"
               onClick={onExplorePrograms}
-              className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 text-white font-bold text-sm tracking-wide shadow-lg shadow-orange-600/20 hover:shadow-orange-600/30 hover:brightness-105 active:scale-95 transition-all"
+              whileHover={{ scale: 1.03, y: -2 }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+              className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 text-white font-bold text-sm tracking-wide shadow-lg shadow-orange-600/25 hover:shadow-orange-600/35 hover:brightness-105 active:scale-95 transition-all cursor-pointer"
             >
               <BookOpen className="w-4 h-4" />
               <span>Jelajahi 3 Program Studi</span>
               <ArrowRight className="w-4 h-4" />
-            </button>
+            </motion.button>
 
             <a
               id="hero-btn-instagram"

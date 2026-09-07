@@ -237,7 +237,7 @@ export const InstitutionalBrandLockup: React.FC<{
     <button
       id="brand-header-link"
       onClick={onHomeClick}
-      className="group flex items-center text-left gap-2 sm:gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded-lg p-1 transition hover:opacity-95 max-w-[calc(100vw-80px)] sm:max-w-none"
+      className="group flex items-center text-left gap-2 sm:gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded-lg p-1 transition hover:opacity-95 max-w-[calc(100vw-80px)] sm:max-w-none shrink-0"
       aria-label="Kembali ke Beranda Fakultas Sains dan Teknologi UHN Sugriwa"
     >
       <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
@@ -247,11 +247,11 @@ export const InstitutionalBrandLockup: React.FC<{
 
       <div className="h-8 sm:h-9 w-px bg-stone-200 hidden sm:block shrink-0" aria-hidden="true" />
 
-      <div className="flex flex-col min-w-0">
-        <span className="text-[9px] sm:text-[11px] uppercase tracking-wider font-semibold text-amber-700 leading-none truncate">
+      <div className="flex flex-col min-w-0 shrink-0">
+        <span className="text-[9px] sm:text-[10px] xl:text-[11px] uppercase tracking-wider font-semibold text-amber-700 leading-none truncate">
           UHN I Gusti Bagus Sugriwa
         </span>
-        <span className="text-xs sm:text-lg font-extrabold text-stone-900 tracking-tight leading-tight mt-0.5 group-hover:text-orange-600 transition-colors truncate">
+        <span className="text-xs sm:text-base xl:text-lg font-extrabold text-stone-900 tracking-tight leading-tight mt-0.5 group-hover:text-orange-600 transition-colors whitespace-nowrap">
           Fakultas Sains dan Teknologi
         </span>
       </div>

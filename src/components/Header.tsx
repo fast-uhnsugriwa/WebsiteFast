@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   ChevronDown,
   Menu,
@@ -82,7 +83,7 @@ export const Header: React.FC<HeaderProps> = ({
     <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-stone-200/80 shadow-xs relative">
       {/* Top Academic Utility Bar */}
       <div className="bg-stone-900 text-stone-300 text-xs py-1.5 px-3 sm:px-6 border-b border-stone-800">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
+        <div className="max-w-7xl xl:max-w-[1440px] mx-auto flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 sm:gap-4 text-[11px] font-medium tracking-wide">
             <span className="flex items-center gap-1.5 text-stone-300">
               <MapPin className="w-3.5 h-3.5 text-amber-500 shrink-0" />
@@ -124,281 +125,352 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       {/* Main Navigation Bar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+      <div className="max-w-7xl xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-20 gap-4 lg:gap-8 xl:gap-12">
           {/* Official Brand Lockup */}
-          <InstitutionalBrandLockup onHomeClick={onNavigateHome} />
-
-          {/* Desktop Navigation Links with Interactive Dropdowns */}
-          <nav
-            ref={dropdownRef}
-            className="hidden lg:flex items-center gap-1 xl:gap-2"
-            aria-label="Navigasi Utama Fakultas"
-          >
-            {/* Beranda Link */}
-            <button
-              id="nav-home-button"
-              onClick={onNavigateHome}
-              className={`px-3 py-2 text-sm font-semibold rounded-lg transition-colors ${
-                currentPage === 'home'
-                  ? 'text-orange-600 bg-orange-50/80 font-bold'
-                  : 'text-stone-700 hover:text-orange-600 hover:bg-stone-50'
-              }`}
-            >
-              Beranda
-            </button>
-
-            {/* Dynamic Dropdown Menus */}
-            {NAVIGATION_MENUS.map((menu) => {
-              const isOpen = openDropdown === menu.slug;
-              return (
-                <div key={menu.slug} className="relative">
-                  <button
-                    id={`nav-menu-${menu.slug}`}
-                    type="button"
-                    onClick={() => handleDropdownToggle(menu.slug)}
-                    aria-expanded={isOpen}
-                    aria-haspopup="true"
-                    className={`flex items-center gap-1.5 px-3 py-2 text-sm font-semibold rounded-lg transition-all ${
-                      isOpen
-                        ? 'text-orange-600 bg-orange-50/90'
-                        : 'text-stone-700 hover:text-orange-600 hover:bg-stone-50'
-                    }`}
-                  >
-                    <span>{menu.title}</span>
-                    <ChevronDown
-                      className={`w-4 h-4 transition-transform duration-200 text-stone-400 ${
-                        isOpen ? 'rotate-180 text-orange-600' : ''
-                      }`}
-                    />
-                  </button>
-
-                  {/* Dropdown Panel */}
-                  {isOpen && (
-                    <div
-                      role="menu"
-                      aria-labelledby={`nav-menu-${menu.slug}`}
-                      className="absolute left-0 mt-2 w-80 rounded-2xl bg-white border border-stone-200/90 shadow-xl shadow-stone-900/10 p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
-                    >
-                      <div className="px-3 py-2 mb-1 border-b border-stone-100 flex items-center justify-between">
-                        <span className="text-[11px] font-bold uppercase tracking-wider text-amber-700">
-                          {menu.title} FAST
-                        </span>
-                        <span className="text-[10px] text-stone-400">Pilih Layanan</span>
-                      </div>
-
-                      <div className="space-y-1">
-                        {menu.items.map((item) => (
-                          <button
-                            key={item.id}
-                            id={`dropdown-item-${item.id}`}
-                            onClick={() => handleSelectMenuItem(item)}
-                            role="menuitem"
-                            className="w-full text-left group p-2.5 rounded-xl hover:bg-gradient-to-r hover:from-amber-50 hover:to-orange-50 transition-colors flex items-start gap-3"
-                          >
-                            <div className="w-2 h-2 rounded-full bg-amber-400 mt-1.5 shrink-0 group-hover:scale-125 group-hover:bg-orange-500 transition-all" />
-                            <div className="flex-1">
-                              <div className="flex items-center justify-between gap-1">
-                                <span className="text-sm font-bold text-stone-800 group-hover:text-orange-600 transition-colors">
-                                  {item.title}
-                                </span>
-                                {item.badge && (
-                                  <span className="text-[9px] font-semibold px-2 py-0.5 rounded-full bg-stone-100 text-stone-600 group-hover:bg-orange-100 group-hover:text-orange-800">
-                                    {item.badge}
-                                  </span>
-                                )}
-                              </div>
-                              <p className="text-xs text-stone-500 line-clamp-2 mt-0.5 font-normal leading-relaxed">
-                                {item.description}
-                              </p>
-                            </div>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </nav>
-
-          {/* Right Action: CTA Button & Mobile Toggle */}
-          <div className="flex items-center gap-3">
-            <a
-              href="https://taplink.cc/uhnmaba2026"
-              target="_blank"
-              rel="noopener noreferrer"
-              id="cta-header-pmb"
-              className="hidden sm:inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-orange-600 via-amber-600 to-amber-500 text-white font-semibold text-xs tracking-wide shadow-md shadow-orange-600/20 hover:shadow-lg hover:shadow-orange-600/30 hover:brightness-105 active:scale-95 transition-all"
-            >
-              <GraduationCap className="w-4 h-4" />
-              <span>Daftar PMB 2026</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </a>
-
-            {/* Mobile Hamburger Toggle Button */}
-            <button
-              id="mobile-menu-toggle"
-              type="button"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-xl text-stone-600 hover:text-stone-900 hover:bg-stone-100 focus:outline-none focus:ring-2 focus:ring-orange-500"
-              aria-label={mobileMenuOpen ? 'Tutup Menu' : 'Buka Menu Navigasi'}
-              aria-expanded={mobileMenuOpen}
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6 text-orange-600" /> : <Menu className="w-6 h-6" />}
-            </button>
+          <div className="shrink-0 flex items-center">
+            <InstitutionalBrandLockup onHomeClick={onNavigateHome} />
           </div>
-        </div>
-      </div>
 
-      {/* Mobile Drawer Menu */}
-      {mobileMenuOpen && (
-        <div
-          id="mobile-navigation-drawer"
-          className="lg:hidden absolute top-full left-0 right-0 w-full bg-stone-950/60 backdrop-blur-md z-50 flex flex-col justify-start animate-in fade-in duration-200 h-[calc(100vh-100%)] min-h-[calc(100vh-100%)]"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) {
-              setMobileMenuOpen(false);
-            }
-          }}
-        >
-          <div className="bg-white max-h-[82vh] overflow-y-auto border-b border-stone-200 shadow-2xl p-4 sm:p-6 space-y-4 rounded-b-2xl">
-            <div className="flex items-center justify-between pb-3 border-b border-stone-100">
-              <span className="text-xs uppercase font-bold tracking-wider text-amber-700">
-                Menu Utama Fakultas
-              </span>
-              <span className="text-xs text-stone-400">UHN IGB Sugriwa</span>
-            </div>
-
-            {/* Home Link */}
-            <button
-              id="mobile-nav-home"
-              onClick={() => {
-                onNavigateHome();
-                setMobileMenuOpen(false);
-              }}
-              className={`w-full text-left px-4 py-3 rounded-xl text-sm font-bold flex items-center justify-between transition-colors ${
-                currentPage === 'home'
-                  ? 'bg-orange-50 text-orange-600'
-                  : 'text-stone-800 hover:bg-stone-50'
-              }`}
+          {/* Right Group: Desktop Navigation + Divider + Action CTA */}
+          <div className="flex items-center gap-2 lg:gap-3 xl:gap-5">
+            {/* Desktop Navigation Links with Interactive Dropdowns */}
+            <nav
+              ref={dropdownRef}
+              className="hidden lg:flex items-center gap-0.5 xl:gap-1.5"
+              aria-label="Navigasi Utama Fakultas"
             >
-              <span>Beranda Fakultas</span>
-              <ArrowRight className="w-4 h-4 text-stone-400" />
-            </button>
+              {/* Beranda Link */}
+              <button
+                id="nav-home-button"
+                onClick={onNavigateHome}
+                className={`px-2.5 xl:px-3 py-2 text-xs xl:text-sm font-semibold rounded-lg transition-colors whitespace-nowrap ${
+                  currentPage === 'home'
+                    ? 'text-orange-600 bg-orange-50/80 font-bold'
+                    : 'text-stone-700 hover:text-orange-600 hover:bg-stone-50'
+                }`}
+              >
+                Beranda
+              </button>
 
-            {/* Accordion Menus */}
-            {NAVIGATION_MENUS.map((menu) => {
-              const isExpanded = mobileExpandedGroup === menu.slug;
-              return (
-                <div key={menu.slug} className="border border-stone-200/80 rounded-xl overflow-hidden shadow-xs">
-                  <button
-                    id={`mobile-accordion-${menu.slug}`}
-                    onClick={() =>
-                      setMobileExpandedGroup(isExpanded ? null : menu.slug)
-                    }
-                    className={`w-full flex items-center justify-between px-4 py-3 text-sm font-bold text-left transition-colors ${
-                      isExpanded
-                        ? 'bg-orange-50/80 text-orange-600 border-b border-orange-100'
-                        : 'bg-stone-50/80 text-stone-800 hover:bg-stone-100'
-                    }`}
-                  >
-                    <span>{menu.title}</span>
-                    <ChevronDown
-                      className={`w-4 h-4 transition-transform duration-200 ${
-                        isExpanded ? 'rotate-180 text-orange-600' : 'text-stone-400'
+              {/* Dynamic Dropdown Menus */}
+              {NAVIGATION_MENUS.map((menu, index) => {
+                const isOpen = openDropdown === menu.slug;
+                const isNearRight = index >= NAVIGATION_MENUS.length - 2;
+                return (
+                  <div key={menu.slug} className="relative">
+                    <button
+                      id={`nav-menu-${menu.slug}`}
+                      type="button"
+                      onClick={() => handleDropdownToggle(menu.slug)}
+                      aria-expanded={isOpen}
+                      aria-haspopup="true"
+                      className={`flex items-center gap-1 xl:gap-1.5 px-2.5 xl:px-3 py-2 text-xs xl:text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${
+                        isOpen
+                          ? 'text-orange-600 bg-orange-50/90'
+                          : 'text-stone-700 hover:text-orange-600 hover:bg-stone-50'
                       }`}
-                    />
-                  </button>
+                    >
+                      <span>{menu.title}</span>
+                      <ChevronDown
+                        className={`w-3.5 h-3.5 xl:w-4 xl:h-4 transition-transform duration-200 text-stone-400 ${
+                          isOpen ? 'rotate-180 text-orange-600' : ''
+                        }`}
+                      />
+                    </button>
 
-                  {isExpanded && (
-                    <div className="p-2 space-y-1 bg-white">
-                      {menu.items.map((item) => (
-                        <button
-                          key={item.id}
-                          id={`mobile-item-${item.id}`}
-                          onClick={() => handleSelectMenuItem(item)}
-                          className="w-full text-left p-2.5 rounded-lg hover:bg-amber-50/80 transition-colors flex items-start gap-2.5"
+                    {/* Dropdown Panel with Smooth Animation */}
+                    <AnimatePresence>
+                      {isOpen && (
+                        <motion.div
+                          role="menu"
+                          aria-labelledby={`nav-menu-${menu.slug}`}
+                          initial={{ opacity: 0, y: 8, scale: 0.97 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 6, scale: 0.97 }}
+                          transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                          className={`absolute ${isNearRight ? 'right-0' : 'left-0'} mt-2 w-80 rounded-2xl bg-white border border-stone-200/90 shadow-xl shadow-stone-900/10 p-2 z-50`}
                         >
-                          <div className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 shrink-0" />
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between gap-1">
-                              <span className="text-sm font-semibold text-stone-800">
-                                {item.title}
-                              </span>
-                              {item.badge && (
-                                <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 shrink-0">
-                                  {item.badge}
-                                </span>
-                              )}
-                            </div>
-                            <p className="text-xs text-stone-500 mt-0.5 line-clamp-1">
-                              {item.description}
-                            </p>
+                          <div className="px-3 py-2 mb-1 border-b border-stone-100 flex items-center justify-between">
+                            <span className="text-[11px] font-bold uppercase tracking-wider text-amber-700">
+                              {menu.title} FAST
+                            </span>
+                            <span className="text-[10px] text-stone-400">Pilih Layanan</span>
                           </div>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
 
-            {/* Program Studi Links */}
-            <div className="pt-2 border-t border-stone-100 space-y-2">
-              <span className="text-[11px] font-semibold text-stone-400 uppercase tracking-wider px-1">
-                Program Studi
-              </span>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                <a
-                  href="https://informatika.uhnsugriwa.ac.id/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between p-2.5 rounded-xl bg-stone-50 hover:bg-orange-50 border border-stone-200 text-xs font-semibold text-stone-800 transition-colors"
-                >
-                  <span>S1 Informatika</span>
-                  <ExternalLink className="w-3.5 h-3.5 text-stone-400" />
-                </a>
-                <a
-                  href="https://dkvsugriwa.id/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between p-2.5 rounded-xl bg-stone-50 hover:bg-orange-50 border border-stone-200 text-xs font-semibold text-stone-800 transition-colors"
-                >
-                  <span>S1 DKV</span>
-                  <ExternalLink className="w-3.5 h-3.5 text-stone-400" />
-                </a>
-                <button
-                  type="button"
-                  onClick={() => {
-                    onNavigateSainsInformasi();
-                    setMobileMenuOpen(false);
-                  }}
-                  className="flex items-center justify-between p-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200/80 text-xs font-bold text-amber-900 transition-colors text-left"
-                >
-                  <span>S1 Sains Informasi</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-amber-700" />
-                </button>
-              </div>
-            </div>
+                          <div className="space-y-1">
+                            {menu.items.map((item) => (
+                              <button
+                                key={item.id}
+                                id={`dropdown-item-${item.id}`}
+                                onClick={() => handleSelectMenuItem(item)}
+                                role="menuitem"
+                                className="w-full text-left group p-2.5 rounded-xl hover:bg-gradient-to-r hover:from-amber-50 hover:to-orange-50 transition-colors flex items-start gap-3"
+                              >
+                                <div className="w-2 h-2 rounded-full bg-amber-400 mt-1.5 shrink-0 group-hover:scale-125 group-hover:bg-orange-500 transition-all" />
+                                <div className="flex-1">
+                                  <div className="flex items-center justify-between gap-1">
+                                    <span className="text-sm font-bold text-stone-800 group-hover:text-orange-600 transition-colors">
+                                      {item.title}
+                                    </span>
+                                    {item.badge && (
+                                      <span className="text-[9px] font-semibold px-2 py-0.5 rounded-full bg-stone-100 text-stone-600 group-hover:bg-orange-100 group-hover:text-orange-800">
+                                        {item.badge}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <p className="text-xs text-stone-500 line-clamp-2 mt-0.5 font-normal leading-relaxed">
+                                    {item.description}
+                                  </p>
+                                </div>
+                              </button>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })}
+            </nav>
 
-            {/* Mobile PMB Button */}
-            <div className="pt-2">
+            {/* Desktop Divider between Navigation and CTA */}
+            <div className="hidden lg:block h-6 w-px bg-stone-200" aria-hidden="true" />
+
+            {/* Right Action: CTA Button & Mobile Toggle */}
+            <div className="flex items-center gap-2 sm:gap-3 shrink-0">
               <a
                 href="https://taplink.cc/uhnmaba2026"
                 target="_blank"
                 rel="noopener noreferrer"
-                id="cta-mobile-pmb"
-                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 text-white font-bold text-sm shadow-md hover:brightness-105 active:scale-95 transition-all"
+                id="cta-header-pmb"
+                className="hidden sm:inline-flex items-center justify-center gap-1.5 xl:gap-2 px-3.5 xl:px-4 py-2 xl:py-2.5 rounded-xl bg-gradient-to-r from-orange-600 via-amber-600 to-amber-500 text-white font-semibold text-xs tracking-wide shadow-md shadow-orange-600/20 hover:shadow-lg hover:shadow-orange-600/30 hover:brightness-105 active:scale-95 transition-all whitespace-nowrap"
               >
                 <GraduationCap className="w-4 h-4" />
-                <span>Penerimaan Mahasiswa Baru (PMB)</span>
-                <ExternalLink className="w-4 h-4" />
+                <span>Daftar PMB 2026</span>
+                <ArrowRight className="w-3.5 h-3.5" />
               </a>
+
+              {/* Mobile Hamburger Toggle Button */}
+              <button
+                id="mobile-menu-toggle"
+                type="button"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="lg:hidden p-2 rounded-xl text-stone-600 hover:text-stone-900 hover:bg-stone-100 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors"
+                aria-label={mobileMenuOpen ? 'Tutup Menu' : 'Buka Menu Navigasi'}
+                aria-expanded={mobileMenuOpen}
+              >
+                {mobileMenuOpen ? <X className="w-6 h-6 text-orange-600" /> : <Menu className="w-6 h-6" />}
+              </button>
             </div>
           </div>
         </div>
-      )}
+      </div>
+
+      {/* Mobile Drawer Menu with Elegant Smooth Animation */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            id="mobile-navigation-drawer"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25, ease: 'easeInOut' }}
+            className="lg:hidden absolute top-full left-0 right-0 w-full bg-stone-950/60 backdrop-blur-md z-50 flex flex-col justify-start h-[calc(100vh-100%)] min-h-[calc(100vh-100%)]"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) {
+                setMobileMenuOpen(false);
+              }
+            }}
+          >
+            <motion.div
+              initial={{ y: -16, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -16, opacity: 0 }}
+              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+              className="bg-white max-h-[82vh] overflow-y-auto border-b border-stone-200 shadow-2xl p-4 sm:p-6 space-y-4 rounded-b-2xl"
+            >
+              <div className="flex items-center justify-between pb-3 border-b border-stone-100">
+                <span className="text-xs uppercase font-bold tracking-wider text-amber-700">
+                  Menu Utama Fakultas
+                </span>
+                <span className="text-xs text-stone-400">UHN IGB Sugriwa</span>
+              </div>
+
+              {/* Home Link */}
+              <button
+                id="mobile-nav-home"
+                onClick={() => {
+                  onNavigateHome();
+                  setMobileMenuOpen(false);
+                }}
+                className={`w-full text-left px-4 py-3 rounded-xl text-sm font-bold flex items-center justify-between transition-colors ${
+                  currentPage === 'home'
+                    ? 'bg-orange-50 text-orange-600'
+                    : 'text-stone-800 hover:bg-stone-50'
+                }`}
+              >
+                <span>Beranda Fakultas</span>
+                <ArrowRight className="w-4 h-4 text-stone-400" />
+              </button>
+
+              {/* Accordion Menus with Smooth Animated Expand / Collapse */}
+              {NAVIGATION_MENUS.map((menu) => {
+                const isExpanded = mobileExpandedGroup === menu.slug;
+                return (
+                  <div
+                    key={menu.slug}
+                    className={`border rounded-xl overflow-hidden transition-colors duration-200 shadow-xs ${
+                      isExpanded ? 'border-orange-200 bg-orange-50/20' : 'border-stone-200/80 bg-stone-50/50'
+                    }`}
+                  >
+                    <button
+                      id={`mobile-accordion-${menu.slug}`}
+                      onClick={() =>
+                        setMobileExpandedGroup(isExpanded ? null : menu.slug)
+                      }
+                      className={`w-full flex items-center justify-between px-4 py-3 text-sm font-bold text-left transition-all duration-200 ${
+                        isExpanded
+                          ? 'bg-orange-50/90 text-orange-600 border-b border-orange-100/80'
+                          : 'bg-transparent text-stone-800 hover:bg-stone-100/80'
+                      }`}
+                    >
+                      <span className="flex items-center gap-2">
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                            isExpanded ? 'bg-orange-500 scale-125' : 'bg-stone-300'
+                          }`}
+                        />
+                        {menu.title}
+                      </span>
+                      <ChevronDown
+                        className={`w-4 h-4 transition-transform duration-300 ease-out ${
+                          isExpanded ? 'rotate-180 text-orange-600' : 'text-stone-400'
+                        }`}
+                      />
+                    </button>
+
+                    <AnimatePresence initial={false}>
+                      {isExpanded && (
+                        <motion.div
+                          key={`content-${menu.slug}`}
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{
+                            height: { duration: 0.32, ease: [0.04, 0.62, 0.23, 0.98] },
+                            opacity: { duration: 0.22, ease: 'linear' }
+                          }}
+                          className="overflow-hidden bg-white"
+                        >
+                          <motion.div
+                            initial="closed"
+                            animate="open"
+                            exit="closed"
+                            variants={{
+                              open: {
+                                transition: { staggerChildren: 0.04, delayChildren: 0.03 }
+                              },
+                              closed: {
+                                transition: { staggerChildren: 0.02, staggerDirection: -1 }
+                              }
+                            }}
+                            className="p-2 space-y-1"
+                          >
+                            {menu.items.map((item) => (
+                              <motion.button
+                                key={item.id}
+                                variants={{
+                                  open: { opacity: 1, x: 0 },
+                                  closed: { opacity: 0, x: -8 }
+                                }}
+                                transition={{ duration: 0.2, ease: 'easeOut' }}
+                                id={`mobile-item-${item.id}`}
+                                onClick={() => handleSelectMenuItem(item)}
+                                className="w-full text-left p-2.5 rounded-lg hover:bg-amber-50/80 active:bg-orange-100/60 transition-colors flex items-start gap-2.5 group"
+                              >
+                                <div className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1.5 shrink-0 group-hover:scale-125 group-hover:bg-orange-500 transition-all" />
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center justify-between gap-1">
+                                    <span className="text-sm font-semibold text-stone-800 group-hover:text-orange-600 transition-colors">
+                                      {item.title}
+                                    </span>
+                                    {item.badge && (
+                                      <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-stone-100 text-stone-600 group-hover:bg-orange-100 group-hover:text-orange-900 shrink-0">
+                                        {item.badge}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <p className="text-xs text-stone-500 mt-0.5 line-clamp-1 font-normal">
+                                    {item.description}
+                                  </p>
+                                </div>
+                              </motion.button>
+                            ))}
+                          </motion.div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })}
+
+              {/* Program Studi Links */}
+              <div className="pt-2 border-t border-stone-100 space-y-2">
+                <span className="text-[11px] font-semibold text-stone-400 uppercase tracking-wider px-1">
+                  Program Studi
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <a
+                    href="https://informatika.uhnsugriwa.ac.id/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between p-2.5 rounded-xl bg-stone-50 hover:bg-orange-50 border border-stone-200 text-xs font-semibold text-stone-800 transition-colors"
+                  >
+                    <span>S1 Informatika</span>
+                    <ExternalLink className="w-3.5 h-3.5 text-stone-400" />
+                  </a>
+                  <a
+                    href="https://dkvsugriwa.id/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between p-2.5 rounded-xl bg-stone-50 hover:bg-orange-50 border border-stone-200 text-xs font-semibold text-stone-800 transition-colors"
+                  >
+                    <span>S1 DKV</span>
+                    <ExternalLink className="w-3.5 h-3.5 text-stone-400" />
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onNavigateSainsInformasi();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="flex items-center justify-between p-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200/80 text-xs font-bold text-amber-900 transition-colors text-left"
+                  >
+                    <span>S1 Sains Informasi</span>
+                    <ArrowRight className="w-3.5 h-3.5 text-amber-700" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Mobile PMB Button */}
+              <div className="pt-2">
+                <a
+                  href="https://taplink.cc/uhnmaba2026"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  id="cta-mobile-pmb"
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 text-white font-bold text-sm shadow-md hover:brightness-105 active:scale-95 transition-all"
+                >
+                  <GraduationCap className="w-4 h-4" />
+                  <span>Penerimaan Mahasiswa Baru (PMB)</span>
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };

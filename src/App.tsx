@@ -46,16 +46,29 @@ export default function App() {
   };
 
   const handleExplorePrograms = () => {
+    const scrollToTarget = () => {
+      const el = document.getElementById('program-studi');
+      if (el) {
+        const headerOffset = 90;
+        const elementPosition = el.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+
+        // Trigger custom highlight event for the program studies section
+        window.dispatchEvent(new CustomEvent('highlight-program-studi'));
+      }
+    };
+
     if (currentPage !== 'home') {
       setCurrentPage('home');
       window.location.hash = '';
-      setTimeout(() => {
-        const el = document.getElementById('program-studi');
-        if (el) el.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
+      setTimeout(scrollToTarget, 150);
     } else {
-      const el = document.getElementById('program-studi');
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
+      scrollToTarget();
     }
   };
 
