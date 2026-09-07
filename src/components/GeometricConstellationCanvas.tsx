@@ -122,7 +122,7 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
     // Color Palette
     const COLOR_PRIMARY = '#E07B1A';
     const COLOR_DEEP = '#B9631A';
-    const PROXIMITY_THRESHOLD = 95;
+    const PROXIMITY_THRESHOLD = 105;
     const MOUSE_REPEL_RADIUS = 95;
 
     // Initialize Particles (~150-170) with slower gentle speeds
@@ -771,8 +771,17 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
         whiteLightBlobRef.current.style.opacity = (rovingWhiteLight.alpha * 0.88).toFixed(3);
       }
 
-      // 6. Draw Proximity Lines between nearby free particles (< 95px)
-      ctx.lineWidth = 0.7;
+      // 6. Draw Glowing Proximity Lines between nearby free particles (< 105px)
+      // Collect valid pairs to draw in two synchronized passes (luminous glow aura + crisp radiant core)
+      interface ActivePair {
+        x1: number;
+        y1: number;
+        x2: number;
+        y2: number;
+        alpha: number;
+      }
+      const activePairs: ActivePair[] = [];
+
       for (let i = 0; i < particles.length; i++) {
         const p1 = particles[i];
         for (let j = i + 1; j < particles.length; j++) {
@@ -786,15 +795,47 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
           const dist = Math.hypot(dx, dy);
 
           if (dist < PROXIMITY_THRESHOLD) {
-            const alpha = (1 - dist / PROXIMITY_THRESHOLD) * 0.25;
-            ctx.strokeStyle = `rgba(224, 123, 26, ${alpha.toFixed(3)})`;
-            ctx.beginPath();
-            ctx.moveTo(p1.x, p1.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.stroke();
+            const normDist = dist / PROXIMITY_THRESHOLD;
+            // Enhanced alpha curve: clearly visible and bright yet soft at perimeter
+            const alpha = Math.pow(1 - normDist, 0.72) * 0.82;
+            activePairs.push({
+              x1: p1.x,
+              y1: p1.y,
+              x2: p2.x,
+              y2: p2.y,
+              alpha
+            });
           }
         }
       }
+
+      ctx.save();
+      ctx.lineCap = 'round';
+
+      // Pass 1: Outer glowing warm-amber luminous aura (berpendar lembut dan jelas)
+      ctx.lineWidth = 2.4;
+      for (let k = 0; k < activePairs.length; k++) {
+        const pair = activePairs[k];
+        ctx.strokeStyle = `rgba(249, 115, 22, ${(pair.alpha * 0.42).toFixed(3)})`;
+        ctx.beginPath();
+        ctx.moveTo(pair.x1, pair.y1);
+        ctx.lineTo(pair.x2, pair.y2);
+        ctx.stroke();
+      }
+
+      // Pass 2: Inner sharp & radiant core line with subtle bloom shadow
+      ctx.lineWidth = 1.15;
+      ctx.shadowColor = 'rgba(234, 88, 12, 0.45)';
+      ctx.shadowBlur = 3.5;
+      for (let k = 0; k < activePairs.length; k++) {
+        const pair = activePairs[k];
+        ctx.strokeStyle = `rgba(194, 88, 14, ${(pair.alpha * 0.88).toFixed(3)})`;
+        ctx.beginPath();
+        ctx.moveTo(pair.x1, pair.y1);
+        ctx.lineTo(pair.x2, pair.y2);
+        ctx.stroke();
+      }
+      ctx.restore();
 
       // 7. Draw Formations (Edges + Nodes + Formula Text at Top-Right)
       for (const f of formations) {
