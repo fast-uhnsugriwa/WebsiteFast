@@ -1304,7 +1304,7 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
       ref={canvasRef}
       aria-hidden="true"
       className={`fixed inset-0 pointer-events-none -z-10 select-none block w-full h-full ${className}`}
-      style={{ backgroundColor }}
+      style={{ backgroundColor, transform: 'translateZ(0)', willChange: 'transform' }}
     />
   );
 };

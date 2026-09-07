@@ -86,7 +86,9 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-[#FDFCFA]/60 font-sans text-stone-800 selection:bg-amber-500 selection:text-white relative">
       {/* Fullscreen Generative Geometric Constellation Canvas Background */}
-      <GeometricConstellationCanvas />
+      <div className="fixed inset-0 z-0 pointer-events-none" style={{ transform: 'translateZ(0)', willChange: 'transform' }}>
+        <GeometricConstellationCanvas />
+      </div>
 
       {/* Global Cinematic Subtle Background Lights */}
       <CinematicLightBackground variant="ambient" />

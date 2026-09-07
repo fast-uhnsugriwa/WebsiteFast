@@ -80,7 +80,7 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-stone-200/80 shadow-xs relative">
+    <header className="sticky top-0 z-50 w-full bg-white/98 md:bg-white/95 md:backdrop-blur-md border-b border-stone-200/80 shadow-xs relative">
       {/* Top Academic Utility Bar */}
       <div className="bg-stone-900 text-stone-300 text-xs py-1.5 px-3 sm:px-6 border-b border-stone-800">
         <div className="max-w-7xl xl:max-w-[1440px] mx-auto flex items-center justify-between gap-2">

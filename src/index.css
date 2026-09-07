@@ -11,10 +11,21 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    /* scroll-behavior: smooth handled via JS to prevent mobile first-scroll flicker */
+  }
+  
+  @media (min-width: 768px) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+  
+  body {
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
   }
 }
 

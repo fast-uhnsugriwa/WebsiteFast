@@ -40,11 +40,6 @@ export const Footer: React.FC<FooterProps> = ({
         className="bg-stone-950 py-3 px-4 sm:px-6 lg:px-8 border-b border-stone-800/80"
       >
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
-          <div className="flex items-center gap-2 text-amber-400 font-semibold tracking-wide text-xs">
-            <Sparkles className="w-3.5 h-3.5 text-orange-500 animate-pulse" />
-            <span className="font-academic italic">"Dharmo Rakshati Rakshitah"</span>
-            <span className="text-stone-500 hidden md:inline">— Kebajikan yang dijaga akan senantiasa menjaga.</span>
-          </div>
 
           <motion.button
             whileHover={{ scale: 1.05 }}
