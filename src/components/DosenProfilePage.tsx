@@ -289,24 +289,43 @@ export const DosenProfilePage: React.FC<{ onBackToHome: () => void }> = ({ onBac
                       </div>
                     )}
 
-                    <div className="mt-auto pt-3 md:pt-4 border-t border-stone-100 flex flex-col xl:flex-row items-start xl:items-center justify-between text-[9px] md:text-[11px] font-semibold text-stone-500 gap-1.5 md:gap-0">
-                      <span className="bg-stone-100 px-2 py-1 md:py-1 rounded-md max-w-full truncate">NIP: {dosen.nip !== '-' ? dosen.nip : 'N/A'}</span>
-                      <span>Gol: {dosen.golongan !== '-' ? dosen.golongan : '-'}</span>
+                    <div className="mt-auto pt-3 border-t border-stone-100 flex flex-col gap-1.5">
+                      {/* NIP Row */}
+                      <div className="flex items-center justify-between text-[10px] md:text-[11px] bg-stone-100/80 px-2.5 py-1 rounded-md border border-stone-200/50">
+                        <span className="text-stone-400 font-bold uppercase tracking-wider text-[9px] shrink-0">NIP</span>
+                        <span 
+                          className="font-mono text-stone-700 font-semibold tracking-tight text-[10px] md:text-[11px] truncate ml-2 text-right select-all"
+                          title={dosen.nip !== '-' ? dosen.nip : undefined}
+                        >
+                          {dosen.nip !== '-' ? dosen.nip : '—'}
+                        </span>
+                      </div>
+
+                      {/* Golongan Row */}
+                      <div className="flex items-center justify-between text-[10px] md:text-[11px] bg-stone-100/80 px-2.5 py-1 rounded-md border border-stone-200/50">
+                        <span className="text-stone-400 font-bold uppercase tracking-wider text-[9px] shrink-0">Golongan</span>
+                        <span className="font-semibold text-amber-900 bg-amber-100/80 px-2 py-0.5 rounded text-[9px] md:text-[10px] border border-amber-200/60">
+                          {dosen.golongan !== '-' ? dosen.golongan : '—'}
+                        </span>
+                      </div>
                     </div>
 
+                    {/* Email Button */}
                     {dosen.email !== '-' ? (
                       <a 
                         href={`mailto:${dosen.email}`}
-                        className="mt-2 w-full py-1.5 md:py-2 flex items-center justify-center gap-1.5 md:gap-2 rounded-md md:rounded-lg bg-orange-50 text-orange-700 hover:bg-orange-100 border border-orange-200 transition-colors text-[10px] md:text-xs font-bold"
+                        title={`Kirim email ke ${dosen.email}`}
+                        className="mt-1 w-full min-w-0 px-2.5 py-1.5 md:py-2 flex items-center justify-center gap-1.5 rounded-lg bg-orange-50 text-orange-700 hover:bg-orange-600 hover:text-white border border-orange-200 hover:border-orange-600 transition-all text-[10px] md:text-xs font-semibold overflow-hidden group/mail shadow-xs active:scale-[0.98]"
                       >
-                        <Mail className="w-3.5 h-3.5 shrink-0" />
-                        <span className="hidden min-[375px]:inline md:inline truncate">{dosen.email}</span>
-                        <span className="min-[375px]:hidden">Kirim Email</span>
+                        <Mail className="w-3.5 h-3.5 shrink-0 text-orange-600 group-hover/mail:text-white transition-colors" />
+                        <span className="min-w-0 truncate select-all">
+                          {dosen.email}
+                        </span>
                       </a>
                     ) : (
-                      <div className="mt-2 w-full py-1.5 md:py-2 flex items-center justify-center gap-1.5 md:gap-2 rounded-md md:rounded-lg bg-stone-50 text-stone-400 border border-stone-200 text-[10px] md:text-xs font-bold">
-                        <Mail className="w-3.5 h-3.5 shrink-0" />
-                        -
+                      <div className="mt-1 w-full min-w-0 px-2.5 py-1.5 md:py-2 flex items-center justify-center gap-1.5 rounded-lg bg-stone-50/80 text-stone-400 border border-stone-200/60 text-[10px] md:text-xs font-medium overflow-hidden">
+                        <Mail className="w-3.5 h-3.5 shrink-0 opacity-40" />
+                        <span className="text-[9px] md:text-[10px] text-stone-400 italic">Email Belum Tersedia</span>
                       </div>
                     )}
                   </div>
