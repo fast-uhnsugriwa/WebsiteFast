@@ -60,6 +60,7 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
   backgroundColor = '#FDFCFA'
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const whiteLightBlobRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -127,6 +128,13 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
     // Initialize Particles (~150-170) with slower gentle speeds
     const count = Math.max(150, Math.min(170, particleCount));
     const particles: Particle[] = [];
+
+    // Luminous White Light Tracker state (follows active formations with agile speed)
+    const rovingWhiteLight = {
+      x: width * 0.5,
+      y: height * 0.35,
+      alpha: 0
+    };
 
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
@@ -660,7 +668,110 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
         }
       }
 
-      // 5. Draw Proximity Lines between nearby free particles (< 95px)
+      // 5. CAHAYA PUTIH MENGIKUTI FORMASI (Luminous White Light Tracking Formations)
+      // Setiap kali ada formasi geometris terbentuk, cahaya putih menyelimuti & mengikutinya sampai hilang
+      let mostActiveFormation: Formation | null = null;
+      let highestFormationAlpha = 0;
+
+      for (const f of formations) {
+        const elapsed = time - f.spawnTime;
+        let formationAlpha = 0;
+
+        if (elapsed < f.fadeDuration) {
+          formationAlpha = elapsed / f.fadeDuration;
+        } else if (elapsed < f.fadeDuration + f.holdDuration) {
+          formationAlpha = 1.0;
+        } else if (elapsed < f.totalDuration) {
+          formationAlpha = 1 - (elapsed - f.fadeDuration - f.holdDuration) / (f.totalDuration - f.fadeDuration - f.holdDuration);
+        }
+
+        formationAlpha = Math.max(0, Math.min(1, formationAlpha));
+        if (formationAlpha > highestFormationAlpha) {
+          highestFormationAlpha = formationAlpha;
+          mostActiveFormation = f;
+        }
+
+        if (formationAlpha > 0.01) {
+          // Broad volumetric white daylight bloom centered at formation
+          const outerR = f.radius * 2.8;
+          const glowGrad = ctx.createRadialGradient(
+            f.centerX, f.centerY, 0,
+            f.centerX, f.centerY, outerR
+          );
+          glowGrad.addColorStop(0, `rgba(255, 255, 255, ${(0.96 * formationAlpha).toFixed(3)})`);
+          glowGrad.addColorStop(0.25, `rgba(255, 255, 255, ${(0.84 * formationAlpha).toFixed(3)})`);
+          glowGrad.addColorStop(0.55, `rgba(255, 252, 240, ${(0.52 * formationAlpha).toFixed(3)})`);
+          glowGrad.addColorStop(0.8, `rgba(254, 243, 199, ${(0.22 * formationAlpha).toFixed(3)})`);
+          glowGrad.addColorStop(1, 'rgba(253, 252, 250, 0)');
+
+          ctx.fillStyle = glowGrad;
+          ctx.beginPath();
+          ctx.arc(f.centerX, f.centerY, outerR, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Focused brilliant white specular core
+          const innerR = f.radius * 1.25;
+          const coreGrad = ctx.createRadialGradient(
+            f.centerX, f.centerY, 0,
+            f.centerX, f.centerY, innerR
+          );
+          coreGrad.addColorStop(0, `rgba(255, 255, 255, ${(1.0 * formationAlpha).toFixed(3)})`);
+          coreGrad.addColorStop(0.38, `rgba(255, 255, 255, ${(0.92 * formationAlpha).toFixed(3)})`);
+          coreGrad.addColorStop(0.72, `rgba(255, 255, 255, ${(0.45 * formationAlpha).toFixed(3)})`);
+          coreGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+          ctx.fillStyle = coreGrad;
+          ctx.beginPath();
+          ctx.arc(f.centerX, f.centerY, innerR, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Subtle sunbeam streak rotating gracefully through formation center
+          const streakAngle = f.baseAngle + (elapsed * f.rotSpeed);
+          const streakLen = f.radius * 2.2;
+          const sp1 = rotatePoint(-streakLen, 0, streakAngle);
+          const sp2 = rotatePoint(streakLen, 0, streakAngle);
+          const streakGrad = ctx.createLinearGradient(
+            f.centerX + sp1.x, f.centerY + sp1.y,
+            f.centerX + sp2.x, f.centerY + sp2.y
+          );
+          streakGrad.addColorStop(0, 'rgba(255, 255, 255, 0)');
+          streakGrad.addColorStop(0.3, `rgba(255, 255, 255, ${(0.35 * formationAlpha).toFixed(3)})`);
+          streakGrad.addColorStop(0.5, `rgba(255, 255, 255, ${(0.82 * formationAlpha).toFixed(3)})`);
+          streakGrad.addColorStop(0.7, `rgba(255, 255, 255, ${(0.35 * formationAlpha).toFixed(3)})`);
+          streakGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+          ctx.strokeStyle = streakGrad;
+          ctx.lineWidth = 14;
+          ctx.beginPath();
+          ctx.moveTo(f.centerX + sp1.x, f.centerY + sp1.y);
+          ctx.lineTo(f.centerX + sp2.x, f.centerY + sp2.y);
+          ctx.stroke();
+        }
+      }
+
+      // Dynamic White Light Tracker (pergerakan dipercepat, mengikuti formasi sampai hilang)
+      if (mostActiveFormation && highestFormationAlpha > 0.01) {
+        // Swift tracking response (lerp 0.085) so it quickly matches the moving formation
+        rovingWhiteLight.x += (mostActiveFormation.centerX - rovingWhiteLight.x) * 0.085;
+        rovingWhiteLight.y += (mostActiveFormation.centerY - rovingWhiteLight.y) * 0.085;
+        rovingWhiteLight.alpha += (highestFormationAlpha - rovingWhiteLight.alpha) * 0.12;
+      } else {
+        // When no active formation, light drifts with accelerated speed and gently fades
+        const wanderTime = time * 0.0016; // pergerakan agak dipercepat
+        const wanderX = width * 0.5 + Math.sin(wanderTime) * (width * 0.28);
+        const wanderY = height * 0.35 + Math.cos(wanderTime * 0.8) * (height * 0.22);
+        rovingWhiteLight.x += (wanderX - rovingWhiteLight.x) * 0.045;
+        rovingWhiteLight.y += (wanderY - rovingWhiteLight.y) * 0.045;
+        rovingWhiteLight.alpha += (0 - rovingWhiteLight.alpha) * 0.06;
+      }
+
+      if (whiteLightBlobRef.current) {
+        const halfSize = 260; // half of 520px
+        whiteLightBlobRef.current.style.transform = `translate3d(${Math.round(rovingWhiteLight.x - halfSize)}px, ${Math.round(rovingWhiteLight.y - halfSize)}px, 0)`;
+        whiteLightBlobRef.current.style.opacity = (rovingWhiteLight.alpha * 0.88).toFixed(3);
+      }
+
+      // 6. Draw Proximity Lines between nearby free particles (< 95px)
       ctx.lineWidth = 0.7;
       for (let i = 0; i < particles.length; i++) {
         const p1 = particles[i];
@@ -685,7 +796,7 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
         }
       }
 
-      // 6. Draw Formations (Edges + Nodes + Formula Text at Top-Right)
+      // 7. Draw Formations (Edges + Nodes + Formula Text at Top-Right)
       for (const f of formations) {
         const elapsed = time - f.spawnTime;
         let alpha = 0;
@@ -803,7 +914,7 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
         }
       }
 
-      // 7. Draw All Particles
+      // 8. Draw All Particles
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
         ctx.beginPath();
@@ -834,11 +945,27 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
   }, [particleCount, backgroundColor]);
 
   return (
-    <canvas
-      ref={canvasRef}
+    <div
       aria-hidden="true"
-      className={`fixed inset-0 pointer-events-none -z-10 select-none block w-full h-full ${className}`}
+      className={`fixed inset-0 pointer-events-none -z-10 select-none overflow-hidden ${className}`}
       style={{ backgroundColor }}
-    />
+    >
+      <canvas
+        ref={canvasRef}
+        aria-hidden="true"
+        className="block w-full h-full"
+      />
+      {/* Luminous White Light Spotlight that dynamically tracks the active formation until it disappears */}
+      <div
+        ref={whiteLightBlobRef}
+        aria-hidden="true"
+        className="absolute top-0 left-0 w-[520px] h-[520px] rounded-full blur-[85px] pointer-events-none will-change-transform opacity-0"
+        style={{
+          background:
+            'radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.85) 25%, rgba(254, 240, 138, 0.4) 50%, transparent 72%)',
+          transform: 'translate3d(-9999px, -9999px, 0)'
+        }}
+      />
+    </div>
   );
 };

@@ -128,43 +128,43 @@
 }
 
 .animate-cinematic-amber {
-  animation: cinematic-drift-amber 11s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+  animation: cinematic-drift-amber 6.5s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
   will-change: transform;
   contain: layout paint;
 }
 
 .animate-cinematic-orange {
-  animation: cinematic-drift-orange 13s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+  animation: cinematic-drift-orange 7.5s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
   will-change: transform;
   contain: layout paint;
 }
 
 .animate-cinematic-yellow {
-  animation: cinematic-drift-yellow 9s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+  animation: cinematic-drift-yellow 5.2s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
   will-change: transform;
   contain: layout paint;
 }
 
 .animate-cinematic-white {
-  animation: cinematic-drift-white 8s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+  animation: cinematic-drift-white 4.2s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
   will-change: transform, opacity;
   contain: layout paint;
 }
 
 .animate-cinematic-white-spot {
-  animation: cinematic-white-spot 6s ease-in-out infinite alternate;
+  animation: cinematic-white-spot 3.2s ease-in-out infinite alternate;
   will-change: transform, opacity;
   contain: layout paint;
 }
 
 .animate-cinematic-beam {
-  animation: cinematic-beam 10s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+  animation: cinematic-beam 5.8s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
   will-change: transform, opacity;
   contain: layout paint;
 }
 
 .animate-cinematic-pulse {
-  animation: cinematic-pulse-slow 7s ease-in-out infinite;
+  animation: cinematic-pulse-slow 4s ease-in-out infinite;
   will-change: transform, opacity;
   contain: layout paint;
 }
