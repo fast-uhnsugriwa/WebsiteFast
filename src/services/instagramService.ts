@@ -1,8 +1,8 @@
 import { InstagramPost } from '../types';
 
 export const INSTAGRAM_CONFIG = {
-  appId: (typeof process !== 'undefined' && process.env?.INSTAGRAM_APP_ID) || '',
-  appKey: (typeof process !== 'undefined' && process.env?.INSTAGRAM_APP_KEY) || '',
+  appId: (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_INSTAGRAM_APP_ID) || (typeof process !== 'undefined' && process.env?.INSTAGRAM_APP_ID) || '1380494503634325',
+  appKey: (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_INSTAGRAM_APP_KEY) || (typeof process !== 'undefined' && process.env?.INSTAGRAM_APP_KEY) || '189490cf107cf96231414fcb3afd12e9',
   handle: '@fastsugriwa',
   username: 'fastsugriwa',
   profileUrl: 'https://www.instagram.com/fastsugriwa/',
