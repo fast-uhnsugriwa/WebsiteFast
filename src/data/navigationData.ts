@@ -61,7 +61,7 @@ export const NAVIGATION_MENUS: NavMenu[] = [
     items: [
       {
         id: 'profil-dosen',
-        title: 'Profil Dosen',
+        title: 'Profil Dosen & Pegawai',
         description: 'Tenaga pendidik berkualifikasi Magister (S2) dan Doktor (S3) serta praktisi teknologi bereputasi.',
         category: 'akademik',
         badge: 'Pengajar'
@@ -358,7 +358,7 @@ export const DETAIL_CONTENTS: Record<string, DetailContent> = {
       }
     ],
     actionLink: {
-      label: 'Lihat Direktori Lengkap Dosen & Publikasi SINTA',
+      label: 'Lihat Direktori Lengkap Dosen & Pegawai',
       url: '#dosen',
       isExternal: false
     },
