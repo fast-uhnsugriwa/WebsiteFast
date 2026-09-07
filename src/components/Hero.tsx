@@ -97,15 +97,15 @@ export const Hero: React.FC<HeroProps> = ({
             </motion.button>
 
             <motion.a
-              id="hero-btn-instagram"
-              href="https://www.instagram.com/fastsugriwa/"
+              id="hero-btn-pmb"
+              href="https://pmb.uhnsugriwa.ac.id/"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.02, x: 2 }}
               whileTap={{ scale: 0.98 }}
               className="inline-flex items-center gap-2 px-4 py-3.5 rounded-xl bg-white/70 border border-stone-200/80 text-stone-700 hover:text-orange-600 hover:border-orange-300 font-semibold text-sm transition-all shadow-2xs"
             >
-              <span>Instagram @fastsugriwa</span>
+              <span>Daftar PMB</span>
               <ExternalLink className="w-3.5 h-3.5 text-stone-400" />
             </motion.a>
           </motion.div>

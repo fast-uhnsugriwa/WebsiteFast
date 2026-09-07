@@ -202,7 +202,7 @@ export const DosenProfilePage: React.FC<{ onBackToHome: () => void }> = ({ onBac
 
         {/* Dosen Grid */}
         {!isLoading && !error && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
             <AnimatePresence>
               {filteredDosen.map((dosen, index) => (
                 <motion.div
@@ -212,7 +212,7 @@ export const DosenProfilePage: React.FC<{ onBackToHome: () => void }> = ({ onBac
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.3, delay: index * 0.05 }}
-                  className="group flex flex-col bg-white/70 backdrop-blur-md rounded-2xl border border-stone-200/80 overflow-hidden hover:shadow-xl hover:shadow-orange-900/5 hover:-translate-y-1 transition-all duration-300"
+                  className="group flex flex-col bg-white/70 backdrop-blur-md rounded-xl md:rounded-2xl border border-stone-200/80 overflow-hidden hover:shadow-xl hover:shadow-orange-900/5 hover:-translate-y-1 transition-all duration-300"
                 >
                   {/* Photo Area */}
                   <div className="relative aspect-[4/5] w-full overflow-hidden bg-stone-100 flex-shrink-0">
@@ -228,33 +228,33 @@ export const DosenProfilePage: React.FC<{ onBackToHome: () => void }> = ({ onBac
                       />
                     ) : (
                       <div className="w-full h-full flex flex-col items-center justify-center text-stone-400">
-                        <GraduationCap className="w-16 h-16 mb-2 opacity-50" />
-                        <span className="text-xs font-medium uppercase tracking-wider">Foto Tidak Tersedia</span>
+                        <GraduationCap className="w-8 h-8 md:w-16 md:h-16 mb-1 md:mb-2 opacity-50" />
+                        <span className="text-[8px] md:text-xs font-medium uppercase tracking-wider text-center px-2">Foto Tidak Tersedia</span>
                       </div>
                     )}
 
                     {/* Name overlay on photo */}
-                    <div className="absolute bottom-0 left-0 right-0 p-5 z-20">
-                      <h3 className="text-lg font-bold text-white leading-snug drop-shadow-md">
+                    <div className="absolute bottom-0 left-0 right-0 p-3 md:p-5 z-20">
+                      <h3 className="text-xs md:text-lg font-bold text-white leading-snug drop-shadow-md">
                         {dosen.name}
                       </h3>
-                      <p className="text-orange-300 text-xs font-semibold mt-1">
+                      <p className="text-orange-300 text-[10px] md:text-xs font-semibold mt-0.5 md:mt-1 leading-tight">
                         {dosen.jabatan !== '-' ? dosen.jabatan : 'Tenaga Pendidik'}
                       </p>
                     </div>
                   </div>
 
                   {/* Info Area */}
-                  <div className="p-5 flex-1 flex flex-col gap-4 bg-white/50">
+                  <div className="p-2.5 md:p-5 flex-1 flex flex-col gap-2 md:gap-4 bg-white/50">
                     {/* Keahlian Tags ATAU Jabatan untuk Non-Dosen */}
                     {(dosen.rumpunIlmu !== '-' || dosen.pohonIlmu !== '-' || dosen.rantingIlmu !== '-') ? (
-                      <div className="space-y-3">
+                      <div className="space-y-2 md:space-y-3">
                         {dosen.rumpunIlmu !== '-' && (
-                          <div className="flex items-start gap-2.5">
-                            <BookOpen className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                          <div className="flex items-start gap-2 md:gap-2.5">
+                            <BookOpen className="w-3.5 h-3.5 md:w-4 md:h-4 text-amber-600 shrink-0 mt-0.5" />
                             <div>
-                              <p className="text-[10px] font-bold uppercase tracking-wider text-stone-400">Rumpun Ilmu</p>
-                              <p className="text-sm font-medium text-stone-700 leading-tight mt-0.5">
+                              <p className="text-[9px] md:text-[10px] font-bold uppercase tracking-wider text-stone-400 leading-none mb-0.5 md:mb-0">Rumpun Ilmu</p>
+                              <p className="text-[10px] md:text-sm font-medium text-stone-700 leading-tight md:mt-0.5">
                                 {dosen.rumpunIlmu}
                               </p>
                             </div>
@@ -262,13 +262,13 @@ export const DosenProfilePage: React.FC<{ onBackToHome: () => void }> = ({ onBac
                         )}
                         
                         {(dosen.rantingIlmu !== '-' || dosen.pohonIlmu !== '-') && (
-                          <div className="flex items-start gap-2.5">
-                            <Award className="w-4 h-4 text-orange-600 shrink-0 mt-0.5" />
+                          <div className="flex items-start gap-2 md:gap-2.5">
+                            <Award className="w-3.5 h-3.5 md:w-4 md:h-4 text-orange-600 shrink-0 mt-0.5" />
                             <div>
-                              <p className="text-[10px] font-bold uppercase tracking-wider text-stone-400">
+                              <p className="text-[9px] md:text-[10px] font-bold uppercase tracking-wider text-stone-400 leading-none mb-0.5 md:mb-0">
                                 {dosen.rantingIlmu !== '-' ? 'Spesialisasi (Ranting)' : 'Pohon / Cabang Ilmu'}
                               </p>
-                              <p className="text-sm font-medium text-stone-700 leading-tight mt-0.5">
+                              <p className="text-[10px] md:text-sm font-medium text-stone-700 leading-tight md:mt-0.5">
                                 {dosen.rantingIlmu !== '-' ? dosen.rantingIlmu : dosen.pohonIlmu}
                               </p>
                             </div>
@@ -276,12 +276,12 @@ export const DosenProfilePage: React.FC<{ onBackToHome: () => void }> = ({ onBac
                         )}
                       </div>
                     ) : (
-                      <div className="space-y-3">
-                        <div className="flex items-start gap-2.5">
-                          <Briefcase className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                      <div className="space-y-2 md:space-y-3">
+                        <div className="flex items-start gap-2 md:gap-2.5">
+                          <Briefcase className="w-3.5 h-3.5 md:w-4 md:h-4 text-emerald-600 shrink-0 mt-0.5" />
                           <div>
-                            <p className="text-[10px] font-bold uppercase tracking-wider text-stone-400">Jabatan / Posisi</p>
-                            <p className="text-sm font-medium text-stone-700 leading-tight mt-0.5">
+                            <p className="text-[9px] md:text-[10px] font-bold uppercase tracking-wider text-stone-400 leading-none mb-0.5 md:mb-0">Jabatan / Posisi</p>
+                            <p className="text-[10px] md:text-sm font-medium text-stone-700 leading-tight md:mt-0.5">
                               {dosen.jabatan !== '-' ? dosen.jabatan : 'Tenaga Kependidikan'}
                             </p>
                           </div>
@@ -289,22 +289,23 @@ export const DosenProfilePage: React.FC<{ onBackToHome: () => void }> = ({ onBac
                       </div>
                     )}
 
-                    <div className="mt-auto pt-4 border-t border-stone-100 flex items-center justify-between text-[11px] font-semibold text-stone-500">
-                      <span className="bg-stone-100 px-2 py-1 rounded-md">NIP: {dosen.nip !== '-' ? dosen.nip : 'N/A'}</span>
+                    <div className="mt-auto pt-3 md:pt-4 border-t border-stone-100 flex flex-col xl:flex-row items-start xl:items-center justify-between text-[9px] md:text-[11px] font-semibold text-stone-500 gap-1.5 md:gap-0">
+                      <span className="bg-stone-100 px-2 py-1 md:py-1 rounded-md max-w-full truncate">NIP: {dosen.nip !== '-' ? dosen.nip : 'N/A'}</span>
                       <span>Gol: {dosen.golongan !== '-' ? dosen.golongan : '-'}</span>
                     </div>
 
                     {dosen.email !== '-' ? (
                       <a 
                         href={`mailto:${dosen.email}`}
-                        className="mt-2 w-full py-2 flex items-center justify-center gap-2 rounded-lg bg-orange-50 text-orange-700 hover:bg-orange-100 border border-orange-200 transition-colors text-xs font-bold"
+                        className="mt-2 w-full py-1.5 md:py-2 flex items-center justify-center gap-1.5 md:gap-2 rounded-md md:rounded-lg bg-orange-50 text-orange-700 hover:bg-orange-100 border border-orange-200 transition-colors text-[10px] md:text-xs font-bold"
                       >
-                        <Mail className="w-3.5 h-3.5" />
-                        {dosen.email}
+                        <Mail className="w-3.5 h-3.5 shrink-0" />
+                        <span className="hidden min-[375px]:inline md:inline truncate">{dosen.email}</span>
+                        <span className="min-[375px]:hidden">Kirim Email</span>
                       </a>
                     ) : (
-                      <div className="mt-2 w-full py-2 flex items-center justify-center gap-2 rounded-lg bg-stone-50 text-stone-400 border border-stone-200 text-xs font-bold">
-                        <Mail className="w-3.5 h-3.5" />
+                      <div className="mt-2 w-full py-1.5 md:py-2 flex items-center justify-center gap-1.5 md:gap-2 rounded-md md:rounded-lg bg-stone-50 text-stone-400 border border-stone-200 text-[10px] md:text-xs font-bold">
+                        <Mail className="w-3.5 h-3.5 shrink-0" />
                         -
                       </div>
                     )}
