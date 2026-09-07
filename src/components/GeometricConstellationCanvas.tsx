@@ -19,6 +19,7 @@ interface Particle {
   targetX: number;
   targetY: number;
   noiseOffset: number;
+  canJoinFormation: boolean;
 }
 
 interface FormationEdge {
@@ -122,12 +123,23 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
     // Color Palette
     const COLOR_PRIMARY = '#E07B1A';
     const COLOR_DEEP = '#B9631A';
-    const PROXIMITY_THRESHOLD = 105;
+    const PROXIMITY_THRESHOLD = 110;
     const MOUSE_REPEL_RADIUS = 95;
+
+    // Pre-allocated Float32 buffers for proximity lines (zero per-frame allocations, buttery 60 FPS)
+    const MAX_PROXIMITY_LINES = 700;
+    const lineX1 = new Float32Array(MAX_PROXIMITY_LINES);
+    const lineY1 = new Float32Array(MAX_PROXIMITY_LINES);
+    const lineX2 = new Float32Array(MAX_PROXIMITY_LINES);
+    const lineY2 = new Float32Array(MAX_PROXIMITY_LINES);
+    const lineAlpha = new Float32Array(MAX_PROXIMITY_LINES);
 
     // Initialize Particles (~150-170) with slower gentle speeds
     const count = Math.max(150, Math.min(170, particleCount));
     const particles: Particle[] = [];
+
+    // Track connections per particle to prevent messy spiderwebs (max 2 connections per particle)
+    const connectionCounts = new Uint8Array(count);
 
     // Luminous White Light Tracker state (follows active formations with agile speed)
     const rovingWhiteLight = {
@@ -150,12 +162,14 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
         vy,
         baseVx: vx,
         baseVy: vy,
-        radius: 1.4 + Math.random() * 1.1,
+        radius: 1.4 + Math.random() * 1.1, // ukuran partikel dipertahankan persis
         color: Math.random() > 0.4 ? COLOR_PRIMARY : COLOR_DEEP,
         formationId: null,
         targetX: 0,
         targetY: 0,
-        noiseOffset: Math.random() * 1000
+        noiseOffset: Math.random() * 1000,
+        // ~35% partikel menjadi pengembara bebas (tidak pernah ikut formasi, hanya membuat garis tipis)
+        canJoinFormation: i % 3 !== 0
       });
     }
 
@@ -459,7 +473,8 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
       // Find closest free particles to each initial target node
       const availableIndices = particles
         .map((p, idx) => ({ p, idx }))
-        .filter(({ p }) => p.formationId === null);
+        // Only recruit particles that are allowed to form geometric shapes
+        .filter(({ p }) => p.formationId === null && p.canJoinFormation);
 
       if (availableIndices.length < neededNodesCount) return;
 
@@ -668,6 +683,38 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
         }
       }
 
+      // Anti-clumping soft repulsion (memastikan partikel tidak menumpuk / bertumpuk di satu titik)
+      const MIN_SEPARATION = 26;
+      const minSeparationSq = MIN_SEPARATION * MIN_SEPARATION;
+
+      for (let i = 0; i < particles.length; i++) {
+        const p1 = particles[i];
+        if (p1.formationId !== null) continue;
+
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          if (p2.formationId !== null) continue;
+
+          const dx = p1.x - p2.x;
+          if (dx > MIN_SEPARATION || dx < -MIN_SEPARATION) continue;
+          const dy = p1.y - p2.y;
+          if (dy > MIN_SEPARATION || dy < -MIN_SEPARATION) continue;
+
+          const distSq = dx * dx + dy * dy;
+          if (distSq < minSeparationSq && distSq > 0.001) {
+            const dist = Math.sqrt(distSq);
+            const push = ((MIN_SEPARATION - dist) / MIN_SEPARATION) * 0.42;
+            const nx = (dx / dist) * push;
+            const ny = (dy / dist) * push;
+
+            p1.x += nx;
+            p1.y += ny;
+            p2.x -= nx;
+            p2.y -= ny;
+          }
+        }
+      }
+
       // 5. CAHAYA PUTIH MENGIKUTI FORMASI (Luminous White Light Tracking Formations)
       // Setiap kali ada formasi geometris terbentuk, cahaya putih menyelimuti & mengikutinya sampai hilang
       let mostActiveFormation: Formation | null = null;
@@ -766,76 +813,94 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
       }
 
       if (whiteLightBlobRef.current) {
-        const halfSize = 260; // half of 520px
-        whiteLightBlobRef.current.style.transform = `translate3d(${Math.round(rovingWhiteLight.x - halfSize)}px, ${Math.round(rovingWhiteLight.y - halfSize)}px, 0)`;
+        const halfSize = 250; // half of 500px
+        whiteLightBlobRef.current.style.transform = `translate3d(${Math.round(rovingWhiteLight.x - halfSize)}px, ${Math.round(rovingWhiteLight.y - halfSize)}px, 0) translateZ(0)`;
         whiteLightBlobRef.current.style.opacity = (rovingWhiteLight.alpha * 0.88).toFixed(3);
       }
 
-      // 6. Draw Glowing Proximity Lines between nearby free particles (< 105px)
-      // Collect valid pairs to draw in two synchronized passes (luminous glow aura + crisp radiant core)
-      interface ActivePair {
-        x1: number;
-        y1: number;
-        x2: number;
-        y2: number;
-        alpha: number;
-      }
-      const activePairs: ActivePair[] = [];
+      // 6. Draw Glowing Proximity Lines between nearby free particles (< 110px)
+      // Dibatasi maksimal 2 koneksi per partikel agar rapi, elegan, dan tidak ruet/berantakan
+      connectionCounts.fill(0);
+      let lineCount = 0;
+      const thresholdSq = PROXIMITY_THRESHOLD * PROXIMITY_THRESHOLD;
 
       for (let i = 0; i < particles.length; i++) {
+        if (connectionCounts[i] >= 2) continue; // partikel sudah punya 2 koneksi, lewati
         const p1 = particles[i];
+
         for (let j = i + 1; j < particles.length; j++) {
+          if (connectionCounts[i] >= 2) break; // p1 sudah mencapai batas maksimal 2 koneksi
+          if (connectionCounts[j] >= 2) continue; // p2 sudah mencapai batas maksimal 2 koneksi
+
           const p2 = particles[j];
 
-          // If both are in the SAME formation, formation drawing handles it
+          // If both belong to the SAME formation, formation drawing handles it
           if (p1.formationId !== null && p1.formationId === p2.formationId) continue;
 
           const dx = p1.x - p2.x;
+          if (dx > PROXIMITY_THRESHOLD || dx < -PROXIMITY_THRESHOLD) continue;
           const dy = p1.y - p2.y;
-          const dist = Math.hypot(dx, dy);
+          if (dy > PROXIMITY_THRESHOLD || dy < -PROXIMITY_THRESHOLD) continue;
 
-          if (dist < PROXIMITY_THRESHOLD) {
-            const normDist = dist / PROXIMITY_THRESHOLD;
-            // Enhanced alpha curve: clearly visible and bright yet soft at perimeter
-            const alpha = Math.pow(1 - normDist, 0.72) * 0.82;
-            activePairs.push({
-              x1: p1.x,
-              y1: p1.y,
-              x2: p2.x,
-              y2: p2.y,
-              alpha
-            });
+          const distSq = dx * dx + dy * dy;
+          if (distSq < thresholdSq && lineCount < MAX_PROXIMITY_LINES) {
+            const dist = Math.sqrt(distSq);
+            const norm = 1 - dist / PROXIMITY_THRESHOLD;
+            // Enhanced alpha: clearly visible, rich contrast on warm white (#FDFCFA)
+            const alpha = Math.pow(norm, 0.65) * 0.94;
+
+            lineX1[lineCount] = p1.x;
+            lineY1[lineCount] = p1.y;
+            lineX2[lineCount] = p2.x;
+            lineY2[lineCount] = p2.y;
+            lineAlpha[lineCount] = alpha;
+            lineCount++;
+
+            connectionCounts[i]++;
+            connectionCounts[j]++;
           }
         }
       }
 
-      ctx.save();
-      ctx.lineCap = 'round';
+      if (lineCount > 0) {
+        ctx.save();
+        ctx.lineCap = 'round';
 
-      // Pass 1: Outer glowing warm-amber luminous aura (berpendar lembut dan jelas)
-      ctx.lineWidth = 2.4;
-      for (let k = 0; k < activePairs.length; k++) {
-        const pair = activePairs[k];
-        ctx.strokeStyle = `rgba(249, 115, 22, ${(pair.alpha * 0.42).toFixed(3)})`;
-        ctx.beginPath();
-        ctx.moveTo(pair.x1, pair.y1);
-        ctx.lineTo(pair.x2, pair.y2);
-        ctx.stroke();
-      }
+        // Pass 1: Outer Luminous Warm-Amber Glow Halo (lebar 2.4px berpendar jelas)
+        ctx.lineWidth = 2.4;
+        for (let k = 0; k < lineCount; k++) {
+          ctx.strokeStyle = `rgba(249, 115, 22, ${(lineAlpha[k] * 0.48).toFixed(3)})`;
+          ctx.beginPath();
+          ctx.moveTo(lineX1[k], lineY1[k]);
+          ctx.lineTo(lineX2[k], lineY2[k]);
+          ctx.stroke();
+        }
 
-      // Pass 2: Inner sharp & radiant core line with subtle bloom shadow
-      ctx.lineWidth = 1.15;
-      ctx.shadowColor = 'rgba(234, 88, 12, 0.45)';
-      ctx.shadowBlur = 3.5;
-      for (let k = 0; k < activePairs.length; k++) {
-        const pair = activePairs[k];
-        ctx.strokeStyle = `rgba(194, 88, 14, ${(pair.alpha * 0.88).toFixed(3)})`;
-        ctx.beginPath();
-        ctx.moveTo(pair.x1, pair.y1);
-        ctx.lineTo(pair.x2, pair.y2);
-        ctx.stroke();
+        // Pass 2: Intense Radiant Core Line (tipis 1.1px warna oranye menyala)
+        ctx.lineWidth = 1.1;
+        for (let k = 0; k < lineCount; k++) {
+          ctx.strokeStyle = `rgba(217, 75, 10, ${(lineAlpha[k] * 0.95).toFixed(3)})`;
+          ctx.beginPath();
+          ctx.moveTo(lineX1[k], lineY1[k]);
+          ctx.lineTo(lineX2[k], lineY2[k]);
+          ctx.stroke();
+        }
+
+        // Pass 3: Electric White-Gold Specular Core for close connections (dist < ~45px)
+        ctx.lineWidth = 0.6;
+        for (let k = 0; k < lineCount; k++) {
+          if (lineAlpha[k] > 0.68) {
+            const glintAlpha = (lineAlpha[k] - 0.68) * 2.8;
+            ctx.strokeStyle = `rgba(255, 252, 235, ${Math.min(1, glintAlpha).toFixed(3)})`;
+            ctx.beginPath();
+            ctx.moveTo(lineX1[k], lineY1[k]);
+            ctx.lineTo(lineX2[k], lineY2[k]);
+            ctx.stroke();
+          }
+        }
+
+        ctx.restore();
       }
-      ctx.restore();
 
       // 7. Draw Formations (Edges + Nodes + Formula Text at Top-Right)
       for (const f of formations) {
@@ -1000,11 +1065,12 @@ export const GeometricConstellationCanvas: React.FC<GeometricConstellationCanvas
       <div
         ref={whiteLightBlobRef}
         aria-hidden="true"
-        className="absolute top-0 left-0 w-[520px] h-[520px] rounded-full blur-[85px] pointer-events-none will-change-transform opacity-0"
+        className="absolute top-0 left-0 w-[500px] h-[500px] rounded-full blur-[65px] pointer-events-none will-change-transform opacity-0"
         style={{
           background:
             'radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.85) 25%, rgba(254, 240, 138, 0.4) 50%, transparent 72%)',
-          transform: 'translate3d(-9999px, -9999px, 0)'
+          transform: 'translate3d(-9999px, -9999px, 0) translateZ(0)',
+          contain: 'strict'
         }}
       />
     </div>
