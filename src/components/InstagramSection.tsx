@@ -13,7 +13,6 @@ import {
 } from 'lucide-react';
 import { InstagramPost } from '../types';
 import { InstagramService, INSTAGRAM_CONFIG } from '../services/instagramService';
-import { FacultyLogo } from './Logos';
 
 export const InstagramSection: React.FC = () => {
   const [posts, setPosts] = useState<InstagramPost[]>([]);
@@ -80,9 +79,16 @@ export const InstagramSection: React.FC = () => {
           >
             <div className="flex items-center gap-3 p-3 rounded-2xl bg-stone-50 border border-stone-200 shadow-2xs hover:shadow-md transition-shadow">
               <div className="relative">
-                <div className="p-0.5 rounded-full bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500">
-                  <div className="p-0.5 bg-white rounded-full">
-                    <FacultyLogo size="sm" showText={false} />
+                <div className="p-0.5 rounded-full bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500 shadow-2xs">
+                  <div className="w-10 h-10 rounded-full bg-white p-0.5 overflow-hidden flex items-center justify-center">
+                    <img
+                      src={INSTAGRAM_CONFIG.profilePictureUrl}
+                      alt="Foto Profil Instagram FAST"
+                      className="w-full h-full object-cover rounded-full"
+                      onError={(e) => {
+                        e.currentTarget.src = '/fast_instagram_profile.webp';
+                      }}
+                    />
                   </div>
                 </div>
               </div>
@@ -211,9 +217,16 @@ export const InstagramSection: React.FC = () => {
                   {/* Post Header: Profile & Date */}
                   <div className="p-2.5 sm:p-4 flex items-center justify-between border-b border-stone-100 bg-stone-50/50 gap-1.5">
                     <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
-                      <div className="w-6 h-6 sm:w-8 sm:h-8 shrink-0 rounded-full bg-gradient-to-tr from-amber-400 to-orange-500 p-0.5">
-                        <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
-                          <FacultyLogo size="sm" showText={false} />
+                      <div className="w-6 h-6 sm:w-8 sm:h-8 shrink-0 rounded-full bg-gradient-to-tr from-amber-400 to-orange-500 p-0.5 shadow-2xs">
+                        <div className="w-full h-full bg-white rounded-full overflow-hidden flex items-center justify-center">
+                          <img
+                            src={post.authorAvatar || INSTAGRAM_CONFIG.profilePictureUrl}
+                            alt="@fastsugriwa"
+                            className="w-full h-full object-cover rounded-full"
+                            onError={(e) => {
+                              e.currentTarget.src = '/fast_instagram_profile.webp';
+                            }}
+                          />
                         </div>
                       </div>
                       <div className="min-w-0">
@@ -414,7 +427,18 @@ export const InstagramSection: React.FC = () => {
             {/* Modal Top Bar */}
             <div className="p-4 border-b border-stone-100 flex items-center justify-between bg-stone-50">
               <div className="flex items-center gap-2.5">
-                <FacultyLogo size="sm" showText={false} />
+                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500 p-0.5 shrink-0 shadow-2xs">
+                  <div className="w-full h-full bg-white rounded-full overflow-hidden flex items-center justify-center">
+                    <img
+                      src={activeModalPost.authorAvatar || INSTAGRAM_CONFIG.profilePictureUrl}
+                      alt="@fastsugriwa"
+                      className="w-full h-full object-cover rounded-full"
+                      onError={(e) => {
+                        e.currentTarget.src = '/fast_instagram_profile.webp';
+                      }}
+                    />
+                  </div>
+                </div>
                 <div>
                   <div className="text-xs font-bold text-stone-900">
                     @fastsugriwa

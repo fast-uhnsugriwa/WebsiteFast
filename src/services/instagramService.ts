@@ -7,6 +7,7 @@ export const INSTAGRAM_CONFIG = {
   handle: '@fastsugriwa',
   username: 'fastsugriwa',
   profileUrl: 'https://www.instagram.com/fastsugriwa/',
+  profilePictureUrl: '/fast_instagram_profile.webp',
   apiVersion: 'v21.0'
 };
 
@@ -305,6 +306,7 @@ export class InstagramService {
         const res = await fetch(INSTAGRAM_CONFIG.feedUrl);
         if (res.ok) {
           const data = await res.json();
+          const profilePic = data.profilePictureUrl || INSTAGRAM_CONFIG.profilePictureUrl;
           const rawPosts = Array.isArray(data) ? data : (data.posts || []);
           if (Array.isArray(rawPosts) && rawPosts.length > 0) {
             const livePosts: InstagramPost[] = rawPosts.map((item: any) => {
@@ -332,6 +334,7 @@ export class InstagramService {
                 mediaUrl: displayImage,
                 thumbnailUrl: item.thumbnailUrl || item.thumbnail_url,
                 videoUrl: isVideo ? (item.mediaUrl || item.media_url) : undefined,
+                authorAvatar: profilePic,
                 source: 'api'
               };
             });
