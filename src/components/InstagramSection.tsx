@@ -232,16 +232,11 @@ export const InstagramSection: React.FC = () => {
         {/* Instagram Post Cards Grid (Shown when posts are available) */}
         {!isLoading && posts.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredPosts.map((post, idx) => (
-              <motion.article
+            {filteredPosts.map((post) => (
+              <article
                 key={post.id}
                 id={`post-card-${post.id}`}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.15 }}
-                transition={{ duration: 0.5, delay: idx * 0.08 }}
-                whileHover={{ y: -6 }}
-                className="flex flex-col justify-between rounded-2xl bg-white border border-stone-200/90 shadow-2xs hover:shadow-xl hover:border-amber-400/80 transition-all duration-300 overflow-hidden group"
+                className="flex flex-col justify-between rounded-2xl bg-white border border-stone-200/90 shadow-2xs hover:shadow-xl hover:border-amber-400/80 hover:-translate-y-1.5 transition-all duration-300 overflow-hidden group"
               >
                 <div>
                   {/* Post Header: Profile & Date */}
@@ -278,38 +273,53 @@ export const InstagramSection: React.FC = () => {
                     </span>
                   </div>
 
-                  {/* Post Graphic Banner (Clean Vector Graphic - NO campus photography) */}
-                  <div className="relative p-6 bg-gradient-to-br from-stone-900 via-stone-850 to-stone-900 text-white overflow-hidden border-b border-stone-100 min-h-[140px] flex flex-col justify-between">
-                    {/* Subtle Geometric Balinese Sacred Line Pattern */}
-                    <div className="absolute inset-0 opacity-10 pointer-events-none">
-                      <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="20" cy="20" r="15" fill="none" stroke="#f59e0b" strokeWidth="1" />
-                        <circle cx="80" cy="80" r="40" fill="none" stroke="#ea580c" strokeWidth="1" />
-                        <rect x="120" y="20" width="30" height="30" fill="none" stroke="#d97706" strokeWidth="1" transform="rotate(45 135 35)" />
-                      </svg>
+                  {/* Post Media / Banner */}
+                  {post.mediaUrl ? (
+                    <div className="relative aspect-[4/3] w-full overflow-hidden bg-stone-100 border-b border-stone-100">
+                      <img
+                        src={post.mediaUrl}
+                        alt={post.shortSnippet}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                        loading="lazy"
+                      />
+                      <div className="absolute top-2.5 right-2.5 px-2 py-1 rounded-md bg-stone-900/70 backdrop-blur-xs text-white flex items-center gap-1 text-[10px] font-medium">
+                        <Instagram className="w-3 h-3 text-orange-400" />
+                        <span>{post.mediaType === 'CAROUSEL_ALBUM' ? 'Album' : post.mediaType === 'VIDEO' ? 'Reel' : 'Post'}</span>
+                      </div>
                     </div>
+                  ) : (
+                    <div className="relative p-6 bg-gradient-to-br from-stone-900 via-stone-850 to-stone-900 text-white overflow-hidden border-b border-stone-100 min-h-[140px] flex flex-col justify-between">
+                      {/* Subtle Geometric Balinese Sacred Line Pattern */}
+                      <div className="absolute inset-0 opacity-10 pointer-events-none">
+                        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                          <circle cx="20" cy="20" r="15" fill="none" stroke="#f59e0b" strokeWidth="1" />
+                          <circle cx="80" cy="80" r="40" fill="none" stroke="#ea580c" strokeWidth="1" />
+                          <rect x="120" y="20" width="30" height="30" fill="none" stroke="#d97706" strokeWidth="1" transform="rotate(45 135 35)" />
+                        </svg>
+                      </div>
 
-                    <div className="relative z-10 flex items-center justify-between">
-                      <span className="text-[10px] uppercase font-mono tracking-widest text-amber-400">
-                        FAST SUGRIWA POST
-                      </span>
-                      <Instagram className="w-4 h-4 text-orange-400" />
-                    </div>
-
-                    <div className="relative z-10 my-3">
-                      <h4 className="text-base sm:text-lg font-bold text-white tracking-tight leading-snug line-clamp-2">
-                        {post.shortSnippet}
-                      </h4>
-                    </div>
-
-                    <div className="relative z-10 flex items-center gap-2">
-                      {post.tags.slice(0, 2).map((t) => (
-                        <span key={t} className="text-[10px] text-stone-400 font-mono">
-                          {t}
+                      <div className="relative z-10 flex items-center justify-between">
+                        <span className="text-[10px] uppercase font-mono tracking-widest text-amber-400">
+                          FAST SUGRIWA POST
                         </span>
-                      ))}
+                        <Instagram className="w-4 h-4 text-orange-400" />
+                      </div>
+
+                      <div className="relative z-10 my-3">
+                        <h4 className="text-base sm:text-lg font-bold text-white tracking-tight leading-snug line-clamp-2">
+                          {post.shortSnippet}
+                        </h4>
+                      </div>
+
+                      <div className="relative z-10 flex items-center gap-2">
+                        {post.tags.slice(0, 2).map((t) => (
+                          <span key={t} className="text-[10px] text-stone-400 font-mono">
+                            {t}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   {/* Post Caption Preview */}
                   <div className="p-4 text-xs text-stone-600 leading-relaxed">
@@ -348,7 +358,7 @@ export const InstagramSection: React.FC = () => {
                     <ExternalLink className="w-3 h-3 text-stone-400" />
                   </a>
                 </div>
-              </motion.article>
+              </article>
             ))}
           </div>
         )}
@@ -421,6 +431,16 @@ export const InstagramSection: React.FC = () => {
 
             {/* Modal Body */}
             <div className="p-6 overflow-y-auto space-y-4">
+              {activeModalPost.mediaUrl && (
+                <div className="rounded-xl overflow-hidden aspect-[4/3] w-full bg-stone-100 border border-stone-200 shadow-2xs">
+                  <img
+                    src={activeModalPost.mediaUrl}
+                    alt={activeModalPost.shortSnippet}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+
               <div className="p-4 rounded-xl bg-stone-900 text-white text-xs space-y-2">
                 <div className="text-amber-400 font-mono text-[10px] uppercase">
                   PENGUMUMAN RESMI FAST UHN SUGRIWA

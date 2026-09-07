@@ -1,6 +1,7 @@
 import { InstagramPost } from '../types';
 
 export const INSTAGRAM_CONFIG = {
+  feedUrl: (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_BEHOLD_FEED_URL) || 'https://feeds.behold.so/ixTc8BrGBsXeSpLQs7wN',
   appId: (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_INSTAGRAM_APP_ID) || (typeof process !== 'undefined' && process.env?.INSTAGRAM_APP_ID) || '1380494503634325',
   appKey: (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_INSTAGRAM_APP_KEY) || (typeof process !== 'undefined' && process.env?.INSTAGRAM_APP_KEY) || '189490cf107cf96231414fcb3afd12e9',
   handle: '@fastsugriwa',
@@ -272,7 +273,62 @@ export class InstagramService {
     const creds = this.getAppCredentials();
     const nowStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-    // 1. If an access token is provided, query the real Instagram Graph API
+    // 1. Prioritas Utama: Tarik postingan dari feed resmi Behold.so
+    if (INSTAGRAM_CONFIG.feedUrl) {
+      try {
+        const res = await fetch(INSTAGRAM_CONFIG.feedUrl);
+        if (res.ok) {
+          const data = await res.json();
+          const rawPosts = Array.isArray(data) ? data : (data.posts || []);
+          if (Array.isArray(rawPosts) && rawPosts.length > 0) {
+            const livePosts: InstagramPost[] = rawPosts.map((item: any) => {
+              const caption = item.caption || 'Postingan resmi dari @fastsugriwa';
+              const cleanLines = caption.split('\n').map((l: string) => l.trim()).filter((l: string) => l.length > 0);
+              const shortSnippet = cleanLines[0] || caption.slice(0, 100);
+
+              return {
+                id: item.id || `ig-${Math.random()}`,
+                caption: caption,
+                shortSnippet: shortSnippet,
+                date: item.timestamp ? new Date(item.timestamp).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Terbaru',
+                timestamp: item.timestamp,
+                category: categorizeCaption(caption),
+                likesCount: item.likeCount ?? item.like_count ?? 0,
+                commentsCount: item.commentsCount ?? item.comments_count ?? 0,
+                tags: extractTags(caption),
+                postUrl: item.permalink || INSTAGRAM_CONFIG.profileUrl,
+                permalink: item.permalink || INSTAGRAM_CONFIG.profileUrl,
+                mediaType: item.mediaType || item.media_type || 'IMAGE',
+                mediaUrl: item.mediaUrl || item.thumbnailUrl || item.media_url,
+                source: 'api'
+              };
+            });
+
+            // Cache postingan ke localStorage
+            if (typeof window !== 'undefined') {
+              localStorage.setItem(STORAGE_KEY_POSTS, JSON.stringify(livePosts));
+              localStorage.setItem(STORAGE_KEY_LAST_SYNC, new Date().toISOString());
+            }
+
+            return {
+              posts: livePosts,
+              status: {
+                appId: creds.appId,
+                appKeyMasked: creds.appKeyMasked,
+                status: 'connected_live',
+                message: `Berhasil tersambung ke Instagram @fastsugriwa (${livePosts.length} postingan live)`,
+                lastChecked: nowStr,
+                hasUserToken: true
+              }
+            };
+          }
+        }
+      } catch (err) {
+        console.warn('Error fetching live Instagram from Behold feed:', err);
+      }
+    }
+
+    // 2. Jika ada direct access token, query Meta Instagram Graph API langsung
     if (token) {
       try {
         const url = `https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url,timestamp,like_count,comments_count,username&access_token=${token}`;
