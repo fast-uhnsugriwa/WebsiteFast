@@ -25,10 +25,10 @@ Fakultas Sains dan Teknologi (FAST) UHN I Gusti Bagus Sugriwa Denpasar resmi men
 
 Selamat datang para Ksatria Muda Sains dan Teknologi! Bersama kita wujudkan transformasi teknologi berkarakter kearifan lokal.
 
-#MASAYU2026 #FASTSugriwa #UHNSugriwa #MahasiswaBaru #Informatika #DKV #SainsInformasi`,
+#pinned #MASAYU2026 #FASTSugriwa #UHNSugriwa #MahasiswaBaru #Informatika #DKV #SainsInformasi`,
     likesCount: 58,
     commentsCount: 6,
-    tags: ['#MASAYU2026', '#FASTSugriwa', '#UHNSugriwa', '#Informatika'],
+    tags: ['#pinned', '#MASAYU2026', '#FASTSugriwa', '#UHNSugriwa'],
     postUrl: 'https://www.instagram.com/p/DdB4YuPEmL9/',
     permalink: 'https://www.instagram.com/p/DdB4YuPEmL9/',
     mediaType: 'IMAGE',
@@ -65,7 +65,7 @@ Explore your curiosity, build your future!
       'https://behold.pictures/eyJ1IjoiU0VuQWc3M2c2SmhEMk1WOW50bTdNa2hZV2tFMyIsImYiOiJpeFRjOEJyR0JzWGVTcExRczd3TiIsInAiOiIxNzkxMjY0ODQ4MTQ2MDA4NyIsImgiOiJsc240aGEifQ.jpg?class=originalSmall',
     authorAvatar: '/fast_instagram_profile.webp',
     source: 'api',
-    isPinned: true
+    isPinned: false
   },
   {
     id: '18429290059176598',

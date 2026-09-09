@@ -26,29 +26,16 @@ export const INSTAGRAM_CONFIG = {
 
 const STORAGE_KEY_TOKEN = 'fast_sugriwa_ig_access_token';
 const STORAGE_KEY_POSTS = 'fast_sugriwa_ig_posts_cache';
-const STORAGE_KEY_ACCUMULATED = 'fast_sugriwa_ig_accumulated_posts_v2';
+const STORAGE_KEY_ACCUMULATED = 'fast_sugriwa_ig_accumulated_posts_v3';
 const STORAGE_KEY_LAST_SYNC = 'fast_sugriwa_ig_last_sync';
 
-// Konfigurasi Pinned Posts (Postingan yang disematkan di posisi paling atas)
-export const PINNED_CONFIG = {
-  // ID postingan atau shortcode URL Instagram yang disematkan
-  pinnedIds: [
-    '18421877839147866', // FAST Sukses Gelar MASAYU 2026: Sambut Generasi CYBER di Era Digital!
-    '17912648481460087'  // Assemble, Ksatria Muda FAST! Selamat Datang di Universe Inovasi!
-  ],
-  pinnedPermalinks: [
-    'DdB4YuPEmL9',
-    'Dc9pMc-kseT'
-  ]
-};
-
+/**
+ * Deteksi Postingan yang di-pin HANYA melalui tagar / caption: #pinned
+ * Sesuai instruksi: hanya postingan yang memiliki hashtag #pinned yang disematkan ke paling atas.
+ */
 export function isPostPinned(post: Partial<InstagramPost>): boolean {
-  if (post.isPinned) return true;
-  if (post.id && PINNED_CONFIG.pinnedIds.includes(post.id)) return true;
-  if (post.permalink && PINNED_CONFIG.pinnedPermalinks.some((p) => post.permalink?.includes(p))) return true;
-  if (post.postUrl && PINNED_CONFIG.pinnedPermalinks.some((p) => post.postUrl?.includes(p))) return true;
-  if (post.caption && /#(pinned|disematkan|pin)\b/i.test(post.caption)) return true;
-  return false;
+  if (!post.caption) return false;
+  return /#pinned\b/i.test(post.caption);
 }
 
 export interface InstagramApiStatus {
