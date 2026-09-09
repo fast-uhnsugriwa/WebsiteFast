@@ -13,6 +13,7 @@ import { CinematicLightBackground } from './components/CinematicLightBackground'
 import { GeometricConstellationCanvas } from './components/GeometricConstellationCanvas';
 import { NavDropdownItem } from './types';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<'home' | 'sains-informasi' | 'dosen'>('home');
@@ -139,8 +140,9 @@ export default function App() {
         onNavigateSainsInformasi={handleNavigateSainsInformasi}
       />
 
-      {/* Vercel Web Analytics */}
+      {/* Vercel Web Analytics & Speed Insights */}
       <Analytics />
+      <SpeedInsights />
     </div>
   );
 }
