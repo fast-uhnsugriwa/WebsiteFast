@@ -12,6 +12,7 @@ import { Footer } from './components/Footer';
 import { CinematicLightBackground } from './components/CinematicLightBackground';
 import { GeometricConstellationCanvas } from './components/GeometricConstellationCanvas';
 import { NavDropdownItem } from './types';
+import { Analytics } from '@vercel/analytics/react';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<'home' | 'sains-informasi' | 'dosen'>('home');
@@ -137,6 +138,9 @@ export default function App() {
         onNavigateHome={handleNavigateHome}
         onNavigateSainsInformasi={handleNavigateSainsInformasi}
       />
+
+      {/* Vercel Web Analytics */}
+      <Analytics />
     </div>
   );
 }
