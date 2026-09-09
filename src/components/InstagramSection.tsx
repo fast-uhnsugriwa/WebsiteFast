@@ -225,7 +225,11 @@ export const InstagramSection: React.FC = () => {
               <article
                 key={post.id}
                 id={`post-card-${post.id}`}
-                className="flex flex-col justify-between rounded-xl sm:rounded-2xl bg-white border border-stone-200/90 shadow-2xs hover:shadow-xl hover:border-amber-400/80 hover:-translate-y-1.5 transition-all duration-300 overflow-hidden group"
+                className={`flex flex-col justify-between rounded-xl sm:rounded-2xl bg-white border shadow-2xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 overflow-hidden group ${
+                  post.isPinned
+                    ? 'border-amber-300/90 shadow-amber-500/5 ring-1 ring-amber-400/40'
+                    : 'border-stone-200/90 hover:border-amber-400/80'
+                }`}
               >
                 <div>
                   {/* Post Header: Profile & Date */}
@@ -254,24 +258,32 @@ export const InstagramSection: React.FC = () => {
                       </div>
                     </div>
 
-                    <span
-                      className={`shrink-0 text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full ${post.category === 'Beasiswa'
-                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                          : post.category === 'Prestasi'
-                            ? 'bg-amber-50 text-amber-800 border border-amber-200'
-                            : post.category === 'Akademik'
-                              ? 'bg-orange-50 text-orange-800 border border-orange-200'
-                              : post.category === 'Hari Raya'
-                                ? 'bg-purple-50 text-purple-800 border border-purple-200'
-                                : post.category === 'Workshop'
-                                  ? 'bg-blue-50 text-blue-800 border border-blue-200'
-                                  : post.category === 'Riset'
-                                    ? 'bg-teal-50 text-teal-800 border border-teal-200'
-                                    : 'bg-stone-100 text-stone-700 border border-stone-200'
-                        }`}
-                    >
-                      {post.category}
-                    </span>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      {post.isPinned && (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-300 text-amber-900 text-[9px] sm:text-[10px] font-extrabold shadow-2xs">
+                          <span>📌</span>
+                          <span className="hidden xs:inline">Disematkan</span>
+                        </span>
+                      )}
+                      <span
+                        className={`shrink-0 text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full ${post.category === 'Beasiswa'
+                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                            : post.category === 'Prestasi'
+                              ? 'bg-amber-50 text-amber-800 border border-amber-200'
+                              : post.category === 'Akademik'
+                                ? 'bg-orange-50 text-orange-800 border border-orange-200'
+                                : post.category === 'Hari Raya'
+                                  ? 'bg-purple-50 text-purple-800 border border-purple-200'
+                                  : post.category === 'Workshop'
+                                    ? 'bg-blue-50 text-blue-800 border border-blue-200'
+                                    : post.category === 'Riset'
+                                      ? 'bg-teal-50 text-teal-800 border border-teal-200'
+                                      : 'bg-stone-100 text-stone-700 border border-stone-200'
+                          }`}
+                      >
+                        {post.category}
+                      </span>
+                    </div>
                   </div>
 
                   {/* Post Media / Banner */}
@@ -487,8 +499,15 @@ export const InstagramSection: React.FC = () => {
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-stone-900">
-                    @fastsugriwa
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-stone-900">
+                      @fastsugriwa
+                    </span>
+                    {activeModalPost.isPinned && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300">
+                        📌 Disematkan
+                      </span>
+                    )}
                   </div>
                   <div className="text-[10px] text-stone-400">
                     {activeModalPost.date} • {activeModalPost.category}

@@ -29,6 +29,28 @@ const STORAGE_KEY_POSTS = 'fast_sugriwa_ig_posts_cache';
 const STORAGE_KEY_ACCUMULATED = 'fast_sugriwa_ig_accumulated_posts_v2';
 const STORAGE_KEY_LAST_SYNC = 'fast_sugriwa_ig_last_sync';
 
+// Konfigurasi Pinned Posts (Postingan yang disematkan di posisi paling atas)
+export const PINNED_CONFIG = {
+  // ID postingan atau shortcode URL Instagram yang disematkan
+  pinnedIds: [
+    '18421877839147866', // FAST Sukses Gelar MASAYU 2026: Sambut Generasi CYBER di Era Digital!
+    '17912648481460087'  // Assemble, Ksatria Muda FAST! Selamat Datang di Universe Inovasi!
+  ],
+  pinnedPermalinks: [
+    'DdB4YuPEmL9',
+    'Dc9pMc-kseT'
+  ]
+};
+
+export function isPostPinned(post: Partial<InstagramPost>): boolean {
+  if (post.isPinned) return true;
+  if (post.id && PINNED_CONFIG.pinnedIds.includes(post.id)) return true;
+  if (post.permalink && PINNED_CONFIG.pinnedPermalinks.some((p) => post.permalink?.includes(p))) return true;
+  if (post.postUrl && PINNED_CONFIG.pinnedPermalinks.some((p) => post.postUrl?.includes(p))) return true;
+  if (post.caption && /#(pinned|disematkan|pin)\b/i.test(post.caption)) return true;
+  return false;
+}
+
 export interface InstagramApiStatus {
   appId: string;
   appKeyMasked: string;
@@ -197,13 +219,19 @@ export class InstagramService {
       }
     }
 
-    // Urutkan berdasarkan tanggal / timestamp terbaru dan filter ulang seluruh postingan dengan kategori yang tepat
+    // Urutkan dengan prioritas PINNED POSTS di paling atas, kemudian tanggal terbaru
     const combined = Array.from(new Set(map.values())).map((post) => ({
       ...post,
-      category: categorizeCaption(post.caption || '')
+      category: categorizeCaption(post.caption || ''),
+      isPinned: isPostPinned(post)
     }));
 
     return combined.sort((a, b) => {
+      // 1. Postingan yang disematkan (isPinned) selalu berada di urutan teratas
+      if (a.isPinned && !b.isPinned) return -1;
+      if (!a.isPinned && b.isPinned) return 1;
+
+      // 2. Kemudian urutkan berdasarkan waktu/tanggal terbaru
       const tA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
       const tB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
       return tB - tA;
@@ -258,7 +286,8 @@ export class InstagramService {
             videoUrl: isVideo ? item.media_url : undefined,
             videoEmbedUrl: isVideo && item.permalink ? `${item.permalink.replace(/\/+$/, '')}/embed/` : undefined,
             authorAvatar: INSTAGRAM_CONFIG.profilePictureUrl,
-            source: 'api'
+            source: 'api',
+            isPinned: isPostPinned({ id: item.id, permalink: item.permalink, caption })
           };
         });
       }
