@@ -19,8 +19,13 @@ export const InstagramSection: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('Semua');
   const [activeModalPost, setActiveModalPost] = useState<InstagramPost | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
   const [visibleCount, setVisibleCount] = useState<number>(6);
+  const [videoPlayerMode, setVideoPlayerMode] = useState<'video' | 'embed'>('video');
+
+  const handleOpenModal = (post: InstagramPost) => {
+    setActiveModalPost(post);
+    setVideoPlayerMode(post.videoUrl ? 'video' : 'embed');
+  };
 
   const categories = ['Semua', 'Akademik', 'Beasiswa', 'Prestasi', 'Workshop', 'Riset', 'Hari Raya'];
 
@@ -272,7 +277,7 @@ export const InstagramSection: React.FC = () => {
                   {/* Post Media / Banner */}
                   {post.mediaUrl ? (
                     <div
-                      onClick={() => setActiveModalPost(post)}
+                      onClick={() => handleOpenModal(post)}
                       className="relative aspect-square sm:aspect-[4/3] w-full overflow-hidden bg-stone-100 border-b border-stone-100 cursor-pointer"
                     >
                       <img
@@ -280,6 +285,16 @@ export const InstagramSection: React.FC = () => {
                         alt={post.shortSnippet}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                         loading="lazy"
+                        referrerPolicy="no-referrer"
+                        crossOrigin="anonymous"
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          if (post.thumbnailUrl && target.src !== post.thumbnailUrl) {
+                            target.src = post.thumbnailUrl;
+                          } else {
+                            target.src = '/fast_instagram_profile.webp';
+                          }
+                        }}
                       />
                       <div className="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md bg-stone-900/75 backdrop-blur-xs text-white flex items-center gap-1 text-[9px] sm:text-[10px] font-medium shadow-xs">
                         {post.mediaType === 'REEL' || post.mediaType === 'VIDEO' ? (
@@ -302,16 +317,16 @@ export const InstagramSection: React.FC = () => {
 
                       {/* Play overlay for Reels / Videos */}
                       {(post.mediaType === 'REEL' || post.mediaType === 'VIDEO') && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/35 transition-colors">
-                          <div className="w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-white/90 text-stone-900 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                            <span className="ml-0.5 text-[10px] sm:text-xs font-black">▶</span>
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/25 group-hover:bg-black/40 transition-colors">
+                          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-gradient-to-tr from-amber-500 to-orange-600 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                            <span className="ml-0.5 text-[11px] sm:text-xs font-black">▶</span>
                           </div>
                         </div>
                       )}
                     </div>
                   ) : (
                     <div
-                      onClick={() => setActiveModalPost(post)}
+                      onClick={() => handleOpenModal(post)}
                       className="relative p-3.5 sm:p-6 bg-gradient-to-br from-stone-900 via-stone-850 to-stone-900 text-white overflow-hidden border-b border-stone-100 min-h-[120px] sm:min-h-[140px] flex flex-col justify-between cursor-pointer"
                     >
                       {/* Subtle Geometric Balinese Sacred Line Pattern */}
@@ -352,7 +367,7 @@ export const InstagramSection: React.FC = () => {
                       {post.caption}
                     </p>
                     <button
-                      onClick={() => setActiveModalPost(post)}
+                      onClick={() => handleOpenModal(post)}
                       className="text-orange-600 font-bold hover:underline mt-1.5 sm:mt-2 inline-block text-[10px] sm:text-xs"
                     >
                       Baca selengkapnya...
@@ -492,22 +507,92 @@ export const InstagramSection: React.FC = () => {
 
             {/* Modal Body */}
             <div className="p-6 overflow-y-auto space-y-4">
-              {activeModalPost.videoUrl ? (
-                <div className="rounded-xl overflow-hidden aspect-[4/3] sm:aspect-video w-full bg-black border border-stone-200 shadow-2xs">
-                  <video
-                    src={activeModalPost.videoUrl}
-                    poster={activeModalPost.mediaUrl}
-                    controls
-                    playsInline
-                    className="w-full h-full object-contain"
-                  />
+              {/* Media Display: Video/Reels Player or Image Banner */}
+              {activeModalPost.mediaType === 'REEL' || activeModalPost.mediaType === 'VIDEO' ? (
+                <div className="space-y-2.5">
+                  <div className="rounded-xl sm:rounded-2xl overflow-hidden w-full bg-stone-950 border border-stone-800 shadow-md relative flex items-center justify-center min-h-[420px] sm:min-h-[500px]">
+                    {videoPlayerMode === 'video' && activeModalPost.videoUrl ? (
+                      <video
+                        src={activeModalPost.videoUrl}
+                        poster={activeModalPost.mediaUrl}
+                        controls
+                        autoPlay
+                        playsInline
+                        referrerPolicy="no-referrer"
+                        className="w-full max-h-[500px] object-contain"
+                        onError={() => setVideoPlayerMode('embed')}
+                      />
+                    ) : (
+                      <iframe
+                        src={activeModalPost.videoEmbedUrl || `${(activeModalPost.permalink || activeModalPost.postUrl).replace(/\/+$/, '')}/embed/`}
+                        className="w-full h-[460px] sm:h-[520px] border-0 rounded-xl sm:rounded-2xl bg-black"
+                        frameBorder="0"
+                        scrolling="no"
+                        allowTransparency={true}
+                        allow="encrypted-media; autoplay; clipboard-write; picture-in-picture"
+                        title={activeModalPost.shortSnippet}
+                      />
+                    )}
+                  </div>
+
+                  {/* Reel Player Controls & Quick Switch Bar */}
+                  <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-xl bg-stone-50 border border-stone-200 text-xs">
+                    <div className="flex items-center gap-2">
+                      {activeModalPost.videoUrl && (
+                        <div className="inline-flex rounded-lg p-0.5 bg-stone-200/70">
+                          <button
+                            onClick={() => setVideoPlayerMode('video')}
+                            className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all cursor-pointer ${
+                              videoPlayerMode === 'video'
+                                ? 'bg-white text-orange-600 shadow-2xs'
+                                : 'text-stone-600 hover:text-stone-900'
+                            }`}
+                          >
+                            Video Langsung
+                          </button>
+                          <button
+                            onClick={() => setVideoPlayerMode('embed')}
+                            className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all cursor-pointer ${
+                              videoPlayerMode === 'embed'
+                                ? 'bg-white text-orange-600 shadow-2xs'
+                                : 'text-stone-600 hover:text-stone-900'
+                            }`}
+                          >
+                            Instagram Player
+                          </button>
+                        </div>
+                      )}
+                      <span className="text-stone-500 text-[11px] font-medium hidden xs:inline">
+                        {videoPlayerMode === 'embed' ? 'Memutar via Instagram Player' : 'Pemutar Video HD'}
+                      </span>
+                    </div>
+
+                    <a
+                      href={activeModalPost.permalink || activeModalPost.postUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-orange-50 text-orange-700 hover:bg-orange-100 font-bold text-[11px] transition-colors"
+                    >
+                      <span>Buka di Instagram</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
                 </div>
               ) : activeModalPost.mediaUrl ? (
-                <div className="rounded-xl overflow-hidden aspect-[4/3] w-full bg-stone-100 border border-stone-200 shadow-2xs">
+                <div className="rounded-xl sm:rounded-2xl overflow-hidden aspect-[4/3] w-full bg-stone-100 border border-stone-200 shadow-2xs">
                   <img
                     src={activeModalPost.mediaUrl}
                     alt={activeModalPost.shortSnippet}
                     className="w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      if (activeModalPost.thumbnailUrl && target.src !== activeModalPost.thumbnailUrl) {
+                        target.src = activeModalPost.thumbnailUrl;
+                      } else {
+                        target.src = '/fast_instagram_profile.webp';
+                      }
+                    }}
                   />
                 </div>
               ) : null}

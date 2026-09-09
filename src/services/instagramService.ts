@@ -254,8 +254,9 @@ export class InstagramService {
             permalink: item.permalink || INSTAGRAM_CONFIG.profileUrl,
             mediaType: isVideo ? 'REEL' : (item.media_type || 'IMAGE'),
             mediaUrl: displayImage,
-            thumbnailUrl: item.thumbnail_url,
+            thumbnailUrl: item.thumbnail_url || displayImage,
             videoUrl: isVideo ? item.media_url : undefined,
+            videoEmbedUrl: isVideo && item.permalink ? `${item.permalink.replace(/\/+$/, '')}/embed/` : undefined,
             authorAvatar: INSTAGRAM_CONFIG.profilePictureUrl,
             source: 'api'
           };
@@ -405,8 +406,9 @@ export class InstagramService {
                 permalink: item.permalink || INSTAGRAM_CONFIG.profileUrl,
                 mediaType: isVideo ? 'REEL' : (item.mediaType || 'IMAGE'),
                 mediaUrl: displayImage,
-                thumbnailUrl: item.sizes?.small?.mediaUrl || item.thumbnailUrl,
+                thumbnailUrl: item.sizes?.small?.mediaUrl || item.thumbnailUrl || displayImage,
                 videoUrl: isVideo ? item.mediaUrl : undefined,
+                videoEmbedUrl: isVideo && (item.permalink || item.postUrl) ? `${(item.permalink || item.postUrl).replace(/\/+$/, '')}/embed/` : undefined,
                 authorAvatar: profilePic,
                 source: 'api'
               };

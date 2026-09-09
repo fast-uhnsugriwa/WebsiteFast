@@ -28,6 +28,7 @@ export interface InstagramPost {
   mediaUrl?: string;
   thumbnailUrl?: string;
   videoUrl?: string;
+  videoEmbedUrl?: string;
   authorAvatar?: string;
   permalink?: string;
   timestamp?: string;
