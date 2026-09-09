@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion } from 'motion/react';
 import {
   Instagram,
@@ -15,45 +15,63 @@ import { InstagramPost } from '../types';
 import { InstagramService, INSTAGRAM_CONFIG } from '../services/instagramService';
 
 export const InstagramSection: React.FC = () => {
-  const [posts, setPosts] = useState<InstagramPost[]>([]);
+  // 1. Inisialisasi instan (0 ms) dari cache/arsip lokal agar tidak ada lag saat pertama kali load
+  const [posts, setPosts] = useState<InstagramPost[]>(() => InstagramService.getInitialPosts());
   const [selectedCategory, setSelectedCategory] = useState<string>('Semua');
   const [activeModalPost, setActiveModalPost] = useState<InstagramPost | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [visibleCount, setVisibleCount] = useState<number>(6);
   const [videoPlayerMode, setVideoPlayerMode] = useState<'video' | 'embed'>('video');
 
-  const handleOpenModal = (post: InstagramPost) => {
+  const categories = useMemo(
+    () => ['Semua', 'Akademik', 'Beasiswa', 'Prestasi', 'Workshop', 'Riset', 'Hari Raya'],
+    []
+  );
+
+  const handleOpenModal = useCallback((post: InstagramPost) => {
     setActiveModalPost(post);
     setVideoPlayerMode(post.videoUrl ? 'video' : 'embed');
-  };
-
-  const categories = ['Semua', 'Akademik', 'Beasiswa', 'Prestasi', 'Workshop', 'Riset', 'Hari Raya'];
-
-  const loadPosts = async () => {
-    try {
-      const res = await InstagramService.fetchPosts();
-      setPosts(res.posts);
-    } catch (err) {
-      console.error('Failed loading Instagram posts:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadPosts();
   }, []);
 
-  const handleCategoryChange = (cat: string) => {
+  const handleCategoryChange = useCallback((cat: string) => {
     setSelectedCategory(cat);
     setVisibleCount(6);
-  };
+  }, []);
 
-  const filteredPosts = selectedCategory === 'Semua'
-    ? posts
-    : posts.filter((p) => p.category === selectedCategory);
+  // 2. Background Sync (Stale-While-Revalidate): sinkronisasi live tanpa memblokir thread UI
+  useEffect(() => {
+    let isMounted = true;
+    const syncLatestFeed = async () => {
+      try {
+        const res = await InstagramService.fetchPosts();
+        if (isMounted && res.posts && res.posts.length > 0) {
+          setPosts(res.posts);
+        }
+      } catch (err) {
+        console.warn('Background sync Instagram feed skipped:', err);
+      }
+    };
 
-  const displayedPosts = filteredPosts.slice(0, visibleCount);
+    // Jalankan sync setelah frame pertama selesai agar tidak mengganggu rendering awal
+    const timeoutId = setTimeout(() => {
+      syncLatestFeed();
+    }, 100);
+
+    return () => {
+      isMounted = false;
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
+  // 3. Memoized filtering & pagination untuk mencegah kalkulasi ulang saat re-render
+  const filteredPosts = useMemo(() => {
+    if (selectedCategory === 'Semua') return posts;
+    return posts.filter((p) => p.category === selectedCategory);
+  }, [posts, selectedCategory]);
+
+  const displayedPosts = useMemo(() => {
+    return filteredPosts.slice(0, visibleCount);
+  }, [filteredPosts, visibleCount]);
 
   return (
     <section
@@ -66,8 +84,8 @@ export const InstagramSection: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.15 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8"
         >
           <div>
@@ -173,8 +191,8 @@ export const InstagramSection: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.96, y: 25 }}
             whileInView={{ opacity: 1, scale: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.15 }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             whileHover={{ scale: 1.01 }}
             className="rounded-2xl border-2 border-dashed border-amber-300/90 bg-amber-50/40 p-8 sm:p-14 text-center max-w-3xl mx-auto shadow-xs hover:shadow-md transition-all"
           >
@@ -225,7 +243,7 @@ export const InstagramSection: React.FC = () => {
               <article
                 key={post.id}
                 id={`post-card-${post.id}`}
-                className={`flex flex-col justify-between rounded-xl sm:rounded-2xl bg-white border shadow-2xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 overflow-hidden group ${
+                className={`flex flex-col justify-between rounded-xl sm:rounded-2xl bg-white border shadow-2xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 overflow-hidden group transform-gpu ${
                   post.isPinned
                     ? 'border-amber-300/90 shadow-amber-500/5 ring-1 ring-amber-400/40'
                     : 'border-stone-200/90 hover:border-amber-400/80'
@@ -241,6 +259,8 @@ export const InstagramSection: React.FC = () => {
                             src={post.authorAvatar || INSTAGRAM_CONFIG.profilePictureUrl}
                             alt="@fastsugriwa"
                             className="w-full h-full object-cover rounded-full"
+                            loading="lazy"
+                            decoding="async"
                             onError={(e) => {
                               e.currentTarget.src = '/fast_instagram_profile.webp';
                             }}
@@ -286,23 +306,23 @@ export const InstagramSection: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Post Media / Banner */}
+                  {/* Post Media / Banner (Menggunakan Thumbnail ringan ~30-50KB untuk rendering cepat & bebas lag) */}
                   {post.mediaUrl ? (
                     <div
                       onClick={() => handleOpenModal(post)}
                       className="relative aspect-square sm:aspect-[4/3] w-full overflow-hidden bg-stone-100 border-b border-stone-100 cursor-pointer"
                     >
                       <img
-                        src={post.mediaUrl}
+                        src={post.thumbnailUrl || post.mediaUrl}
                         alt={post.shortSnippet}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-out"
                         loading="lazy"
+                        decoding="async"
                         referrerPolicy="no-referrer"
-                        crossOrigin="anonymous"
                         onError={(e) => {
                           const target = e.currentTarget;
-                          if (post.thumbnailUrl && target.src !== post.thumbnailUrl) {
-                            target.src = post.thumbnailUrl;
+                          if (post.mediaUrl && target.src !== post.mediaUrl) {
+                            target.src = post.mediaUrl;
                           } else {
                             target.src = '/fast_instagram_profile.webp';
                           }
@@ -444,7 +464,7 @@ export const InstagramSection: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.15 }}
+          viewport={{ once: true, amount: 0.15 }}
           transition={{ duration: 0.5 }}
           className="mt-10 sm:mt-12 p-5 sm:p-7 md:p-8 rounded-2xl bg-gradient-to-br from-amber-50/80 via-orange-50/50 to-stone-50 border border-amber-200/80 shadow-xs flex flex-col md:flex-row items-center md:items-center justify-between gap-5 sm:gap-6 text-center md:text-left"
         >

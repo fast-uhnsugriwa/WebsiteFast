@@ -128,6 +128,27 @@ export class InstagramService {
     INSTAGRAM_CONFIG.accessToken ||
     '';
 
+  /**
+   * Mengembalikan postingan secara instan (0 ms) dari cache/arsip lokal
+   * sehingga website dapat langsung dirender tanpa menunggu fetch jaringan (Zero-Lag).
+   */
+  public static getInitialPosts(): InstagramPost[] {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY_ACCUMULATED) || localStorage.getItem(STORAGE_KEY_POSTS);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            return this.mergeAccumulatedPosts([], parsed, OFFICIAL_FAST_POSTS);
+          }
+        }
+      } catch (e) {
+        // Abaikan parse error jika ada
+      }
+    }
+    return this.mergeAccumulatedPosts([], [], OFFICIAL_FAST_POSTS);
+  }
+
   public static getToken(): string {
     return (
       this.userToken ||
