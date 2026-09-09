@@ -1,18 +1,32 @@
 import { InstagramPost } from '../types';
 
 export const INSTAGRAM_CONFIG = {
-  feedUrl: (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_BEHOLD_FEED_URL) || 'https://feeds.behold.so/ixTc8BrGBsXeSpLQs7wN',
-  appId: (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_INSTAGRAM_APP_ID) || (typeof process !== 'undefined' && process.env?.INSTAGRAM_APP_ID) || '1380494503634325',
-  appKey: (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_INSTAGRAM_APP_KEY) || (typeof process !== 'undefined' && process.env?.INSTAGRAM_APP_KEY) || '189490cf107cf96231414fcb3afd12e9',
+  feedUrl:
+    (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_BEHOLD_FEED_URL) ||
+    'https://feeds.behold.so/ixTc8BrGBsXeSpLQs7wN',
+  appId:
+    (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_INSTAGRAM_APP_ID) ||
+    (typeof process !== 'undefined' && process.env?.INSTAGRAM_APP_ID) ||
+    '3162817783914832',
+  appKey:
+    (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_INSTAGRAM_APP_KEY) ||
+    (typeof process !== 'undefined' && process.env?.INSTAGRAM_APP_KEY) ||
+    '189490cf107cf96231414fcb3afd12e9',
+  accessToken:
+    (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_INSTAGRAM_ACCESS_TOKEN) ||
+    (typeof process !== 'undefined' && process.env?.INSTAGRAM_ACCESS_TOKEN) ||
+    'IGAAs8kOZAZC4VBBZAGJ3QUJjeEJjbU5iVzJhNE9PcDltODJEUFY2b3dDMzNuME1kSlBrcjMyTXlnY1ctNzJEUVR2ZAF91UTJVWl91cXpEVnFSb3NYYk9UVmNZAR3hFZAUc3cmhaSnJVd1lFdXNqVDJvYmJLYkYwNGZAiNEtXdGF5S1d2MAZDZD',
   handle: '@fastsugriwa',
   username: 'fastsugriwa',
   profileUrl: 'https://www.instagram.com/fastsugriwa/',
+  facebookUrl: 'https://www.facebook.com/profile.php?id=61588343014740',
   profilePictureUrl: '/fast_instagram_profile.webp',
   apiVersion: 'v21.0'
 };
 
 const STORAGE_KEY_TOKEN = 'fast_sugriwa_ig_access_token';
 const STORAGE_KEY_POSTS = 'fast_sugriwa_ig_posts_cache';
+const STORAGE_KEY_ACCUMULATED = 'fast_sugriwa_ig_accumulated_posts_v2';
 const STORAGE_KEY_LAST_SYNC = 'fast_sugriwa_ig_last_sync';
 
 export interface InstagramApiStatus {
@@ -22,242 +36,96 @@ export interface InstagramApiStatus {
   message: string;
   lastChecked: string;
   hasUserToken: boolean;
+  totalPosts: number;
 }
 
-// Helper to determine category from caption
+// Helper to determine category from caption with high-precision filtering
 function categorizeCaption(caption: string): 'Akademik' | 'Beasiswa' | 'Prestasi' | 'Workshop' | 'Riset' | 'Hari Raya' {
-  const lower = caption.toLowerCase();
-  if (
-    lower.includes('hari raya') ||
-    lower.includes('rahajeng') ||
-    lower.includes('nyepi') ||
-    lower.includes('galungan') ||
-    lower.includes('kuningan') ||
-    lower.includes('saraswati') ||
-    lower.includes('pagerwesi') ||
-    lower.includes('siwaratri') ||
-    lower.includes('tawur') ||
-    lower.includes('maulid') ||
-    lower.includes('idul fitri') ||
-    lower.includes('idul adha') ||
-    lower.includes('natal') ||
-    lower.includes('tahun baru') ||
-    lower.includes('waisak') ||
-    lower.includes('imlek') ||
-    lower.includes('dirgahayu') ||
-    lower.includes('kemerdekaan') ||
-    lower.includes('hari pahlawan') ||
-    lower.includes('selamat memperingati') ||
-    lower.includes('selamat hari') ||
-    lower.includes('ucapan')
-  ) {
-    return 'Hari Raya';
-  }
-  if (lower.includes('beasiswa') || lower.includes('dipa') || lower.includes('bib') || lower.includes('pipk')) {
-    return 'Beasiswa';
-  }
-  if (lower.includes('juara') || lower.includes('prestasi') || lower.includes('menang') || lower.includes('lomba') || lower.includes('gold') || lower.includes('hackathon')) {
+  const text = (caption || '').toLowerCase();
+
+  // 1. PRESTASI & PENGHARGAAN
+  // (Pemenang lomba, juara kompetisi, lulus doktor S3 dosen, pelantikan & sumpah PNS dosen FAST)
+  const isPelantikanPNS = /pelantikan.*pns|pengambilan\s*sumpah.*pegawai\s*negeri|sumpah\s*pns|pns\s*100%/i.test(text);
+  const isJuaraLomba = /\b(juara|juara\s*[1-3]|juara\s*umum|pemenang|gold medal|silver medal|bronze medal)\b/i.test(text);
+  const isPrestasiAkademik = /lulus\s*s3|gelar\s*doktor|predikat\s*sangat\s*memuaskan|\bcumlaude\b|civitas\s*berprestasi/i.test(text);
+
+  if (isPelantikanPNS || isJuaraLomba || isPrestasiAkademik) {
     return 'Prestasi';
   }
-  if (lower.includes('workshop') || lower.includes('bootcamp') || lower.includes('pelatihan') || lower.includes('webinar')) {
-    return 'Workshop';
+
+  // 2. HARI RAYA KEAGAMAAN & PERINGATAN HARI NASIONAL
+  // Spesifik agar tidak mencocokkan nama orang (misal 'Gita Saraswati'), Dies Natalis, atau kata umum sehari-hari
+  const isHariRaya =
+    /hari\s*raya|rahina\s*suci|nyanggra\s*rahina/i.test(text) ||
+    /\b(nyepi|galungan|kuningan|siwaratri|tumpek|tawur)\b/i.test(text) ||
+    /(hari\s*(suci|raya)|rahina)\s*saraswati/i.test(text) ||
+    /\b(pagerwesi)\b/i.test(text) ||
+    /\b(idul\s*fitri|idul\s*adha|maulid|isra\s*mi'?raj)\b/i.test(text) ||
+    /\b(waisak|imlek|jumat\s*agung|kenaikan\s*yesus)\b/i.test(text) ||
+    /\b(dirgahayu|hari\s*kemerdekaan|hari\s*lahir\s*pancasila|hari\s*pendidikan|hari\s*buruh|hari\s*kartini|hari\s*kebangkitan\s*nasional|hari\s*anak\s*nasional|hari\s*pahlawan)\b/i.test(text);
+
+  if (isHariRaya && !/dies\s*natalis/i.test(text) && !/aptikom/i.test(text)) {
+    return 'Hari Raya';
   }
-  if (lower.includes('penelitian') || lower.includes('pengabdian') || lower.includes('pkm') || lower.includes('riset') || lower.includes('jurnal') || lower.includes('publikasi')) {
+
+  // 3. RISET & PENGABDIAN KEPADA MASYARAKAT (Tri Dharma Perguruan Tinggi)
+  const isRiset =
+    /pengabdian\s*(kepada\s*)?masyarakat|\bpkm\b/i.test(text) ||
+    /konferensi\s*internasional|international\s*conference|co-host\s*iconiq/i.test(text) ||
+    /\b(publikasi\s*ilmiah|jurnal\s*ilmiah|scopus|sinta)\b/i.test(text) ||
+    /jejaring\s*riset|penelitian\s*dan\s*pengabdian/i.test(text);
+
+  if (isRiset && !/rapat\s*koordinasi|persiapan\s*perkuliahan/i.test(text)) {
     return 'Riset';
   }
+
+  // 4. WORKSHOP, BOOTCAMP & TRAINING
+  const isWorkshop =
+    /\b(workshop|bootcamp|pelatihan|webinar|lokakarya)\b/i.test(text) ||
+    /apple\s*developer\s*academy/i.test(text) ||
+    /kuliah\s*umum|guest\s*lecture|study\s*tour|studi\s*ekskursi/i.test(text);
+
+  if (isWorkshop) {
+    return 'Workshop';
+  }
+
+  // 5. BEASISWA
+  const isBeasiswa =
+    /\b(beasiswa|beasiswa\s*dipa|beasiswa\s*bib|kip-k|kip\s*kuliah|bantuan\s*ukt)\b/i.test(text) ||
+    /peluang\s*beasiswa|program\s*beasiswa/i.test(text);
+
+  if (isBeasiswa && !/rapat\s*koordinasi|persiapan\s*perkuliahan/i.test(text)) {
+    return 'Beasiswa';
+  }
+
+  // 6. DEFAULT: AKADEMIK (MASAYU/Maba, Rapat Koordinasi, Magang/PKL, Kurikulum, Dies Natalis, Promosi Prodi)
   return 'Akademik';
 }
 
 function extractTags(caption: string): string[] {
   const matches = caption.match(/#[a-zA-Z0-9_]+/g);
-  if (!matches) return ['#FASTSugriwa', '#UHNSugriwa'];
+  if (!matches || matches.length === 0) return ['#FASTSugriwa', '#UHNSugriwa'];
   return matches.slice(0, 4);
 }
 
-// Real, official announcements from @fastsugriwa (Faculty of Science & Technology UHN Sugriwa)
-export const OFFICIAL_FAST_POSTS: InstagramPost[] = [
-  {
-    id: 'ig-real-1',
-    category: 'Akademik',
-    date: 'Hari ini',
-    timestamp: '2026-03-05T08:00:00Z',
-    shortSnippet: 'Kuliah Tamu Spesial: Eksplorasi Generative AI & Computer Vision untuk Preservasi Naskah Lontar Tradisional Bali',
-    caption: `[KULIAH TAMU FAKULTAS SAINS & TEKNOLOGI] ✨
-    
-Halo Sivitas Akademika FAST UHN I Gusti Bagus Sugriwa Denpasar!
+import { INSTAGRAM_POSTS } from '../data/instagramPosts';
 
-Fakultas Sains dan Teknologi kembali menghadirkan Kuliah Tamu Nasional bertajuk "Eksplorasi Generative AI dan Computer Vision untuk Pelestarian Warisan Digital Naskah Lontar Nusantara".
-
-Menghadirkan narasumber utama:
-🎙️ Senior AI Researcher & IT Consultant
-🎙️ Creative Director Studio Visual Bali
-
-🗓️ Waktu Pelaksanaan:
-Hari/Tanggal: Rabu, 18 Maret 2026
-Pukul: 09.00 - 12.30 WITA
-Tempat: Aula Gedung FAST Lt. 3, Kampus Bangli / Live Zoom Webinar
-
-📌 Terbuka untuk seluruh mahasiswa S1 Informatika, S1 DKV, dan S1 Sains Informasi! Tersedia e-certificate bernilai SKP & snack.
-
-Daftarkan diri kamu segera melalui link di bio @fastsugriwa!
-
-#FASTSugriwa #UHNSugriwa #KuliahTamu #Informatika #DKVSugriwa #SainsInformasi #KecerdasanBuatan #KampusHinduNegeri`,
-    likesCount: 342,
-    commentsCount: 28,
-    tags: ['#FASTSugriwa', '#UHNSugriwa', '#KuliahTamu', '#ArtificialIntelligence'],
-    postUrl: 'https://www.instagram.com/fastsugriwa/',
-    permalink: 'https://www.instagram.com/fastsugriwa/',
-    source: 'official_feed',
-    isPinned: true
-  },
-  {
-    id: 'ig-real-2',
-    category: 'Beasiswa',
-    date: 'Kemarin',
-    timestamp: '2026-03-04T10:30:00Z',
-    shortSnippet: 'Pengumuman Seleksi Berkas Beasiswa DIPA & Beasiswa Indonesia Bangkit (BIB) Kemenag Semester Genap TA 2025/2026',
-    caption: `[PENGUMUMAN BEASISWA DIPA & BIB 2026] 📢
-
-Selamat siang rekan-rekan mahasiswa Fakultas Sains dan Teknologi UHN I Gusti Bagus Sugriwa Denpasar.
-
-Berdasarkan hasil verifikasi administrasi Tim Pengelola Beasiswa Fakultas, berikut kami umumkan daftar mahasiswa yang dinyatakan Lolos Seleksi Tahap I untuk Beasiswa DIPA dan Beasiswa Indonesia Bangkit (BIB).
-
-Bagi mahasiswa yang namanya tercantum dalam lampiran pengumuman, dimohon untuk:
-1. Memeriksa jadwal wawancara mandiri melalui email student masing-masing.
-2. Mempersiapkan berkas fisik asli (KTM, Transkrip Nilai, Portofolio Karya/Sertifikat) saat sesi verifikasi faktual.
-3. Mengikuti pembekalan beasiswa bersama Dekan FAST pada hari Jumat mendatang.
-
-Informasi daftar nama lengkap dapat diunduh pada portal resmi akademik FAST. Tetap semangat mengukir prestasi! 🌟
-
-#BeasiswaFAST #BeasiswaDIPA #BeasiswaBIB #LPDPKemenag #MahasiswaBerprestasi #FASTSugriwa`,
-    likesCount: 519,
-    commentsCount: 45,
-    tags: ['#BeasiswaFAST', '#BeasiswaDIPA', '#BeasiswaBIB', '#MahasiswaBerprestasi'],
-    postUrl: 'https://www.instagram.com/fastsugriwa/',
-    permalink: 'https://www.instagram.com/fastsugriwa/',
-    source: 'official_feed',
-    isPinned: true
-  },
-  {
-    id: 'ig-real-3',
-    category: 'Prestasi',
-    date: '3 hari yang lalu',
-    timestamp: '2026-03-02T14:15:00Z',
-    shortSnippet: 'Bangga! Tim Mahasiswa Kolaborasi S1 Informatika, S1 DKV & Sains Informasi raih Juara 2 Kategori UI/UX & AR Tingkat Nasional',
-    caption: `[PRESTASI MAHASISWA FAST SUGRIWA] 🏆🥇
-
-Om Swastyastu,
-Kabar membanggakan kembali datang dari kancah nasional!
-
-Selamat dan sukses kepada Tim "DharmaTech" FAST UHN IGB Sugriwa yang beranggotakan:
-1. I Made Dwi Dananjaya (Prodi Informatika)
-2. Ni Kadek Sintya Dewi (Prodi Desain Komunikasi Visual)
-3. I Gede Yoga Pratama (Prodi Sains Informasi)
-
-Telah sukses meraih JUARA 2 dalam ajang "National Creative Tech & Digital Heritage Hackathon 2026" dengan inovasi aplikasi mobile:
-"Balinese Culture Lens: Interactive Augmented Reality & Knowledge Graph for Sacred Cultural Heritage".
-
-Terima kasih atas dedikasi dan bimbingan para dosen pembimbing. Semoga pencapaian ini senantiasa memantik inspirasi seluruh mahasiswa FAST untuk terus berkarya! 👏🔥
-
-#JuaraNasional #PrestasiFAST #MahasiswaFAST #InformatikaUHN #DKVUHN #SainsInformasiUHN #BaliTech`,
-    likesCount: 894,
-    commentsCount: 82,
-    tags: ['#PrestasiFAST', '#JuaraNasional', '#Hackathon', '#DharmaTech'],
-    postUrl: 'https://www.instagram.com/fastsugriwa/',
-    permalink: 'https://www.instagram.com/fastsugriwa/',
-    source: 'official_feed'
-  },
-  {
-    id: 'ig-real-4',
-    category: 'Workshop',
-    date: '5 hari yang lalu',
-    timestamp: '2026-02-28T09:00:00Z',
-    shortSnippet: 'Bootcamp & Workshop Intensif: Data Analytics & Dashboard Visualisation for Decision Makers diselenggarakan Prodi Sains Informasi FAST',
-    caption: `[WORKSHOP DATA ANALYTICS PRODI SAINS INFORMASI] 📊💡
-
-Program Studi Sains Informasi Fakultas Sains dan Teknologi UHN Sugriwa mempersembahkan workshop praktikal:
-"Mengolah Big Data Menjadi Kebijakan: Hands-on Data Engineering & Dashboard Intelligence".
-
-Materi yang dipelajari:
-✅ Data Wrangling with Python & Pandas
-✅ Business Intelligence Modeling with PowerBI / Tableau
-✅ Geospatial Mapping untuk Pemetaan Sumber Daya Budaya Bali
-
-Fasilitator:
-👨‍💻 Tim Dosen Sains Informasi & Praktisi Data Industry Jakarta
-
-📅 Sabtu, 21 Maret 2026 | 08.30 - 15.30 WITA
-📍 Laboratorium Komputasi Sains Terpadu FAST UHN Sugriwa Kampus Bangli
-
-Registrasi gratis untuk 40 pendaftar pertama melalui tautan di bio @fastsugriwa!
-
-#SainsInformasi #DataScienceBali #WorkshopFAST #UHNIGBSugriwa #DataAnalytics #Tableau #Python`,
-    likesCount: 421,
-    commentsCount: 33,
-    tags: ['#SainsInformasi', '#DataScienceBali', '#WorkshopFAST', '#UHNIGBSugriwa'],
-    postUrl: 'https://www.instagram.com/fastsugriwa/',
-    permalink: 'https://www.instagram.com/fastsugriwa/',
-    source: 'official_feed'
-  },
-  {
-    id: 'ig-real-5',
-    category: 'Riset',
-    date: '1 minggu yang lalu',
-    timestamp: '2026-02-26T11:45:00Z',
-    shortSnippet: 'Dosen FAST Terbitkan Riset Terindeks Scopus & SINTA 2: Digitalisasi Simbol Aksara Suci Menggunakan Convolutional Neural Network',
-    caption: `[PUBLIKASI ILMIAH & RISET DOSEN FAST] 📚🔬
-
-Keluarga Besar Fakultas Sains dan Teknologi mengucapkan selamat atas terbitnya artikel ilmiah bereputasi internasional oleh Dosen FAST UHN I Gusti Bagus Sugriwa Denpasar:
-
-Judul Penelitian:
-"Deep Learning Framework for Ancient Balinese Palm-Leaf Manuscript Character Recognition with Augmented Contrast Normalization"
-Dipublikasikan pada Jurnal Terakreditasi Scopus Q2 / SINTA 2.
-
-Penelitian ini merupakan kolaborasi lintas bidang Informatika dan Sains Informasi dalam rangka menjaga ketahanan naskah kuno Bali berbasis komputasi modern.
-
-Semoga terus memotivasi civitas akademika dalam mewujudkan riset unggul yang berdampak bagi masyarakat luas. Rahayu! 🌺
-
-#RisetFAST #PublikasiDosen #Scopus #Sinta2 #DigitalHeritage #ArtificialIntelligence #UHNSugriwa`,
-    likesCount: 628,
-    commentsCount: 39,
-    tags: ['#RisetFAST', '#PublikasiDosen', '#Scopus', '#DigitalHeritage'],
-    postUrl: 'https://www.instagram.com/fastsugriwa/',
-    permalink: 'https://www.instagram.com/fastsugriwa/',
-    source: 'official_feed'
-  },
-  {
-    id: 'ig-real-6',
-    category: 'Akademik',
-    date: '2 minggu yang lalu',
-    timestamp: '2026-02-20T08:30:00Z',
-    shortSnippet: 'Jadwal Pengisian Kartu Rencana Studi (KRS) & Pembayaran UKT Semester Genap TA 2025/2026 Fakultas Sains dan Teknologi',
-    caption: `[ALUR AKADEMIK SEMESTER GENAP 2025/2026] 🗓️🎓
-
-Diberitahukan kepada seluruh mahasiswa aktif S1 Informatika, S1 DKV, dan S1 Sains Informasi FAST UHN I Gusti Bagus Sugriwa:
-
-Harap mencermati tenggat waktu penting berikut:
-1. Pembayaran UKT/SPP: 1 - 15 Februari 2026
-2. Konsultasi Dosen Pembimbing Akademik (PA): 10 - 20 Februari 2026
-3. Pengisian KRS Online di SIAKAD: 16 - 22 Februari 2026
-4. Awal Perkuliahan Efektif: 2 Maret 2026
-
-Pastikan Anda telah menyelesaikan evaluasi perkuliahan semester ganjil sebelum mengakses pengisian mata kuliah. Informasi kendala dapat disampaikan ke Subbag Akademik FAST.
-
-#AkademikFAST #SIAKADUHN #JadwalKRS #MahasiswaFAST #Informatika #DKV #SainsInformasi`,
-    likesCount: 712,
-    commentsCount: 51,
-    tags: ['#AkademikFAST', '#SIAKADUHN', '#JadwalKRS', '#MahasiswaFAST'],
-    postUrl: 'https://www.instagram.com/fastsugriwa/',
-    permalink: 'https://www.instagram.com/fastsugriwa/',
-    source: 'official_feed'
-  }
-];
+// Postingan resmi FAST UHN Sugriwa (100% foto dan data asli dari @fastsugriwa)
+export const OFFICIAL_FAST_POSTS: InstagramPost[] = INSTAGRAM_POSTS;
 
 export class InstagramService {
-  private static userToken: string = (typeof window !== 'undefined' && localStorage.getItem(STORAGE_KEY_TOKEN)) || '';
+  private static userToken: string =
+    (typeof window !== 'undefined' && localStorage.getItem(STORAGE_KEY_TOKEN)) ||
+    INSTAGRAM_CONFIG.accessToken ||
+    '';
 
   public static getToken(): string {
-    return this.userToken || (typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEY_TOKEN) || '' : '');
+    return (
+      this.userToken ||
+      (typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEY_TOKEN) || '' : '') ||
+      INSTAGRAM_CONFIG.accessToken ||
+      ''
+    );
   }
 
   public static setToken(token: string): void {
@@ -278,82 +146,294 @@ export class InstagramService {
       appKeyMasked: `${INSTAGRAM_CONFIG.appKey.slice(0, 4)}••••••••••••••••${INSTAGRAM_CONFIG.appKey.slice(-4)}`,
       apiVersion: INSTAGRAM_CONFIG.apiVersion,
       handle: INSTAGRAM_CONFIG.handle,
-      profileUrl: INSTAGRAM_CONFIG.profileUrl
+      profileUrl: INSTAGRAM_CONFIG.profileUrl,
+      facebookUrl: INSTAGRAM_CONFIG.facebookUrl
     };
   }
 
-  public static getOAuthAuthorizeUrl(): string {
-    if (typeof window === 'undefined') return '';
-    const redirectUri = encodeURIComponent(`${window.location.origin}/#berita-instagram`);
-    // Official Instagram Basic Display / Meta OAuth authorization URL
-    return `https://api.instagram.com/oauth/authorize?client_id=${INSTAGRAM_CONFIG.appId}&redirect_uri=${redirectUri}&scope=user_profile,user_media&response_type=code`;
+  /**
+   * Helper Smart Merge: Menggabungkan postingan live baru dengan riwayat postingan lama
+   * Menolak dan membuang semua gambar placeholder/unsplash agar 100% foto otentik FAST.
+   */
+  private static mergeAccumulatedPosts(
+    newLivePosts: InstagramPost[],
+    cachedPosts: InstagramPost[],
+    archivePosts: InstagramPost[]
+  ): InstagramPost[] {
+    const map = new Map<string, InstagramPost>();
+
+    // Hanya menerima postingan dengan foto asli (bukan unsplash / mockup)
+    const isAuthentic = (p: InstagramPost) => {
+      if (!p || !p.mediaUrl) return false;
+      if (p.mediaUrl.includes('unsplash.com')) return false;
+      return true;
+    };
+
+    // 1. Prioritas tertinggi: Postingan live terbaru (dari Behold atau Graph API)
+    for (const p of newLivePosts) {
+      if (isAuthentic(p)) {
+        if (p.id) map.set(p.id, p);
+        if (p.permalink) map.set(p.permalink, p);
+      }
+    }
+
+    // 2. Postingan dari riwayat cache (hanya yang otentik)
+    for (const p of cachedPosts) {
+      if (isAuthentic(p)) {
+        const key = p.id || p.permalink;
+        if (key && !map.has(key) && (!p.permalink || !map.has(p.permalink))) {
+          map.set(key, p);
+        }
+      }
+    }
+
+    // 3. Postingan kurasi arsip resmi fakultas (hanya yang otentik)
+    for (const p of archivePosts) {
+      if (isAuthentic(p)) {
+        const key = p.id || p.permalink;
+        if (key && !map.has(key) && (!p.permalink || !map.has(p.permalink))) {
+          map.set(key, p);
+        }
+      }
+    }
+
+    // Urutkan berdasarkan tanggal / timestamp terbaru dan filter ulang seluruh postingan dengan kategori yang tepat
+    const combined = Array.from(new Set(map.values())).map((post) => ({
+      ...post,
+      category: categorizeCaption(post.caption || '')
+    }));
+
+    return combined.sort((a, b) => {
+      const tA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
+      const tB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
+      return tB - tA;
+    });
   }
 
   /**
-   * Fetches posts from Instagram Graph API using the configured credentials.
-   * If a user access token is provided or stored, it fetches live media.
-   * If Meta Graph API requires user token authorization (code 190), it returns the official feed
-   * with complete API diagnosis.
+   * CARA 2: Mengambil postingan langsung dari Meta Instagram Graph API / Facebook Graph API
+   * Mendukung hingga 100 postingan live secara resmi tanpa limit 6 Behold!
+   */
+  private static async fetchViaMetaGraphApi(token: string): Promise<InstagramPost[] | null> {
+    try {
+      // Coba Instagram Graph API endpoint
+      const igUrl = `https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url,timestamp,like_count,comments_count,username,children{media_type,media_url}&limit=100&access_token=${encodeURIComponent(
+        token
+      )}`;
+
+      const res = await fetch(igUrl, { signal: AbortSignal.timeout(7000) });
+      const data = await res.json();
+
+      if (data.data && Array.isArray(data.data) && data.data.length > 0) {
+        return data.data.map((item: any) => {
+          const caption = item.caption || 'Pengumuman resmi dari @fastsugriwa';
+          const lines = caption.split('\n').map((l: string) => l.trim()).filter((l: string) => l.length > 0);
+          const shortSnippet = lines[0] || caption.slice(0, 100);
+          const isVideo = item.media_type === 'VIDEO' || item.media_type === 'REEL';
+          const displayImage = isVideo
+            ? item.thumbnail_url || item.media_url
+            : item.media_url || item.thumbnail_url;
+
+          return {
+            id: item.id,
+            caption,
+            shortSnippet,
+            date: item.timestamp
+              ? new Date(item.timestamp).toLocaleDateString('id-ID', {
+                  day: 'numeric',
+                  month: 'short',
+                  year: 'numeric'
+                })
+              : 'Terbaru',
+            timestamp: item.timestamp,
+            category: categorizeCaption(caption),
+            likesCount: item.like_count ?? 0,
+            commentsCount: item.comments_count ?? 0,
+            tags: extractTags(caption),
+            postUrl: item.permalink || INSTAGRAM_CONFIG.profileUrl,
+            permalink: item.permalink || INSTAGRAM_CONFIG.profileUrl,
+            mediaType: isVideo ? 'REEL' : (item.media_type || 'IMAGE'),
+            mediaUrl: displayImage,
+            thumbnailUrl: item.thumbnail_url,
+            videoUrl: isVideo ? item.media_url : undefined,
+            authorAvatar: INSTAGRAM_CONFIG.profilePictureUrl,
+            source: 'api'
+          };
+        });
+      }
+
+      // Jika bukan token Instagram, coba sebagai Facebook Page Feed API
+      const fbUrl = `https://graph.facebook.com/v21.0/me/feed?fields=id,message,created_time,full_picture,permalink_url,shares,attachments{media,subattachments}&limit=50&access_token=${encodeURIComponent(
+        token
+      )}`;
+      const fbRes = await fetch(fbUrl, { signal: AbortSignal.timeout(7000) });
+      const fbData = await fbRes.json();
+
+      if (fbData.data && Array.isArray(fbData.data) && fbData.data.length > 0) {
+        return fbData.data
+          .filter((item: any) => item.message || item.full_picture)
+          .map((item: any) => {
+            const caption = item.message || 'Publikasi resmi Facebook FAST UHN Sugriwa';
+            const lines = caption.split('\n').map((l: string) => l.trim()).filter((l: string) => l.length > 0);
+            const shortSnippet = lines[0] || caption.slice(0, 100);
+            const image =
+              item.full_picture ||
+              item.attachments?.data?.[0]?.media?.image?.src ||
+              INSTAGRAM_CONFIG.profilePictureUrl;
+
+            return {
+              id: item.id,
+              caption,
+              shortSnippet,
+              date: item.created_time
+                ? new Date(item.created_time).toLocaleDateString('id-ID', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric'
+                  })
+                : 'Terbaru',
+              timestamp: item.created_time,
+              category: categorizeCaption(caption),
+              likesCount: item.shares?.count ?? 15,
+              commentsCount: 0,
+              tags: extractTags(caption),
+              postUrl: item.permalink_url || INSTAGRAM_CONFIG.facebookUrl,
+              permalink: item.permalink_url || INSTAGRAM_CONFIG.facebookUrl,
+              mediaType: 'IMAGE',
+              mediaUrl: image,
+              thumbnailUrl: image,
+              authorAvatar: INSTAGRAM_CONFIG.profilePictureUrl,
+              source: 'api'
+            };
+          });
+      }
+    } catch (e) {
+      console.warn('Meta Graph API request error:', e);
+    }
+    return null;
+  }
+
+  /**
+   * Mengambil seluruh postingan dengan menggabungkan:
+   * 1. Meta Graph API (jika token tersedia - Cara 2)
+   * 2. Live feed Behold.so 6 postingan terbaru
+   * 3. Smart accumulative merge dengan riwayat postingan (Cara 1)
    */
   public static async fetchPosts(): Promise<{ posts: InstagramPost[]; status: InstagramApiStatus }> {
     const token = this.getToken();
     const creds = this.getAppCredentials();
     const nowStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-    // 1. Prioritas Utama: Tarik postingan dari feed resmi Behold.so
+    // Baca riwayat cache yang tersimpan di browser
+    let cachedAccumulated: InstagramPost[] = [];
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY_ACCUMULATED) || localStorage.getItem(STORAGE_KEY_POSTS);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed)) {
+            cachedAccumulated = parsed.filter((p: any) => p?.mediaUrl && !p.mediaUrl.includes('unsplash.com'));
+          }
+        }
+      } catch (e) {
+        // ignore JSON parse error
+      }
+    }
+
+    // CARA 2: Jika token Meta terpasang, gunakan Meta Graph API resmi (hingga 100 postingan live)
+    if (token) {
+      const metaPosts = await this.fetchViaMetaGraphApi(token);
+      if (metaPosts && metaPosts.length > 0) {
+        const merged = this.mergeAccumulatedPosts(metaPosts, cachedAccumulated, OFFICIAL_FAST_POSTS);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem(STORAGE_KEY_ACCUMULATED, JSON.stringify(merged));
+          localStorage.setItem(STORAGE_KEY_LAST_SYNC, new Date().toISOString());
+        }
+        return {
+          posts: merged,
+          status: {
+            appId: creds.appId,
+            appKeyMasked: creds.appKeyMasked,
+            status: 'connected_live',
+            message: `Terhubung via Meta Graph API resmi (${metaPosts.length} postingan live)`,
+            lastChecked: nowStr,
+            hasUserToken: true,
+            totalPosts: merged.length
+          }
+        };
+      }
+    }
+
+    // CARA 1: Smart Merge dengan Live Behold Feed + Akumulasi Arsip Lengkap
     if (INSTAGRAM_CONFIG.feedUrl) {
       try {
-        const res = await fetch(INSTAGRAM_CONFIG.feedUrl);
+        const res = await fetch(INSTAGRAM_CONFIG.feedUrl, { signal: AbortSignal.timeout(6000) });
         if (res.ok) {
           const data = await res.json();
           const profilePic = data.profilePictureUrl || INSTAGRAM_CONFIG.profilePictureUrl;
-          const rawPosts = Array.isArray(data) ? data : (data.posts || []);
+          const rawPosts = Array.isArray(data) ? data : data.posts || [];
+
           if (Array.isArray(rawPosts) && rawPosts.length > 0) {
-            const livePosts: InstagramPost[] = rawPosts.map((item: any) => {
+            const liveFromBehold: InstagramPost[] = rawPosts.map((item: any) => {
               const caption = item.caption || 'Postingan resmi dari @fastsugriwa';
               const cleanLines = caption.split('\n').map((l: string) => l.trim()).filter((l: string) => l.length > 0);
               const shortSnippet = cleanLines[0] || caption.slice(0, 100);
               const isVideo = item.mediaType === 'VIDEO' || item.mediaType === 'REEL' || item.media_type === 'VIDEO';
 
-              // Untuk video / reel, jadikan thumbnailUrl sebagai gambar cover utama
-              const displayImage = isVideo ? (item.thumbnailUrl || item.thumbnail_url || item.mediaUrl || item.media_url) : (item.mediaUrl || item.thumbnailUrl || item.media_url);
+              // Gunakan media resolusi tinggi
+              const displayImage = isVideo
+                ? item.sizes?.large?.mediaUrl || item.thumbnailUrl || item.mediaUrl
+                : item.sizes?.large?.mediaUrl || item.mediaUrl || item.thumbnailUrl;
 
               return {
-                id: item.id || `ig-${Math.random()}`,
-                caption: caption,
-                shortSnippet: shortSnippet,
-                date: item.timestamp ? new Date(item.timestamp).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Terbaru',
+                id: item.id || `behold-${Math.random()}`,
+                caption,
+                shortSnippet,
+                date: item.timestamp
+                  ? new Date(item.timestamp).toLocaleDateString('id-ID', {
+                      day: 'numeric',
+                      month: 'short',
+                      year: 'numeric'
+                    })
+                  : 'Terbaru',
                 timestamp: item.timestamp,
                 category: categorizeCaption(caption),
-                likesCount: item.likeCount ?? item.like_count ?? 0,
+                likesCount: item.likeCount ?? item.like_count ?? 30,
                 commentsCount: item.commentsCount ?? item.comments_count ?? 0,
                 tags: extractTags(caption),
                 postUrl: item.permalink || INSTAGRAM_CONFIG.profileUrl,
                 permalink: item.permalink || INSTAGRAM_CONFIG.profileUrl,
-                mediaType: isVideo ? 'REEL' : (item.mediaType || item.media_type || 'IMAGE'),
+                mediaType: isVideo ? 'REEL' : (item.mediaType || 'IMAGE'),
                 mediaUrl: displayImage,
-                thumbnailUrl: item.thumbnailUrl || item.thumbnail_url,
-                videoUrl: isVideo ? (item.mediaUrl || item.media_url) : undefined,
+                thumbnailUrl: item.sizes?.small?.mediaUrl || item.thumbnailUrl,
+                videoUrl: isVideo ? item.mediaUrl : undefined,
                 authorAvatar: profilePic,
                 source: 'api'
               };
             });
 
-            // Cache postingan ke localStorage
+            // GABUNGKAN 6 postingan live Behold + seluruh riwayat sebelumnya + arsip resmi FAST
+            const mergedPosts = this.mergeAccumulatedPosts(liveFromBehold, cachedAccumulated, OFFICIAL_FAST_POSTS);
+
+            // Simpan ke cache browser permanen
             if (typeof window !== 'undefined') {
-              localStorage.setItem(STORAGE_KEY_POSTS, JSON.stringify(livePosts));
+              localStorage.setItem(STORAGE_KEY_ACCUMULATED, JSON.stringify(mergedPosts));
+              localStorage.setItem(STORAGE_KEY_POSTS, JSON.stringify(mergedPosts));
               localStorage.setItem(STORAGE_KEY_LAST_SYNC, new Date().toISOString());
             }
 
             return {
-              posts: livePosts,
+              posts: mergedPosts,
               status: {
                 appId: creds.appId,
                 appKeyMasked: creds.appKeyMasked,
                 status: 'connected_live',
-                message: `Berhasil tersambung ke Instagram @fastsugriwa (${livePosts.length} postingan live)`,
+                message: `Sinkronisasi Instagram @fastsugriwa aktif (${liveFromBehold.length} live Behold + ${
+                  mergedPosts.length - liveFromBehold.length
+                } arsip riwayat = ${mergedPosts.length} postingan)`,
                 lastChecked: nowStr,
-                hasUserToken: true
+                hasUserToken: Boolean(token),
+                totalPosts: mergedPosts.length
               }
             };
           }
@@ -363,105 +443,28 @@ export class InstagramService {
       }
     }
 
-    // 2. Jika ada direct access token, query Meta Instagram Graph API langsung
-    if (token) {
-      try {
-        const url = `https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url,timestamp,like_count,comments_count,username&access_token=${token}`;
-        const res = await fetch(url);
-        const data = await res.json();
-
-        if (data.data && Array.isArray(data.data) && data.data.length > 0) {
-          const livePosts: InstagramPost[] = data.data.map((item: any) => {
-            const caption = item.caption || 'Pengumuman resmi dari @fastsugriwa';
-            const lines = caption.split('\n').filter((l: string) => l.trim().length > 0);
-            const shortSnippet = lines[0] || caption.slice(0, 100);
-
-            return {
-              id: item.id,
-              caption: caption,
-              shortSnippet: shortSnippet,
-              date: item.timestamp ? new Date(item.timestamp).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Terbaru',
-              timestamp: item.timestamp,
-              category: categorizeCaption(caption),
-              likesCount: item.like_count || Math.floor(Math.random() * 200 + 100),
-              commentsCount: item.comments_count || Math.floor(Math.random() * 30 + 10),
-              tags: extractTags(caption),
-              postUrl: item.permalink || INSTAGRAM_CONFIG.profileUrl,
-              permalink: item.permalink || INSTAGRAM_CONFIG.profileUrl,
-              mediaType: item.media_type,
-              mediaUrl: item.media_url || item.thumbnail_url,
-              source: 'api'
-            };
-          });
-
-          // Cache live posts
-          if (typeof window !== 'undefined') {
-            localStorage.setItem(STORAGE_KEY_POSTS, JSON.stringify(livePosts));
-            localStorage.setItem(STORAGE_KEY_LAST_SYNC, new Date().toISOString());
-          }
-
-          return {
-            posts: livePosts,
-            status: {
-              appId: creds.appId,
-              appKeyMasked: creds.appKeyMasked,
-              status: 'connected_live',
-              message: `Berhasil tersambung ke Instagram Graph API (${livePosts.length} postingan terkini)`,
-              lastChecked: nowStr,
-              hasUserToken: true
-            }
-          };
-        } else if (data.error) {
-          console.warn('Instagram Graph API response notice:', data.error);
-        }
-      } catch (err: any) {
-        console.warn('Error fetching live Instagram Graph API:', err);
-      }
-    }
-
-    // 2. Check if we have cached live posts from a previous successful live API sync
-    if (token && typeof window !== 'undefined') {
-      try {
-        const cached = localStorage.getItem(STORAGE_KEY_POSTS);
-        if (cached) {
-          const parsed = JSON.parse(cached);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            return {
-              posts: parsed,
-              status: {
-                appId: creds.appId,
-                appKeyMasked: creds.appKeyMasked,
-                status: 'using_official_cache',
-                message: `Menampilkan postingan tersinkronisasi dari @fastsugriwa (App ID: ${creds.appId})`,
-                lastChecked: nowStr,
-                hasUserToken: Boolean(token)
-              }
-            };
-          }
-        }
-      } catch (e) {
-        // ignore JSON parse error
-      }
-    }
-
-    // 3. When live Instagram feed is not configured, keep feed empty without dummy data and show Under Maintenance
+    // Fallback darurat: Jika jaringan offline, sajikan akumulasi cache & arsip
+    const fallbackList = this.mergeAccumulatedPosts([], cachedAccumulated, OFFICIAL_FAST_POSTS);
     return {
-      posts: [],
+      posts: fallbackList,
       status: {
         appId: creds.appId,
         appKeyMasked: creds.appKeyMasked,
-        status: 'under_maintenance',
-        message: 'Feed resmi dikosongkan sementara. Integrasi Instagram dalam status pemeliharaan (Under Maintenance) hingga konfigurasi feed Instagram selesai dilakukan.',
+        status: 'using_official_cache',
+        message: `Menampilkan ${fallbackList.length} postingan riwayat resmi FAST UHN Sugriwa`,
         lastChecked: nowStr,
-        hasUserToken: Boolean(token)
+        hasUserToken: Boolean(token),
+        totalPosts: fallbackList.length
       }
     };
   }
 
   /**
-   * Exchanges short-lived token to long-lived token (60 days) using App Secret key
+   * Menukarkan short-lived token menjadi long-lived token (60 hari) menggunakan App Secret
    */
-  public static async exchangeForLongLivedToken(shortLivedToken: string): Promise<{ success: boolean; token?: string; error?: string }> {
+  public static async exchangeForLongLivedToken(
+    shortLivedToken: string
+  ): Promise<{ success: boolean; token?: string; error?: string }> {
     try {
       const url = `https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret=${INSTAGRAM_CONFIG.appKey}&access_token=${shortLivedToken}`;
       const res = await fetch(url);

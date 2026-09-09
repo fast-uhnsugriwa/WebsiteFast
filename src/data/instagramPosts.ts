@@ -4,174 +4,168 @@ export const INSTAGRAM_ACCOUNT = {
   handle: '@fastsugriwa',
   displayName: 'Fakultas Sains & Teknologi UHN Sugriwa',
   profileUrl: 'https://www.instagram.com/fastsugriwa/',
-  bio: 'Official Account of Faculty of Science & Technology UHN I Gusti Bagus Sugriwa Denpasar. 🎓 S1 Informatika | S1 DKV | S1 Sains Informasi',
+  facebookUrl: 'https://www.facebook.com/profile.php?id=61588343014740',
+  bio: 'Akun Resmi Fakultas Sains dan Teknologi UHN I Gusti Bagus Sugriwa Denpasar. S1 Informatika | S1 Desain Komunikasi Visual | S1 Sains Informasi',
   followers: '4.8K',
   postsCount: 382,
   following: 124
 };
 
+// Postingan asli dan otentik dari Instagram resmi @fastsugriwa dengan foto asli
 export const INSTAGRAM_POSTS: InstagramPost[] = [
   {
-    id: 'post-1',
+    id: '18421877839147866',
     category: 'Akademik',
-    date: '3 hari yang lalu',
-    shortSnippet: 'Kuliah Tamu Spesial: Peluang dan Tantangan Artificial Intelligence Beretika dalam Preservasi Manuskrip Tradisional Nusantara bersama narasumber industri...',
-    caption: `[KULIAH TAMU FAKULTAS SAINS & TEKNOLOGI] ✨
-    
-Halo Sivitas Akademika FAST UHN I Gusti Bagus Sugriwa Denpasar!
+    date: '8 Sep 2026',
+    timestamp: '2026-09-08T14:17:05+0000',
+    shortSnippet: 'FAST Sukses Gelar MASAYU 2026: Sambut Generasi CYBER di Era Digital!',
+    caption: `FAST Sukses Gelar MASAYU 2026: Sambut Generasi CYBER di Era Digital!
 
-Fakultas Sains dan Teknologi kembali menghadirkan Kuliah Tamu Nasional bertajuk "Eksplorasi Generative AI dan Computer Vision untuk Pelestarian Warisan Digital Naskah Lontar Nusantara".
+Fakultas Sains dan Teknologi (FAST) UHN I Gusti Bagus Sugriwa Denpasar resmi menyambut mahasiswa baru tahun akademik 2026/2027 melalui kegiatan Masa Orientasi Akademik Mahasiswa Baru (MASAYU) 2026.
 
-Menghadirkan narasumber utama:
-🎙️ Senior AI Researcher & IT Consultant
-🎙️ Creative Director Studio Visual Bali
+Selamat datang para Ksatria Muda Sains dan Teknologi! Bersama kita wujudkan transformasi teknologi berkarakter kearifan lokal.
 
-🗓️ Waktu Pelaksanaan:
-Hari/Tanggal: Rabu, 18 Maret 2026
-Pukul: 09.00 - 12.30 WITA
-Tempat: Aula Gedung FAST Lt. 3, Kampus Bangli / Live Zoom Webinar
-
-📌 Terbuka untuk seluruh mahasiswa S1 Informatika, S1 DKV, dan S1 Sains Informasi! Tersedia e-certificate bernilai SKP & snack.
-
-Daftarkan diri kamu segera melalui link di bio @fastsugriwa!
-
-#FASTSugriwa #UHNSugriwa #KuliahTamu #Informatika #DKVSugriwa #SainsInformasi #KecerdasanBuatan #KampusHinduNegeri`,
-    likesCount: 342,
-    commentsCount: 28,
-    tags: ['#FASTSugriwa', '#UHNSugriwa', '#KuliahTamu', '#ArtificialIntelligence'],
-    postUrl: 'https://www.instagram.com/fastsugriwa/',
+#MASAYU2026 #FASTSugriwa #UHNSugriwa #MahasiswaBaru #Informatika #DKV #SainsInformasi`,
+    likesCount: 58,
+    commentsCount: 6,
+    tags: ['#MASAYU2026', '#FASTSugriwa', '#UHNSugriwa', '#Informatika'],
+    postUrl: 'https://www.instagram.com/p/DdB4YuPEmL9/',
+    permalink: 'https://www.instagram.com/p/DdB4YuPEmL9/',
+    mediaType: 'IMAGE',
+    mediaUrl:
+      'https://behold.pictures/eyJ1IjoiU0VuQWc3M2c2SmhEMk1WOW50bTdNa2hZV2tFMyIsImYiOiJpeFRjOEJyR0JzWGVTcExRczd3TiIsInAiOiIxODQyMTg3NzgzOTE0Nzg2NiIsImgiOiIxanUxdDZqIn0.jpg?class=originalLarge',
+    thumbnailUrl:
+      'https://behold.pictures/eyJ1IjoiU0VuQWc3M2c2SmhEMk1WOW50bTdNa2hZV2tFMyIsImYiOiJpeFRjOEJyR0JzWGVTcExRczd3TiIsInAiOiIxODQyMTg3NzgzOTE0Nzg2NiIsImgiOiIxanUxdDZqIn0.jpg?class=originalSmall',
+    authorAvatar: '/fast_instagram_profile.webp',
+    source: 'api',
     isPinned: true
   },
   {
-    id: 'post-2',
-    category: 'Beasiswa',
-    date: '5 hari yang lalu',
-    shortSnippet: 'Pengumuman Seleksi Berkas Beasiswa DIPA & Beasiswa Indonesia Bangkit (BIB) Semester Genap TA 2025/2026 Fakultas Sains dan Teknologi...',
-    caption: `[PENGUMUMAN BEASISWA DIPA & BIB 2026] 📢
+    id: '17912648481460087',
+    category: 'Akademik',
+    date: '7 Sep 2026',
+    timestamp: '2026-09-06T22:47:22+0000',
+    shortSnippet: 'Assemble, Ksatria Muda FAST! Selamat Datang di Universe Inovasi!',
+    caption: `Assemble, Ksatria Muda FAST! Selamat Datang di Universe Inovasi! 
 
-Selamat siang rekan-rekan mahasiswa Fakultas Sains dan Teknologi UHN I Gusti Bagus Sugriwa Denpasar.
+Perjalanan epik kalian baru saja dimulai. Di Fakultas Sains dan Teknologi UHN I Gusti Bagus Sugriwa Denpasar, kalian tidak hanya belajar sains dan teknologi, tetapi juga ditempa menjadi kreator masa depan yang berdaya saing tinggi dan berakhlak mulia.
 
-Berdasarkan hasil verifikasi administrasi Tim Pengelola Beasiswa Fakultas, berikut kami umumkan daftar mahasiswa yang dinyatakan Lolos Seleksi Tahap I untuk Beasiswa DIPA dan Beasiswa Indonesia Bangkit (BIB).
+Explore your curiosity, build your future!
 
-Bagi mahasiswa yang namanya tercantum dalam lampiran pengumuman, dimohon untuk:
-1. Memeriksa jadwal wawancara mandiri melalui email student masing-masing.
-2. Mempersiapkan berkas fisik asli (KTM, Transkrip Nilai, Portofolio Karya/Sertifikat) saat sesi verifikasi faktual.
-3. Mengikuti pembekalan beasiswa bersama Dekan FAST pada hari Jumat mendatang.
-
-Informasi daftar nama lengkap dapat diunduh pada portal resmi akademik FAST. Tetap semangat mengukir prestasi! 🌟
-
-#BeasiswaFAST #BeasiswaDIPA #BeasiswaBIB #LPDPKemenag #MahasiswaBerprestasi #FASTSugriwa`,
-    likesCount: 519,
-    commentsCount: 45,
-    tags: ['#BeasiswaFAST', '#BeasiswaDIPA', '#BeasiswaBIB', '#MahasiswaBerprestasi'],
-    postUrl: 'https://www.instagram.com/fastsugriwa/',
+#FASTSugriwa #KsatriaMuda #UniverseInovasi #SaintekUHN #Informatika #DKV #SainsInformasi`,
+    likesCount: 64,
+    commentsCount: 4,
+    tags: ['#FASTSugriwa', '#KsatriaMuda', '#UniverseInovasi', '#SaintekUHN'],
+    postUrl: 'https://www.instagram.com/p/Dc9pMc-kseT/',
+    permalink: 'https://www.instagram.com/p/Dc9pMc-kseT/',
+    mediaType: 'IMAGE',
+    mediaUrl:
+      'https://behold.pictures/eyJ1IjoiU0VuQWc3M2c2SmhEMk1WOW50bTdNa2hZV2tFMyIsImYiOiJpeFRjOEJyR0JzWGVTcExRczd3TiIsInAiOiIxNzkxMjY0ODQ4MTQ2MDA4NyIsImgiOiJsc240aGEifQ.jpg?class=originalLarge',
+    thumbnailUrl:
+      'https://behold.pictures/eyJ1IjoiU0VuQWc3M2c2SmhEMk1WOW50bTdNa2hZV2tFMyIsImYiOiJpeFRjOEJyR0JzWGVTcExRczd3TiIsInAiOiIxNzkxMjY0ODQ4MTQ2MDA4NyIsImgiOiJsc240aGEifQ.jpg?class=originalSmall',
+    authorAvatar: '/fast_instagram_profile.webp',
+    source: 'api',
     isPinned: true
   },
   {
-    id: 'post-3',
-    category: 'Prestasi',
-    date: '1 minggu yang lalu',
-    shortSnippet: 'Bangga! Tim Mahasiswa Kolaborasi S1 Informatika dan S1 DKV FAST UHN Sugriwa raih Juara 2 Kategori UI/UX Design Competition Tingkat Nasional...',
-    caption: `[PRESTASI MAHASISWA FAST SUGRIWA] 🏆🥇
+    id: '18429290059176598',
+    category: 'Akademik',
+    date: '5 Sep 2026',
+    timestamp: '2026-09-05T04:30:42+0000',
+    shortSnippet: 'Rapat Koordinasi Strategis Persiapan Perkuliahan Semester Genap FAST UHN Sugriwa',
+    caption: `Fakultas Sains dan Teknologi (FAST) UHN I Gusti Bagus Sugriwa Denpasar menggelar rapat koordinasi strategis dalam rangka mematangkan persiapan perkuliahan dan kurikulum outcome-based education (OBE).
 
-Om Swastyastu,
-Kabar membanggakan kembali datang dari kancah nasional!
+Rapat dihadiri oleh jajaran Dekanat, Ketua Program Studi Informatika, Desain Komunikasi Visual, Sains Informasi, serta seluruh dosen FAST guna menyelaraskan rencana pembelajaran semester dan fasilitas laboratorium.
 
-Selamat dan sukses kepada Tim "DharmaTech" FAST UHN IGB Sugriwa yang beranggotakan:
-1. I Made Dwi Dananjaya (Prodi Informatika)
-2. Ni Kadek Sintya Dewi (Prodi Desain Komunikasi Visual)
-3. I Gede Yoga Pratama (Prodi Sains Informasi)
-
-Telah sukses meraih JUARA 2 dalam ajang "National Creative Tech & Digital Heritage Hackathon 2026" dengan inovasi aplikasi mobile:
-"Balinese Culture Lens: Interactive Augmented Reality & Knowledge Graph for Sacred Cultural Heritage".
-
-Terima kasih atas dedikasi dan bimbingan para dosen pembimbing. Semoga pencapaian ini senantiasa memantik inspirasi seluruh mahasiswa FAST untuk terus berkarya! 👏🔥
-
-#JuaraNasional #PrestasiFAST #MahasiswaFAST #InformatikaUHN #DKVUHN #SainsInformasiUHN #BaliTech`,
-    likesCount: 894,
-    commentsCount: 82,
-    tags: ['#PrestasiFAST', '#JuaraNasional', '#Hackathon', '#DharmaTech'],
-    postUrl: 'https://www.instagram.com/fastsugriwa/'
+#FASTSugriwa #RapatKoordinasi #OBE #AkademikFAST #Kurikulum2026`,
+    likesCount: 47,
+    commentsCount: 2,
+    tags: ['#FASTSugriwa', '#RapatKoordinasi', '#OBE', '#AkademikFAST'],
+    postUrl: 'https://www.instagram.com/p/Dc5G5TcknoZ/',
+    permalink: 'https://www.instagram.com/p/Dc5G5TcknoZ/',
+    mediaType: 'IMAGE',
+    mediaUrl:
+      'https://behold.pictures/eyJ1IjoiU0VuQWc3M2c2SmhEMk1WOW50bTdNa2hZV2tFMyIsImYiOiJpeFRjOEJyR0JzWGVTcExRczd3TiIsInAiOiIxODQyOTI5MDA1OTE3NjU5OCIsImgiOiIxbTJzbG5uIn0.jpg?class=originalLarge',
+    thumbnailUrl:
+      'https://behold.pictures/eyJ1IjoiU0VuQWc3M2c2SmhEMk1WOW50bTdNa2hZV2tFMyIsImYiOiJpeFRjOEJyR0JzWGVTcExRczd3TiIsInAiOiIxODQyOTI5MDA1OTE3NjU5OCIsImgiOiIxbTJzbG5uIn0.jpg?class=originalSmall',
+    authorAvatar: '/fast_instagram_profile.webp',
+    source: 'api'
   },
   {
-    id: 'post-4',
+    id: '17950577820037559',
     category: 'Workshop',
-    date: '2 minggu yang lalu',
-    shortSnippet: 'Bootcamp & Workshop Intensif: Data Analytics & Dashboard Visualisation for Decision Makers diselenggarakan oleh Prodi Sains Informasi FAST...',
-    caption: `[WORKSHOP INTENSIF PRODI SAINS INFORMASI] 📊✨
+    date: '2 Sep 2026',
+    timestamp: '2026-09-02T15:00:16+0000',
+    shortSnippet: 'FAST UHN Sugriwa Gelar Workshop 2 Hari: Matangkan Visi & Misi Fakultas dan Prodi',
+    caption: `FAST UHN Sugriwa Gelar Workshop 2 Hari: Matangkan Visi & Misi Fakultas dan Prodi Bersama Pakar, Industri, dan Pemerintah.
 
-Di era big data, kemampuan mengekstrak wawasan (insight) dari data mentah adalah salah satu keterampilan paling dicari oleh industri modern.
+DENPASAR — Memantapkan arah pengembangan akademik dan memperkuat daya saing lulusan di kancah nasional maupun global, FAST UHN Sugriwa menyelenggarakan lokakarya penajaman visi misi institusi.
 
-Program Studi S1 Sains Informasi FAST UHN I Gusti Bagus Sugriwa Denpasar menyelenggarakan Workshop Interaktif:
-"Hands-On Data Engineering & Business Intelligence Dashboard with Python, SQL, and PowerBI".
+Workshop ini melibatkan masukan dari stakeholder industri teknologi, akademisi terkemuka, dan alumni guna memastikan keselarasan kurikulum dengan kebutuhan dunia kerja masa kini.
 
-Mentor:
-👨‍💻 Tim Dosen & Ahli Data Engineering FAST
-
-Materi yang dibahas:
-- Data Wrangling & Exploratory Data Analysis (EDA)
-- Transformasi Data Multi-dimensi
-- Visualisasi Data yang Berdaya Guna
-- Studi Kasus: Pemetaan Data Pariwisata & Kebudayaan Bali
-
-Swipe gambar untuk melihat antusiasme peserta di Laboratorium Sains Data FAST! 💻
-
-#SainsInformasi #DataScience #DataAnalytics #WorkshopFAST #FASTSugriwa #BigDataBali`,
-    likesCount: 412,
-    commentsCount: 19,
-    tags: ['#SainsInformasi', '#DataScience', '#PowerBI', '#FASTWorkshop'],
-    postUrl: 'https://www.instagram.com/fastsugriwa/'
+#WorkshopFAST #VisiMisi #FASTSugriwa #KolaborasiIndustri #Informatika #DKV #SainsInformasi`,
+    likesCount: 52,
+    commentsCount: 3,
+    tags: ['#WorkshopFAST', '#VisiMisi', '#FASTSugriwa', '#KolaborasiIndustri'],
+    postUrl: 'https://www.instagram.com/p/Dcygjx-EtVj/',
+    permalink: 'https://www.instagram.com/p/Dcygjx-EtVj/',
+    mediaType: 'IMAGE',
+    mediaUrl:
+      'https://behold.pictures/eyJ1IjoiU0VuQWc3M2c2SmhEMk1WOW50bTdNa2hZV2tFMyIsImYiOiJpeFRjOEJyR0JzWGVTcExRczd3TiIsInAiOiIxNzk1MDU3NzgyMDAzNzU1OSIsImgiOiJqM3lheDgifQ.jpg?class=originalLarge',
+    thumbnailUrl:
+      'https://behold.pictures/eyJ1IjoiU0VuQWc3M2c2SmhEMk1WOW50bTdNa2hZV2tFMyIsImYiOiJpeFRjOEJyR0JzWGVTcExRczd3TiIsInAiOiIxNzk1MDU3NzgyMDAzNzU1OSIsImgiOiJqM3lheDgifQ.jpg?class=originalSmall',
+    authorAvatar: '/fast_instagram_profile.webp',
+    source: 'api'
   },
   {
-    id: 'post-5',
+    id: '17900754246356747',
     category: 'Riset',
-    date: '3 minggu yang lalu',
-    shortSnippet: 'Kolaborasi Pengabdian Masyarakat: FAST UHN Sugriwa selenggarakan Digitalisasi Manajemen Inventaris Desa Adat & Pelatihan Branding Produk Kriya...',
-    caption: `[PENGABDIAN KEPADA MASYARAKAT - FAST BERDAYA] 🤝🌿
+    date: '29 Agu 2026',
+    timestamp: '2026-08-29T04:50:05+0000',
+    shortSnippet: 'Perluas Jejaring Riset Global, FAST UHN Sugriwa Jalin Kerja Sama dengan APSKIN & Co-Host ICONIQ 2026',
+    caption: `Perluas Jejaring Riset Global, Fakultas Sains dan Teknologi UHN I Gusti Bagus Sugriwa Jalin Kerja Sama dengan APSKIN dan Sukses Jadi Co-Host ICONIQ 2026.
 
-Sebagai wujud pengamalan Tridharma Perguruan Tinggi, sivitas akademika Fakultas Sains dan Teknologi UHN I Gusti Bagus Sugriwa Denpasar menyelenggarakan program Pengabdian kepada Masyarakat (PkM) terpadu di Desa Binaan.
+Langkah strategis ini menandai komitmen FAST dalam mendorong publikasi internasional, riset kolaboratif lintas universitas, serta transfer pengetahuan terkini dalam bidang Artificial Intelligence, Data Science, dan Multimedia Interaktif.
 
-Kegiatan meliputi:
-1. Pemasangan & pelatihan Sistem Informasi Manajemen Keuangan dan Aset Desa Adat berbasis web (Tim Informatika).
-2. Lokakarya kemasan produk ramah lingkungan dan branding identitas visual UMKM anyaman bambu tradisional (Tim DKV).
-3. Digitalisasi katalog naskah serta inventarisasi pustaka sastra desa (Tim Sains Informasi).
-
-Kearifan lokal bertemu dengan sentuhan sains dan teknologi modern demi kemandirian ekonomi umat. Rahayu! 🙏
-
-#PengabdianMasyarakat #PkMFAST #Tridharma #DesaAdatDigital #FASTSugriwa #KearifanLokal`,
-    likesCount: 628,
-    commentsCount: 34,
-    tags: ['#PkMFAST', '#Tridharma', '#DesaDigital', '#PengabdianFAST'],
-    postUrl: 'https://www.instagram.com/fastsugriwa/'
+#RisetGlobal #APSKIN #ICONIQ2026 #FASTSugriwa #PublikasiInternasional #UHNSugriwa`,
+    likesCount: 33,
+    commentsCount: 1,
+    tags: ['#RisetGlobal', '#APSKIN', '#ICONIQ2026', '#FASTSugriwa'],
+    postUrl: 'https://www.instagram.com/p/DcnHjQDklK9/',
+    permalink: 'https://www.instagram.com/p/DcnHjQDklK9/',
+    mediaType: 'IMAGE',
+    mediaUrl:
+      'https://behold.pictures/eyJ1IjoiU0VuQWc3M2c2SmhEMk1WOW50bTdNa2hZV2tFMyIsImYiOiJpeFRjOEJyR0JzWGVTcExRczd3TiIsInAiOiIxNzkwMDc1NDI0NjM1Njc0NyIsImgiOiJpaXd3ZDAifQ.jpg?class=originalLarge',
+    thumbnailUrl:
+      'https://behold.pictures/eyJ1IjoiU0VuQWc3M2c2SmhEMk1WOW50bTdNa2hZV2tFMyIsImYiOiJpeFRjOEJyR0JzWGVTcExRczd3TiIsInAiOiIxNzkwMDc1NDI0NjM1Njc0NyIsImgiOiJpaXd3ZDAifQ.jpg?class=originalSmall',
+    authorAvatar: '/fast_instagram_profile.webp',
+    source: 'api'
   },
   {
-    id: 'post-6',
-    category: 'Akademik',
-    date: '1 bulan yang lalu',
-    shortSnippet: 'Penerimaan Mahasiswa Baru (PMB) Jalur Prestasi & Reguler TA 2026/2027 telah dibuka! Pilih masa depan cerahmu bersama FAST UHN IGB Sugriwa...',
-    caption: `[PMB GELOMBANG I TAHUN AKADEMIK 2026/2027 TELAH DIBUKA!] 🎓✨
+    id: '18112886665953523',
+    category: 'Hari Raya',
+    date: '25 Agu 2026',
+    timestamp: '2026-08-25T02:06:09+0000',
+    shortSnippet: 'Selamat Memperingati Maulid Nabi Muhammad SAW 1448 H',
+    caption: `Kami, Fakultas Sains dan Teknologi Universitas Hindu Negeri I Gusti Bagus Sugriwa Denpasar, mengucapkan selamat memperingati Maulid Nabi Muhammad SAW.
 
-Saatnya melangkah menjadi bagian dari pencetak inovator teknologi dan kreator visual berkarakter mulia!
+Semoga keteladanan Nabi Muhammad SAW senantiasa menginspirasi kita untuk menumbuhkan akhlak mulia, mempererat persaudaraan, menjaga kerukunan, serta menghadirkan kedamaian dan keberkahan dalam kehidupan.
 
-Fakultas Sains dan Teknologi Universitas Hindu Negeri I Gusti Bagus Sugriwa Denpasar membuka pendaftaran mahasiswa baru untuk 3 Program Studi Unggulan:
-🔹 S1 Informatika (Terakreditasi)
-🔹 S1 Desain Komunikasi Visual (Terakreditasi)
-🔹 S1 Sains Informasi (Terakreditasi)
+Selamat memperingati Maulid Nabi Muhammad SAW.
+Semoga nilai-nilai keteladanan beliau senantiasa menjadi cahaya dalam setiap langkah kita. 🤲✨
 
-Kenapa memilih FAST UHN Sugriwa?
-✅ Kurikulum Berbasis OBE & Siap Industri
-✅ Laboratorium Komputasi, Multimedia, & Data Berteknologi Tinggi
-✅ Peluang Beasiswa Berlimpah (DIPA, BIB LPDP, KIP-K)
-✅ Dosen Kualifikasi Doktor & Magister Berpengalaman
-✅ Biaya Pendidikan Sangat Terjangkau dengan Fasilitas Lengkap
-
-Daftar secara online sekarang juga melalui: https://taplink.cc/uhnmaba2026
-Atau klik link langsung pada bio kami @fastsugriwa!
-
-#PMB2026 #DaftarKuliah #FASTSugriwa #UHNSugriwa #KuliahInformatika #KuliahDKV #KuliahSainsData #Denpasar #Bali`,
-    likesCount: 780,
-    commentsCount: 56,
-    tags: ['#PMB2026', '#FASTSugriwa', '#KuliahBali', '#Informatika', '#DKV'],
-    postUrl: 'https://www.instagram.com/fastsugriwa/'
+#MaulidNabi #MaulidNabi1448H #FASTSugriwa #UHNIGustiBagusSugriwa #UniversitasSugriwa #KampusHarmoni`,
+    likesCount: 38,
+    commentsCount: 0,
+    tags: ['#MaulidNabi', '#MaulidNabi1448H', '#FASTSugriwa', '#KampusHarmoni'],
+    postUrl: 'https://www.instagram.com/p/DcchjHKyTi-/',
+    permalink: 'https://www.instagram.com/p/DcchjHKyTi-/',
+    mediaType: 'IMAGE',
+    mediaUrl:
+      'https://behold.pictures/eyJ1IjoiU0VuQWc3M2c2SmhEMk1WOW50bTdNa2hZV2tFMyIsImYiOiJpeFRjOEJyR0JzWGVTcExRczd3TiIsInAiOiIxODExMjg4NjY2NTk1MzUyMyIsImgiOiJ2aHQ1a2YifQ.jpg?class=originalLarge',
+    thumbnailUrl:
+      'https://behold.pictures/eyJ1IjoiU0VuQWc3M2c2SmhEMk1WOW50bTdNa2hZV2tFMyIsImYiOiJpeFRjOEJyR0JzWGVTcExRczd3TiIsInAiOiIxODExMjg4NjY2NTk1MzUyMyIsImgiOiJ2aHQ1a2YifQ.jpg?class=originalSmall',
+    authorAvatar: '/fast_instagram_profile.webp',
+    source: 'api'
   }
 ];

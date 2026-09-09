@@ -20,6 +20,8 @@ export const InstagramSection: React.FC = () => {
   const [activeModalPost, setActiveModalPost] = useState<InstagramPost | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  const [visibleCount, setVisibleCount] = useState<number>(6);
+
   const categories = ['Semua', 'Akademik', 'Beasiswa', 'Prestasi', 'Workshop', 'Riset', 'Hari Raya'];
 
   const loadPosts = async () => {
@@ -37,9 +39,16 @@ export const InstagramSection: React.FC = () => {
     loadPosts();
   }, []);
 
+  const handleCategoryChange = (cat: string) => {
+    setSelectedCategory(cat);
+    setVisibleCount(6);
+  };
+
   const filteredPosts = selectedCategory === 'Semua'
     ? posts
     : posts.filter((p) => p.category === selectedCategory);
+
+  const displayedPosts = filteredPosts.slice(0, visibleCount);
 
   return (
     <section
@@ -60,7 +69,7 @@ export const InstagramSection: React.FC = () => {
             <div className="flex flex-wrap items-center gap-2 mb-3">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-amber-50 to-orange-50 border border-orange-200/70 text-orange-800 text-xs font-bold uppercase tracking-wider shadow-2xs">
                 <Instagram className="w-3.5 h-3.5 text-orange-600 animate-pulse" />
-                <span>Kabar Terkini & Informasi Resmi</span>
+                <span>Kabar Terkini & Informasi Resmi {posts.length > 0 ? `(${posts.length} Postingan)` : ''}</span>
               </div>
             </div>
 
@@ -132,12 +141,11 @@ export const InstagramSection: React.FC = () => {
                 whileTap={{ scale: 0.95 }}
                 whileHover={{ y: -1 }}
                 id={`filter-category-${cat.toLowerCase()}`}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-1.5 rounded-full text-xs font-bold shrink-0 transition-all cursor-pointer ${
-                  selectedCategory === cat
+                onClick={() => handleCategoryChange(cat)}
+                className={`px-4 py-1.5 rounded-full text-xs font-bold shrink-0 transition-all cursor-pointer ${selectedCategory === cat
                     ? 'bg-orange-600 text-white shadow-2xs'
                     : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
-                }`}
+                  }`}
               >
                 {cat}
               </motion.button>
@@ -206,8 +214,9 @@ export const InstagramSection: React.FC = () => {
 
         {/* Instagram Post Cards Grid (Shown when posts are available) */}
         {!isLoading && posts.length > 0 && (
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
-            {filteredPosts.map((post) => (
+          <div>
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+            {displayedPosts.map((post) => (
               <article
                 key={post.id}
                 id={`post-card-${post.id}`}
@@ -241,21 +250,20 @@ export const InstagramSection: React.FC = () => {
                     </div>
 
                     <span
-                      className={`shrink-0 text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full ${
-                        post.category === 'Beasiswa'
+                      className={`shrink-0 text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full ${post.category === 'Beasiswa'
                           ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                           : post.category === 'Prestasi'
-                          ? 'bg-amber-50 text-amber-800 border border-amber-200'
-                          : post.category === 'Akademik'
-                          ? 'bg-orange-50 text-orange-800 border border-orange-200'
-                          : post.category === 'Hari Raya'
-                          ? 'bg-purple-50 text-purple-800 border border-purple-200'
-                          : post.category === 'Workshop'
-                          ? 'bg-blue-50 text-blue-800 border border-blue-200'
-                          : post.category === 'Riset'
-                          ? 'bg-teal-50 text-teal-800 border border-teal-200'
-                          : 'bg-stone-100 text-stone-700 border border-stone-200'
-                      }`}
+                            ? 'bg-amber-50 text-amber-800 border border-amber-200'
+                            : post.category === 'Akademik'
+                              ? 'bg-orange-50 text-orange-800 border border-orange-200'
+                              : post.category === 'Hari Raya'
+                                ? 'bg-purple-50 text-purple-800 border border-purple-200'
+                                : post.category === 'Workshop'
+                                  ? 'bg-blue-50 text-blue-800 border border-blue-200'
+                                  : post.category === 'Riset'
+                                    ? 'bg-teal-50 text-teal-800 border border-teal-200'
+                                    : 'bg-stone-100 text-stone-700 border border-stone-200'
+                        }`}
                     >
                       {post.category}
                     </span>
@@ -263,7 +271,7 @@ export const InstagramSection: React.FC = () => {
 
                   {/* Post Media / Banner */}
                   {post.mediaUrl ? (
-                    <div 
+                    <div
                       onClick={() => setActiveModalPost(post)}
                       className="relative aspect-square sm:aspect-[4/3] w-full overflow-hidden bg-stone-100 border-b border-stone-100 cursor-pointer"
                     >
@@ -302,7 +310,7 @@ export const InstagramSection: React.FC = () => {
                       )}
                     </div>
                   ) : (
-                    <div 
+                    <div
                       onClick={() => setActiveModalPost(post)}
                       className="relative p-3.5 sm:p-6 bg-gradient-to-br from-stone-900 via-stone-850 to-stone-900 text-white overflow-hidden border-b border-stone-100 min-h-[120px] sm:min-h-[140px] flex flex-col justify-between cursor-pointer"
                     >
@@ -379,6 +387,30 @@ export const InstagramSection: React.FC = () => {
               </article>
             ))}
           </div>
+
+          {/* Load More / Pagination Button */}
+          {filteredPosts.length > visibleCount && (
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setVisibleCount((prev) => Math.min(prev + 6, filteredPosts.length))}
+                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-orange-600/20 transition-all cursor-pointer inline-flex items-center gap-2"
+              >
+                <span>Muat Lebih Banyak Postingan</span>
+                <span className="px-2 py-0.5 rounded-full bg-white/20 text-[11px]">
+                  +{Math.min(6, filteredPosts.length - visibleCount)}
+                </span>
+              </motion.button>
+              <button
+                onClick={() => setVisibleCount(filteredPosts.length)}
+                className="text-xs font-semibold text-stone-600 hover:text-orange-600 py-2 px-3 transition-colors cursor-pointer"
+              >
+                Tampilkan Semua ({filteredPosts.length} Postingan)
+              </button>
+            </div>
+          )}
+        </div>
         )}
 
         {/* View All on Instagram CTA Banner */}
